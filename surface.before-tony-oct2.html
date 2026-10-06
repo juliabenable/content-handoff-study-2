@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Repair+ Holiday Hydration · Content · Benable</title>
+<link rel="icon" href="https://benable.com/images/biz/logo.svg">
+<!-- Captured production chrome (Aug 18 capture, scoped under .nf) + the review popup's own styles (rvm-) + the shipped Campaign Pulse (pulse.css). -->
+<link rel="stylesheet" href="assets/newflow-extra.css">
+<link rel="stylesheet" href="assets/newflow-production.css">
+<link rel="stylesheet" href="assets/reviewModal.css">
+<link rel="stylesheet" href="assets/pulse.css">
+<style>
+/* ------------------------------------------------------------------
+   Content + rights surface. Every class is cs- prefixed; the captured
+   production CSS owns the chrome (sidebar, header, tabs, stage card).
+   Chrome-side rules are written as `.nf .cs-*` (0,2,0) because the
+   captured CSS carries `.nf :where(.workflow-page) button` at (0,1,1).
+   Type ramp 12/13/14/16/20 · spacing 4/8/12/16/24/32 · radii 8/12/16/999
+   ------------------------------------------------------------------ */
+html, body { margin: 0; }
+body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+.nf { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+.nf .brand-dashboard { display: flex; flex-direction: column; height: 100vh; }
+.nf .dashboard-body { flex: 1 1 0; min-height: 0; }
+.nf .main-column { padding-bottom: 120px; }   /* the demo bar never hides the last row */
+
+/* neutralise the captured chrome's bare button/anchor styling inside the panel (same specificity, loads later) */
+.nf :where(.cs-panel) button, .nf :where(.cs-panel) a { margin: 0; padding: 0; border: 0; background: none; border-radius: 0; min-height: 0; font: inherit; color: inherit; line-height: inherit; text-decoration: none; }
+.nf .cs-panel :focus-visible, .rvm :focus-visible, .cs-demo :focus-visible { outline: 2px solid #7a5cfa; outline-offset: 2px; }
+.nf .cs-seg button:focus-visible { outline-offset: -2px; }
+body.is-pointer .nf .cs-panel :focus-visible, body.is-pointer .rvm :focus-visible, body.is-pointer .cs-demo :focus-visible { outline: none; }
+
+/* production has no "active" pill in the capture we hold; mirror the recruiting pill in green */
+.nf .phase-pill.phase-pill--active { background: #e8f7ef; color: #15803d; }
+.nf .phase-pill.phase-pill--active .phase-pill-dot { background: #2baf87; }
+.nf .workflow-dashboard-tab { position: relative; }
+.nf .workflow-dashboard-tab .cs-tabdot { position: absolute; top: 10px; right: -6px; width: 6px; height: 6px; border-radius: 999px; background: #e88e2c; }
+
+/* the stage card becomes a two-column workspace: grid + rail */
+.nf .stage-top-card.cs-panel { padding: 0; overflow: visible; }
+.nf .cs-wrap { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 32px; padding: 24px; align-items: start; }
+.nf .cs-wrap.cs-wrap--prod { grid-template-columns: minmax(0, 1fr); padding: 24px 0; }
+
+/* toolbar: production filter pills + download all */
+.nf .cs-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+.nf .cs-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.nf .cs-filter { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px 0 16px; border-radius: 999px; border: 1px solid #e3e3e3; background: #fff; color: #1a1a1a; font: 500 14px/1 Inter, sans-serif; cursor: pointer; transition: background-color .12s, border-color .12s; }
+.nf .cs-filter:hover { border-color: #c6c6c6; }
+.nf .cs-filter.is-on { background: #1a1a1a; border-color: #1a1a1a; color: #fff; }
+.nf .cs-filter .cs-count { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; background: #f1f1f1; color: #4b4b4b; font-size: 12px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.nf .cs-filter.is-on .cs-count { background: rgba(255,255,255,.18); color: #fff; }
+.nf .cs-ghost { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 10px; border: 1px solid #e3e3e3; background: #fff; color: #1a1a1a; font: 500 14px/1 Inter, sans-serif; cursor: pointer; transition: background-color .12s, border-color .12s; white-space: nowrap; }
+.nf .cs-ghost:hover { background: #f7f7f8; border-color: #c6c6c6; }
+.nf .cs-ghost svg { width: 16px; height: 16px; }
+.nf .cs-ghost:disabled { color: #aaa; cursor: default; }
+.nf .cs-ghost:disabled:hover { background: #fff; border-color: #e3e3e3; }
+
+/* the quiet notice (logs in after something ended) */
+.nf .cs-notice { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 16px; border: 1px solid #f3dfc0; background: #fff8ee; border-radius: 12px; margin-bottom: 20px; font-size: 14px; line-height: 1.5; color: #1a1a1a; }
+.nf .cs-notice b { font-weight: 600; }
+.nf .cs-notice-actions { display: flex; gap: 12px; align-items: center; flex: none; }
+.nf .cs-link { background: none; border: 0; padding: 0; color: #5b3fd6; font: 500 14px/1.4 Inter, sans-serif; cursor: pointer; }
+.nf .cs-link:hover { text-decoration: underline; }
+.nf .cs-x { width: 28px; height: 28px; border-radius: 8px; border: 0; background: none; cursor: pointer; color: #717171; display: grid; place-items: center; font-size: 13px; }
+.nf .cs-x:hover { background: rgba(0,0,0,.05); }
+
+/* summary line above the grid, with the active day as a removable chip */
+.nf .cs-sum { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 14px; line-height: 20px; color: #6b7280; margin: 0 0 16px; min-height: 28px; }
+.nf .cs-sum b { color: #1a1a1a; font-weight: 600; }
+.nf .cs-sum .is-amber { color: #b45309; font-weight: 600; }
+.nf .cs-sum .is-purple { color: #5b3fd6; font-weight: 600; }
+.nf .cs-chipday { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 6px 0 10px; border-radius: 999px; background: #1a1a1a; color: #fff; font: 500 13px/1 Inter, sans-serif; border: 0; cursor: pointer; }
+.nf .cs-chipday span { display: grid; place-items: center; width: 18px; height: 18px; border-radius: 999px; background: rgba(255,255,255,.18); font-size: 11px; }
+.nf .cs-chipday:hover span { background: rgba(255,255,255,.32); }
+
+/* the cards (production anatomy: media, platform pill, creator row, caption) */
+.nf .cs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.nf .cs-grid--prod { grid-template-columns: repeat(auto-fill, 333px); justify-content: start; }
+.nf .cs-card { position: relative; display: flex; flex-direction: column; border: 1px solid #ebebeb; border-radius: 16px; background: #fff; overflow: hidden; cursor: pointer; text-align: left; padding: 0; font: inherit; color: inherit; transition: box-shadow .15s, border-color .15s, transform .15s; }
+.nf .cs-card:hover { border-color: #e3e3e3; box-shadow: 0 1px 2px rgba(16,24,40,.05), 0 12px 28px rgba(16,24,40,.10); transform: translateY(-2px); }
+.nf .cs-media { position: relative; aspect-ratio: 4 / 5; background: #eee; overflow: hidden; }
+.nf .cs-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.nf .cs-plat { position: absolute; top: 12px; left: 12px; display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px 0 8px; border-radius: 999px; color: #fff; font-size: 12px; font-weight: 600; line-height: 1; }
+.nf .cs-plat--ig { background: linear-gradient(90deg, #e8771f, #cf2371 55%, #7a2fa8); }
+.nf .cs-plat--tt { background: #111; }
+.nf .cs-plat svg { width: 12px; height: 12px; }
+.nf .cs-hover { position: absolute; right: 12px; bottom: 12px; display: flex; gap: 6px; opacity: 0; transform: translateY(4px); transition: opacity .15s, transform .15s; }
+.nf .cs-card:hover .cs-hover, .nf .cs-card:focus-within .cs-hover { opacity: 1; transform: none; }
+.nf .cs-dl { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; background: rgba(255,255,255,.94); color: #1a1a1a; font: 500 13px/1 Inter, sans-serif; border: 0; cursor: pointer; text-decoration: none; box-shadow: 0 1px 2px rgba(16,24,40,.08); }
+.nf .cs-dl:hover { background: #fff; }
+.nf .cs-dl svg { width: 14px; height: 14px; }
+.nf .cs-body { flex: 1; padding: 14px 16px 14px; display: flex; flex-direction: column; gap: 8px; }
+.nf .cs-who { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.nf .cs-avatar { width: 28px; height: 28px; border-radius: 999px; overflow: hidden; background: #f1f1f1; flex: none; display: grid; place-items: center; font-size: 12px; font-weight: 600; color: #4b4b4b; }
+.nf .cs-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 15%; display: block; }
+.nf .cs-name { font-size: 14px; font-weight: 600; line-height: 18px; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nf .cs-meta { font-size: 12px; line-height: 16px; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nf .cs-cap { font-size: 13px; line-height: 18px; color: #4b4b4b; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 36px; }
+.nf .cs-cap--3 { -webkit-line-clamp: 3; min-height: 54px; }
+.nf .cs-rightsrow { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 10px; border-top: 1px solid #f1f1f1; min-height: 37px; }
+.nf .cs-rights { font-size: 13px; line-height: 18px; color: #6b7280; font-variant-numeric: tabular-nums; display: inline-flex; align-items: center; gap: 6px; min-width: 0; flex: 1; }
+.nf .cs-rights > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.nf .cs-rights i { width: 6px; height: 6px; border-radius: 999px; background: #c2c5c4; flex: none; }
+.nf .cs-rights.is-ext i { background: #2baf87; }
+.nf .cs-rights b { font-weight: 500; color: #1a1a1a; }
+.nf .cs-rights.is-ending i { background: #e88e2c; }
+.nf .cs-rights.is-ending b { color: #b45309; }
+.nf .cs-rights.is-ended i { background: #c2c5c4; }
+.nf .cs-rights.is-ended, .nf .cs-rights.is-ended b { color: #767676; }
+.nf .cs-rights.is-ext b { color: #15803d; }
+.nf .cs-rights.is-req i { background: #896bd9; }
+.nf .cs-rights.is-req b { color: #5b3fd6; }
+.nf .cs-rights.is-pending i { background: #e3e3e3; }
+.nf .cs-extend { flex: none; height: 26px; padding: 0 10px; border-radius: 999px; border: 1px solid #e3e3e3; background: #fff; color: #1a1a1a; font: 500 12px/1 Inter, sans-serif; cursor: pointer; display: inline-flex; align-items: center; }
+.nf .cs-extend:hover { border-color: #1a1a1a; }
+.nf .cs-extend.is-amber { border-color: #f3dfc0; background: #fff8ee; color: #b45309; }
+.nf .cs-extend.is-amber:hover { border-color: #e88e2c; }
+.nf .cs-empty { grid-column: 1 / -1; padding: 48px 24px; text-align: center; color: #6b7280; font-size: 14px; }
+
+/* pending piece (draft approved, not live) */
+.nf .cs-card.is-pending .cs-media { background: #f5f5f7; }
+.nf .cs-card.is-pending .cs-media img { opacity: .35; filter: grayscale(1); }
+.nf .cs-soon { position: absolute; inset: 0; display: grid; place-items: center; }
+.nf .cs-soon span { padding: 6px 12px; border-radius: 999px; background: #fff; border: 1px solid #ebebeb; font-size: 12px; font-weight: 500; color: #4b4b4b; }
+
+/* ---- the rail: calendar + ending next + about ---- */
+.nf .cs-rail { display: flex; flex-direction: column; gap: 16px; }
+.nf .cs-box { border: 1px solid #ebebeb; border-radius: 16px; background: #fff; padding: 16px; min-width: 0; }
+.nf .cs-box-h { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; }
+.nf .cs-box-title { font-size: 14px; font-weight: 600; line-height: 20px; color: #1a1a1a; }
+.nf .cs-box-sub { font-size: 13px; line-height: 18px; color: #6b7280; margin-bottom: 12px; }
+
+.nf .cs-cal-nav { display: flex; align-items: center; justify-content: space-between; margin: 4px 0 8px; }
+.nf .cs-cal-month { font-size: 14px; font-weight: 600; color: #1a1a1a; }
+.nf .cs-cal-btn { width: 28px; height: 28px; border-radius: 8px; border: 1px solid #ebebeb; background: #fff; display: grid; place-items: center; cursor: pointer; color: #4b4b4b; padding: 0; }
+.nf .cs-cal-btn:hover { background: #f7f7f8; }
+.nf .cs-cal-btn svg { width: 12px; height: 12px; }
+.nf .cs-cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; }
+.nf .cs-cal-dow { text-align: center; font-size: 11px; font-weight: 500; letter-spacing: .04em; color: #767676; padding: 4px 0 6px; }
+.nf .cs-day { position: relative; height: 36px; padding: 0; margin: 0; border-radius: 8px; border: 0; background: none; font: 500 13px/1 Inter, sans-serif; color: #1a1a1a; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: default; font-variant-numeric: tabular-nums; min-width: 0; }
+.nf .cs-day.is-blank { visibility: hidden; }
+.nf .cs-day.is-past { color: #8a8a8a; }
+.nf .cs-day.has { cursor: pointer; }
+.nf .cs-day.has:hover { background: #f5f3fc; }
+.nf .cs-day.is-today { font-weight: 600; color: #5b3fd6; background: #efecf7; border-radius: 999px; }
+.nf .cs-cal--faces .cs-day.is-today { border-radius: 12px; }
+.nf .cs-day.is-today.has:hover { background: #e6e0f7; }
+.nf .cs-day.is-sel, .nf .cs-day.is-sel:hover, .nf .cs-day.is-sel.has:hover, .nf .cs-day.is-today.is-sel.has:hover { background: #1a1a1a; color: #fff; }
+.nf .cs-day.is-sel .cs-dot { background: #fff !important; box-shadow: none !important; }
+.nf .cs-dots { display: flex; gap: 2px; height: 5px; }
+.nf .cs-dot { width: 5px; height: 5px; border-radius: 999px; background: #896bd9; }
+.nf .cs-dot.is-ending { background: #e88e2c; }
+.nf .cs-dot.is-ended { background: #c2c5c4; }
+.nf .cs-dot.is-ext { background: #2baf87; }
+.nf .cs-dot.is-req { background: #fff; box-shadow: inset 0 0 0 1.5px #896bd9; }
+.nf .cs-legend { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 6px 14px; margin-top: 12px; font-size: 12px; color: #6b7280; }
+.nf .cs-legend span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.nf .cs-legend i { width: 6px; height: 6px; border-radius: 999px; display: inline-block; flex: none; }
+.nf .cs-legend .cs-legend-today { width: 10px; height: 10px; background: #efecf7; box-shadow: inset 0 0 0 1px #c9bcff; }
+.nf .cs-legend .cs-legend-req { background: #fff; box-shadow: inset 0 0 0 1.5px #896bd9; }
+
+/* calendar variant B: faces in the cells */
+.nf .cs-cal--faces .cs-day { height: 46px; gap: 2px; }
+.nf .cs-faces { display: flex; height: 16px; }
+.nf .cs-faces img { width: 16px; height: 16px; border-radius: 999px; object-fit: cover; object-position: 50% 15%; border: 1.5px solid #fff; margin-left: -5px; box-shadow: 0 0 0 1px #896bd9; }
+.nf .cs-faces img:first-child { margin-left: 0; }
+.nf .cs-faces img.is-ending { box-shadow: 0 0 0 1px #e88e2c; }
+.nf .cs-faces img.is-ended { box-shadow: 0 0 0 1px #c2c5c4; filter: grayscale(1); opacity: .7; }
+.nf .cs-faces img.is-ext { box-shadow: 0 0 0 1px #2baf87; }
+.nf .cs-faces .cs-more { width: 16px; height: 16px; border-radius: 999px; background: #f1f1f1; color: #4b4b4b; font-size: 9px; font-weight: 600; display: grid; place-items: center; margin-left: -5px; border: 1.5px solid #fff; }
+
+/* calendar variant C: the timeline (agenda by week) */
+.nf .cs-tl { display: flex; flex-direction: column; }
+.nf .cs-tl-week { display: flex; justify-content: space-between; align-items: baseline; font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: #767676; padding: 12px 0 6px; border-top: 1px solid #f1f1f1; }
+.nf .cs-tl-week:first-child { border-top: 0; padding-top: 4px; }
+.nf .cs-tl-week .cs-link { font-size: 12px; text-transform: none; letter-spacing: 0; }
+.nf .cs-tl-row { display: grid; grid-template-columns: 30px 22px minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 7px 0; width: 100%; text-align: left; cursor: pointer; border-radius: 8px; }
+.nf .cs-tl-row .cs-avatar { width: 22px; height: 22px; }
+.nf .cs-tl-row .cs-extend { padding: 0 8px; height: 24px; }
+.nf .cs-tl-row:hover { background: #fafafa; }
+.nf .cs-tl-date { display: flex; flex-direction: column; align-items: center; line-height: 1; }
+.nf .cs-tl-date b { font-size: 15px; font-weight: 600; color: #1a1a1a; font-variant-numeric: tabular-nums; }
+.nf .cs-tl-date span { font-size: 10px; color: #767676; margin-top: 2px; text-transform: uppercase; letter-spacing: .04em; }
+.nf .cs-tl-row.is-past .cs-tl-date b { color: #8a8a8a; }
+.nf .cs-tl-row.is-ending .cs-tl-date b { color: #b45309; }
+.nf .cs-tl-txt { min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.nf .cs-tl-name { font-size: 13px; font-weight: 500; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nf .cs-tl-sub { font-size: 12px; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nf .cs-tl-sub.is-ending { color: #b45309; }
+.nf .cs-tl-sub.is-ended { color: #767676; }
+.nf .cs-tl-sub.is-ext { color: #15803d; }
+.nf .cs-tl-sub.is-req { color: #5b3fd6; }
+.nf .cs-tl-today { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; color: #5b3fd6; padding: 8px 0; }
+.nf .cs-tl-today::before, .nf .cs-tl-today::after { content: ""; flex: 1; height: 1px; background: #c9bcff; }
+
+/* ending next */
+.nf .cs-soon-list { display: flex; flex-direction: column; }
+.nf .cs-soon-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid #f1f1f1; }
+.nf .cs-soon-row:first-child { border-top: 0; }
+.nf .cs-soon-main { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; background: none; border: 0; text-align: left; cursor: pointer; font: inherit; color: inherit; padding: 0; }
+.nf .cs-soon-main:hover .cs-soon-name { text-decoration: underline; }
+.nf .cs-soon-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.nf .cs-soon-name { font-size: 13px; font-weight: 500; line-height: 18px; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nf .cs-soon-when { font-size: 12px; line-height: 16px; color: #6b7280; font-variant-numeric: tabular-nums; }
+.nf .cs-soon-when.is-ending { color: #b45309; }
+.nf .cs-soon-empty { font-size: 13px; color: #6b7280; padding: 8px 0 4px; }
+.nf .cs-about { font-size: 13px; line-height: 18px; color: #4b4b4b; }
+.nf .cs-about p + p { margin-top: 8px; }
+.nf .cs-about b { font-weight: 600; color: #1a1a1a; }
+
+/* ---- Dashboard tab: the shipped Campaign Pulse (pulse.css from v47; am-/am2-/tf-/cp- classes) ---- */
+.nf .stage-primary-surface:has(> .cs-panel--dash) { gap: 0; }
+.nf .stage-top-card.cs-panel--dash { background: #f9fafb; border: 0; border-radius: 0; box-shadow: none; margin: 0 -20px -140px; padding: 20px 20px 148px; min-height: calc(100vh - 187px); }
+.nf .cs-panel--dash .cp-root { margin: 0 0 16px; }
+.nf .cs-panel--dash .am2-bar { height: 40px; }
+.nf .cs-panel--dash .am-row { height: 64px; padding: 0 20px; cursor: pointer; }
+.nf .cs-panel--dash .am-row.is-static { cursor: default; }
+.nf .cs-panel--dash .am-row.is-static:hover { background: none; }
+.nf .cs-panel--dash .tf-rowlink { cursor: pointer; }
+.nf .cs-panel--dash .tf-info-i { margin-left: 6px; font-size: 12px; color: #767676; cursor: help; }
+.nf .cs-panel--dash .am-note-text a { color: #1c1c1c; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+.nf .cs-panel--dash .am-card, .nf .cs-panel--dash .am-progress { animation: none; }
+
+/* ---- popup additions (rvm shell reused as-is; these are the right panel's new blocks) ---- */
+.rvm-side-line.is-ending { color: #b45309; }
+.rvm-side-line.is-ended { color: #767676; }
+.rvm-side-line.is-ext { color: #15803d; }
+.rvm-side-line.is-req { color: #5b3fd6; }
+.rvm-shell-side .rvm-side-row .rvm-side-avatar img { object-position: 50% 15%; }
+.rvm-shell-side .rvm-side-row.is-pending-row .rvm-side-avatar { opacity: .6; }
+.rvm-side-tick.cs-tick-grey { background: #f1f1f3; color: #767676; font-weight: 600; font-size: 11px; }
+.rvm-side-tick.cs-tick-req { background: #efecf7; color: #5b3fd6; font-weight: 700; font-size: 12px; }
+.rvm-shell:focus { outline: none; }
+.rvm .rvm-panel-copy { -webkit-mask-image: linear-gradient(#000 calc(100% - 28px), transparent); mask-image: linear-gradient(#000 calc(100% - 28px), transparent); padding-bottom: 32px; }
+@media (max-width: 1100px) {
+  .rvm .rvm-shell-body { grid-template-columns: minmax(0, 1fr) 360px; }
+  .rvm .rvm-shell-side { display: none; }
+}
+
+/* state chip + 90-day meter: the "where are we" the panel was missing */
+.cs-state { display: inline-flex; align-items: center; gap: 7px; height: 26px; padding: 0 10px 0 9px; border-radius: 999px; font-size: 12px; font-weight: 600; letter-spacing: .01em; margin-bottom: 12px; }
+.cs-state i { width: 7px; height: 7px; border-radius: 999px; background: currentColor; }
+.cs-state--active { background: #e8f7ef; color: #15803d; }
+.cs-state--ending { background: #fff4e5; color: #b45309; }
+.cs-state--ended { background: #f1f1f3; color: #52525b; }
+.cs-state--requested { background: #efecf7; color: #5b3fd6; }
+.cs-state--extended { background: #e8f7ef; color: #15803d; }
+.cs-state--pending { background: #f1f1f3; color: #5f5f66; }
+.cs-meter { margin-top: 20px; }
+.cs-meter-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 8px; font-size: 13px; line-height: 18px; color: #717171; font-variant-numeric: tabular-nums; }
+.cs-meter-top b { font-weight: 600; color: #1c1c1c; }
+.cs-meter--ending .cs-meter-top b { color: #b45309; }
+.cs-meter--extended .cs-meter-top b { color: #15803d; }
+.cs-meter--ended .cs-meter-top b { color: #52525b; }
+.cs-meter-bar { position: relative; height: 6px; border-radius: 999px; background: #ececf1; }
+.cs-meter-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: #2baf87; }
+.cs-meter--ending .cs-meter-fill { background: #e88e2c; }
+.cs-meter--ended .cs-meter-fill { background: #c2c5c4; }
+.cs-meter-ext { position: absolute; top: 0; bottom: 0; right: 0; border-radius: 0 999px 999px 0; background: #e8f7ef; box-shadow: inset 0 0 0 1px #9fdcc4; }
+.cs-meter-today { position: absolute; top: -4px; width: 2px; height: 14px; background: #1c1c1c; border-radius: 2px; transform: translateX(-1px); }
+.cs-meter-labels { display: flex; justify-content: space-between; gap: 8px; margin-top: 8px; font-size: 12px; line-height: 16px; color: #717171; font-variant-numeric: tabular-nums; }
+
+.cs-p-block { margin-top: 20px; border: 1px solid #ececf1; border-radius: 14px; overflow: hidden; }
+.cs-p-block-title { font-size: 13px; font-weight: 600; color: #1c1c1c; padding: 12px 16px 0; }
+.cs-p-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; }
+.cs-p-row + .cs-p-row { border-top: 1px solid #f1f1f3; }
+.cs-p-row-txt { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.cs-p-row-name { font-size: 14px; font-weight: 500; color: #1c1c1c; line-height: 18px; }
+.cs-p-row-meta { font-size: 12px; color: #717171; line-height: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+.cs-p-btn { flex: none; display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #e3e3e3; background: #fff; color: #1c1c1c; font: 500 13px/1 Inter, sans-serif; cursor: pointer; transition: background-color .12s; text-decoration: none; }
+.cs-p-btn:hover { background: #f7f7f8; }
+.cs-p-btn:disabled { color: #aaa; cursor: default; }
+.cs-p-btn svg { width: 14px; height: 14px; }
+.cs-receipt { font-size: 12px; color: #717171; padding: 0 16px 12px; }
+.cs-p-note { margin-top: 16px; font-size: 13.5px; line-height: 20px; color: #717171; }
+.cs-p-note b { color: #1c1c1c; font-weight: 500; }
+.cs-p-demo { margin-top: 12px; }
+.cs-p-demo button { background: none; border: 1px dashed #c9bcff; color: #5b3fd6; border-radius: 8px; padding: 6px 10px; font: 500 12px/1 Inter, sans-serif; cursor: pointer; }
+.rvm-shell-foot .rvm-foot-approve.cs-foot-dl { display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+.rvm-shell-foot .rvm-foot-approve.cs-foot-dl svg { width: 16px; height: 16px; }
+/* one quiet status rail for every settled state: grey field, dark words, colour only in the dot */
+.rvm-shell-foot .rvm-footer-status.cs-rail { width: 100%; background: #f6f6f8; color: #1c1c1c; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 400; }
+.rvm-shell-foot .rvm-footer-status.cs-rail i, .cs-foot-status i { width: 8px; height: 8px; border-radius: 999px; background: #896bd9; flex: none; }
+.rvm-shell-foot .rvm-footer-status.cs-rail.is-grey i { background: #c2c5c4; }
+.rvm-shell-foot .rvm-footer-status.cs-rail b { font-weight: 600; }
+.rvm-shell-foot .rvm-footer-status.cs-rail span { color: #717171; }
+.cs-foot-status { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: #52525b; white-space: nowrap; padding: 0 4px; flex: 1; min-width: 0; }
+.cs-foot-status b { font-weight: 600; color: #1c1c1c; }
+.rvm-precheck-tick.cs-tick-dim { opacity: .28; filter: grayscale(1); }
+.rvm-precheck-item.is-dim { color: #717171; }
+
+/* extend sheet (reuses the flag sheet card); compact, scrolls when the window is short */
+.rvm-changes-card.cs-sheet { max-height: calc(100vh - 140px); overflow: auto; }
+.rvm-changes-card.cs-sheet .rvm-changes-body { padding-top: 40px; }
+.rvm-changes-card.cs-sheet .rvm-changes-icon { font-size: 22px; width: 44px; height: 44px; }
+.rvm-changes-card.cs-sheet .rvm-changes-title { font-size: 17px; }
+.rvm-changes-card.cs-sheet .rvm-changes-sub { font-size: 13px; line-height: 18px; }
+.rvm-changes-card.cs-sheet .rvm-changes-footer { position: sticky; bottom: 0; background: #fff; }
+.cs-sheet-field { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; text-align: left; width: 100%; }
+.cs-sheet-label { font-size: 13px; font-weight: 600; color: #1c1c1c; }
+.cs-chips { display: flex; gap: 8px; }
+.cs-chip { height: 34px; padding: 0 14px; border-radius: 999px; border: 1px solid #e3e3e3; background: #fff; color: #1c1c1c; font: 500 13px/1 Inter, sans-serif; cursor: pointer; }
+.cs-chip.is-on { background: #1c1c1c; border-color: #1c1c1c; color: #fff; }
+.cs-money { display: flex; align-items: center; gap: 6px; height: 42px; padding: 0 14px; border: 1px solid #e3e3e3; border-radius: 10px; font-size: 16px; color: #1c1c1c; }
+.cs-money:focus-within { border-color: #1c1c1c; }
+.cs-money input { width: 100%; border: 0; outline: 0; font: 500 16px/1 Inter, sans-serif; color: #1c1c1c; background: transparent; font-variant-numeric: tabular-nums; }
+.cs-sheet-hint { font-size: 12px; color: #717171; line-height: 16px; }
+.rvm-changes-card.cs-sheet .rvm-changes-textarea { margin: 0; min-height: 64px; height: 64px; max-height: 180px; resize: vertical; padding: 10px 12px; border: 1px solid #e3e3e3; border-radius: 10px; font-size: 14px; line-height: 20px; width: 100%; }
+.rvm-changes-card.cs-sheet .rvm-changes-textarea:focus { border-color: #1c1c1c; }
+.rvm-changes-send:disabled { opacity: .4; cursor: default; }
+
+/* toast: top of the window so it never lands on the demo bar */
+.cs-toast { position: fixed; left: 50%; top: 18px; transform: translateX(-50%) translateY(-8px); background: #1a1a1a; color: #fff; padding: 10px 16px; border-radius: 10px; font: 500 13px/1.3 Inter, ui-sans-serif, system-ui, sans-serif; opacity: 0; pointer-events: none; transition: opacity .15s, transform .15s; z-index: 600; }
+.cs-toast.is-on { opacity: 1; transform: translateX(-50%); }
+
+/* ---- demo bar (prototype scaffolding, not product) ---- */
+.cs-demo { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 450; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px 12px; min-height: 40px; padding: 7px 10px 7px 14px; border-radius: 20px; background: #111; color: #fff; font: 500 12px/1 Inter, ui-sans-serif, system-ui, sans-serif; box-shadow: 0 8px 24px rgba(0,0,0,.28); white-space: nowrap; max-width: calc(100vw - 32px); }
+.cs-demo.is-min { bottom: 3px; min-height: 0; padding: 0; background: none; box-shadow: none; }
+.cs-demo-group { display: flex; align-items: center; gap: 6px; }
+.cs-demo-group.is-off { opacity: .32; pointer-events: none; }
+.cs-demo-k { color: #9c9c9c; letter-spacing: .04em; font-size: 11px; }
+.cs-demo button { height: 26px; padding: 0 10px; border-radius: 999px; border: 0; background: rgba(255,255,255,.08); color: #ddd; font: 500 12px/1 Inter, sans-serif; cursor: pointer; }
+.cs-demo button:hover { background: rgba(255,255,255,.16); }
+.cs-demo button.is-on { background: #fff; color: #111; }
+.cs-demo button.is-on.is-prod { background: #ffd166; }
+.cs-demo button.cs-demo-chip { height: 22px; padding: 0 12px; background: #111; color: #ddd; font-size: 11px; letter-spacing: .02em; }
+.cs-demo-sep { width: 1px; height: 18px; background: rgba(255,255,255,.18); flex: none; }
+.cs-demo a { color: #bbb; text-decoration: none; padding: 0 6px; }
+.cs-demo a:hover { color: #fff; }
+body.embed .cs-demo { display: none; }
+
+
+/* ---- Rights tab: every video and its end date in one table (Creators-card anatomy) ---- */
+.nf .stage-top-card.cs-panel--rights { padding: 24px 0; }
+.nf .cs-rt-tools { display: flex; align-items: center; gap: 8px; flex: none; }
+.nf .cs-rt-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 0 0 16px; flex-wrap: wrap; }
+.nf .cs-rt-bar .cs-sum, .nf .cs-rt-bar .cs-bulk { margin: 0; }
+.nf .cs-seg { display: inline-flex; border: 1px solid #e3e3e3; border-radius: 10px; overflow: hidden; background: #fff; }
+.nf .cs-seg button { height: 34px; padding: 0 12px; font: 500 13px/1 Inter, sans-serif; color: #4b4b4b; cursor: pointer; }
+.nf .cs-seg button + button { border-left: 1px solid #e3e3e3; }
+.nf .cs-seg button.is-on { background: #1a1a1a; color: #fff; }
+.nf .cs-rt-card { border: 1px solid #e3e3e3; border-radius: 16px; background: #fff; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,.03); }
+.nf .cs-rt-cols, .nf .cs-rt-row { display: grid; grid-template-columns: 22px minmax(190px, 1.5fr) 84px minmax(120px, .9fr) minmax(150px, 1fr) 172px; gap: 14px; align-items: center; padding: 0 20px; }
+.nf .cs-rt-cols { height: 40px; background: #f8f9fa; border-bottom: 1px solid #e3e3e3; font-size: 12px; font-weight: 600; color: #717171; }
+.nf .cs-rt-sort { display: inline-flex; align-items: center; gap: 4px; font: inherit; font-weight: 600; color: inherit; cursor: pointer; }
+.nf .cs-rt-sort.is-on { color: #1a1a1a; }
+.nf .cs-rt-sort span { font-size: 10px; }
+.nf .cs-rt-row { min-height: 64px; border-bottom: 1px solid #eeeeee; cursor: pointer; }
+.nf .cs-rt-row:last-child { border-bottom: 0; }
+.nf .cs-rt-row:hover { background: #fcfcfc; }
+.nf .cs-rt-row.is-sel { background: #faf9ff; }
+.nf .cs-rt-video { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.nf .cs-rt-thumb { width: 36px; height: 48px; border-radius: 6px; overflow: hidden; background: #eee; flex: none; }
+.nf .cs-rt-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.nf .cs-rt-row.is-pending .cs-rt-thumb img { opacity: .4; filter: grayscale(1); }
+.nf .cs-rt-names { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.nf .cs-rt-date { font-size: 14px; color: #1a1a1a; font-variant-numeric: tabular-nums; }
+.nf .cs-rt-muted { font-size: 13px; color: #767676; }
+.nf .cs-rt-end { display: flex; flex-direction: column; gap: 2px; font-variant-numeric: tabular-nums; }
+.nf .cs-rt-end b { font-size: 14px; font-weight: 500; color: #1a1a1a; }
+.nf .cs-rt-end span { font-size: 12px; color: #6b7280; }
+.nf .cs-rt-end.is-ending span { color: #b45309; font-weight: 500; }
+.nf .cs-rt-end.is-ended b { color: #767676; }
+.nf .cs-rt-status { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 500; color: #444; white-space: nowrap; }
+.nf .cs-rt-status i { width: 8px; height: 8px; border-radius: 999px; background: #2baf87; flex: none; }
+.nf .cs-rt-status.is-ending { color: #b45309; }
+.nf .cs-rt-status.is-ending i { background: #e88e2c; }
+.nf .cs-rt-status.is-ended { color: #767676; }
+.nf .cs-rt-status.is-ended i { background: #c2c5c4; }
+.nf .cs-rt-status.is-requested { color: #5b3fd6; }
+.nf .cs-rt-status.is-requested i { background: #fff; box-shadow: inset 0 0 0 2px #896bd9; }
+.nf .cs-rt-status.is-extended { color: #15803d; }
+.nf .cs-rt-status.is-pending { color: #767676; }
+.nf .cs-rt-status.is-pending i { background: #e3e3e3; }
+.nf .cs-rt-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+.nf .cs-rt-actions .cs-extend { height: 30px; padding: 0 12px; font-size: 13px; }
+.nf .cs-iconbtn { width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e3e3e3; background: #fff; display: grid; place-items: center; color: #1a1a1a; cursor: pointer; flex: none; }
+.nf .cs-iconbtn:hover { background: #f7f7f8; }
+.nf .cs-iconbtn svg { width: 15px; height: 15px; }
+.nf .cs-iconbtn:disabled { color: #c6c6c6; cursor: default; background: #fff; }
+.nf .cs-check { width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid #c6c6c6; background: #fff; display: grid; place-items: center; cursor: pointer; color: #fff; font-size: 11px; line-height: 1; }
+.nf .cs-check[aria-checked="true"], .nf .cs-check[aria-checked="mixed"] { background: #7a5cfa; border-color: #7a5cfa; }
+.nf .cs-check:disabled { opacity: .35; cursor: default; }
+.nf .cs-bulk { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 14px; color: #1a1a1a; min-height: 28px; margin: 0 0 16px; }
+.nf .cs-bulk b { font-weight: 600; }
+.nf .cs-bulk .cs-ghost { height: 30px; font-size: 13px; padding: 0 12px; border-radius: 8px; }
+.nf .cs-bulk .cs-ghost.is-dark { background: #1a1a1a; border-color: #1a1a1a; color: #fff; }
+
+/* the same dates as a month, behind the Table / Calendar toggle (Vendr's pairing) */
+.nf .cs-bigcal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px; border-bottom: 1px solid #e3e3e3; background: #f8f9fa; }
+.nf .cs-bigcal-head .cs-cal-month { font-size: 15px; }
+.nf .cs-bigcal-nav { display: flex; align-items: center; gap: 8px; }
+.nf .cs-bigcal-dows, .nf .cs-bigcal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.nf .cs-bigcal-dows span { padding: 8px 10px; font-size: 11px; font-weight: 600; letter-spacing: .04em; color: #767676; text-transform: uppercase; border-bottom: 1px solid #eee; }
+.nf .cs-bigday { min-height: 98px; padding: 6px 8px 8px; border-right: 1px solid #f1f1f1; border-bottom: 1px solid #f1f1f1; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.nf .cs-bigday:nth-child(7n) { border-right: 0; }
+.nf .cs-bigday-n { font-size: 12px; font-weight: 500; color: #1a1a1a; width: 22px; height: 22px; display: grid; place-items: center; border-radius: 999px; font-variant-numeric: tabular-nums; }
+.nf .cs-bigday.is-out .cs-bigday-n { color: #b3b3b3; }
+.nf .cs-bigday.is-today .cs-bigday-n { background: #7a5cfa; color: #fff; font-weight: 600; }
+.nf .cs-bigchip { display: flex; align-items: center; gap: 6px; height: 24px; padding: 0 8px 0 3px; border-radius: 999px; background: #f5f3fc; font-size: 12px; font-weight: 500; color: #1a1a1a; cursor: pointer; min-width: 0; width: 100%; text-align: left; }
+.nf .cs-bigchip img { width: 18px; height: 18px; border-radius: 999px; object-fit: cover; object-position: 50% 15%; flex: none; }
+.nf .cs-bigchip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nf .cs-bigchip.is-ending { background: #fff4e5; color: #b45309; }
+.nf .cs-bigchip.is-ended { background: #f1f1f3; color: #767676; }
+.nf .cs-bigchip.is-ext { background: #e8f7ef; color: #15803d; }
+.nf .cs-bigchip.is-req { background: #fff; box-shadow: inset 0 0 0 1px #c9bcff; color: #5b3fd6; }
+.nf .cs-bigmore { font-size: 11px; font-weight: 500; color: #5b3fd6; padding-left: 4px; cursor: pointer; text-align: left; }
+.nf .cs-panel--dash .am-update.cs-upd2 > .cp-live { max-width: 100%; min-width: 0; }
+.nf .cs-upd-rights > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.nf .cs-upd-rights .tf-rowlink { flex: none; }
+
+/* ---- Dashboard variant: a second quiet line under each creator's update + the videos in the drawer ---- */
+.nf .cs-panel--dash .am-update.cs-upd2 { flex-direction: column; align-items: flex-start; justify-content: center; gap: 3px; }
+.nf .cs-upd-rights { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; line-height: 16px; color: #6b7280; white-space: nowrap; max-width: 100%; }
+.nf .cs-upd-rights i { width: 6px; height: 6px; border-radius: 999px; background: #2baf87; flex: none; }
+.nf .cs-upd-rights.is-ending { color: #b45309; font-weight: 500; }
+.nf .cs-upd-rights.is-ending i { background: #e88e2c; }
+.nf .cs-upd-rights.is-ended { color: #767676; }
+.nf .cs-upd-rights.is-ended i { background: #c2c5c4; }
+.nf .cs-upd-rights.is-req { color: #5b3fd6; }
+.nf .cs-upd-rights.is-req i { background: #896bd9; }
+.nf .cs-upd-rights.is-ext { color: #15803d; }
+.nf .cs-panel--dash .cs-upd-rights .tf-rowlink { margin-left: 4px; font-weight: 600; }
+.nf .cs-dvids { padding: 16px 20px 6px; border-top: 1px dashed #e3e3e3; background: #fcfcfc; }
+.nf .cs-dvids-title { margin: 0 0 6px; font-size: 12px; font-weight: 600; letter-spacing: .6px; text-transform: uppercase; color: #717171; }
+.nf .cs-dvid { display: grid; grid-template-columns: 36px minmax(0, 1fr) minmax(130px, auto) auto; gap: 12px; align-items: center; padding: 8px 0; border-top: 1px solid #f1f1f1; cursor: pointer; }
+.nf .cs-dvid:first-of-type { border-top: 0; }
+.nf .cs-dvids + .am-hist { border-top: 0; }
+
+/* the extend sheet on its own (table rows and bulk): same card, centred on a scrim */
+.rvm.cs-solo .cs-solo-scrim { position: fixed; inset: 0; z-index: 420; background: rgba(0,0,0,.45); display: grid; place-items: center; padding: 24px; }
+.rvm.cs-solo .rvm-changes-card { position: relative; right: auto; bottom: auto; width: 410px; max-width: 100%; min-height: 0; }
+
+
+/* ---- Content tab, shelf layout: production's grid untouched, one slim shelf above it ----
+   Everything sits on the same 333px tracks, so the shelf, the headings and the cards share one right edge. */
+.nf .cs-wrap.cs-wrap--shelf { display: block; padding: 24px 0; }
+.nf .cs-flow { display: grid; grid-template-columns: repeat(auto-fill, 333px); gap: 16px; justify-content: start; }
+.nf .cs-flow > .cs-span { grid-column: 1 / -1; min-width: 0; }
+.nf .cs-wrap--shelf > .cs-toolbar { margin-bottom: 20px; }
+.nf .cs-shelf { border: 1px solid #ebebeb; border-radius: 14px; background: #fff; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+.nf .cs-shelf-lead { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; min-width: 0; }
+.nf .cs-shelf-title { font-size: 14px; font-weight: 600; color: #1a1a1a; }
+.nf .cs-shelf-sub { font-size: 13px; color: #6b7280; }
+.nf .cs-shelf-sub b { font-weight: 500; color: #1a1a1a; }
+.nf .cs-shelf-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.nf .cs-bucket { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 12px; border-radius: 10px; border: 1px solid #ebebeb; background: #fff; cursor: pointer; white-space: nowrap; transition: background-color .12s, border-color .12s; }
+.nf .cs-bucket:hover { background: #fafafa; border-color: #d9d9d9; }
+.nf .cs-bucket.is-on { border-color: #1a1a1a; box-shadow: inset 0 0 0 1px #1a1a1a; }
+.nf .cs-bucket.is-empty { cursor: default; background: #fcfcfc; }
+.nf .cs-bucket.is-empty:hover { background: #fcfcfc; border-color: #ebebeb; }
+.nf .cs-bucket-label { font-size: 13px; font-weight: 600; color: #1a1a1a; }
+.nf .cs-bucket-n { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: #f1f1f1; color: #4b4b4b; font-size: 12px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.nf .cs-bucket.is-empty .cs-bucket-n { background: none; padding: 0; color: #767676; font-weight: 400; }
+.nf .cs-bucket.is-empty .cs-bucket-label { color: #767676; font-weight: 500; }
+.nf .cs-bucket-faces { display: inline-flex; align-items: center; }
+.nf .cs-bucket-faces img { width: 22px; height: 22px; border-radius: 999px; object-fit: cover; object-position: 50% 15%; border: 2px solid #fff; margin-left: -6px; }
+.nf .cs-bucket-faces img:first-child { margin-left: 0; }
+.nf .cs-bucket-faces img.is-ending { box-shadow: 0 0 0 1.5px #e88e2c; }
+.nf .cs-bucket-faces img.is-ended { filter: grayscale(1); opacity: .7; }
+.nf .cs-bucket-faces img.is-ext { box-shadow: 0 0 0 1.5px #2baf87; }
+.nf .cs-bucket-faces img.is-req { box-shadow: 0 0 0 1.5px #896bd9; }
+.nf .cs-bucket-more { margin-left: 4px; font-size: 12px; color: #6b7280; }
+.nf .cs-bucket-sep { width: 1px; background: #ebebeb; margin: 6px 4px; }
+.nf .cs-sec { display: flex; align-items: center; gap: 10px; margin: 12px 0 -4px; font-size: 14px; font-weight: 600; color: #1a1a1a; }
+.nf .cs-sec .cs-sec-n { font-weight: 400; color: #6b7280; font-variant-numeric: tabular-nums; }
+.nf .cs-sec i { width: 7px; height: 7px; border-radius: 999px; background: #e88e2c; flex: none; }
+.nf .cs-sec-acts { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+.nf .cs-sec .cs-link { font-size: 13px; }
+.nf .cs-sec .cs-ghost { height: 30px; font-size: 13px; padding: 0 12px; border-radius: 8px; }
+.nf .cs-ends { position: absolute; left: 12px; bottom: 12px; display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; background: #fff4e5; color: #b45309; font-size: 12px; font-weight: 600; box-shadow: 0 1px 2px rgba(16,24,40,.12); }
+.nf .cs-ends.is-ended { background: rgba(255,255,255,.94); color: #52525b; }
+.nf .cs-card-check { position: absolute; top: 10px; right: 10px; width: 24px; height: 24px; border-radius: 7px; border: 1.5px solid #fff; background: rgba(0,0,0,.45); color: #fff; font-size: 13px; opacity: 0; transition: opacity .15s; z-index: 2; box-shadow: 0 1px 3px rgba(0,0,0,.35); }
+.nf .cs-card:hover .cs-card-check, .nf .cs-card:focus-within .cs-card-check, .nf .cs-flow.has-sel .cs-card-check { opacity: 1; }
+.nf .cs-card-check[aria-checked="true"] { background: #7a5cfa; border-color: #7a5cfa; opacity: 1; }
+.nf .cs-card.is-picked { border-color: #7a5cfa; box-shadow: 0 0 0 1px #7a5cfa; }
+/* the selection bar floats: it never pushes the grid down */
+.nf .cs-float { position: fixed; left: calc(50% + 110px); bottom: calc(var(--demo-h, 56px) + 28px); transform: translateX(-50%); z-index: 300; }
+.nf .cs-float .cs-bulk { margin: 0; padding: 8px 10px 8px 16px; border-radius: 14px; background: #fff; border: 1px solid #e3e3e3; box-shadow: 0 1px 2px rgba(16,24,40,.06), 0 12px 32px rgba(16,24,40,.18); min-height: 0; flex-wrap: nowrap; white-space: nowrap; }
+.nf .cs-flow .cs-sum { margin: 0; }
+.cs-sheet-names { margin-top: 8px; font-size: 12px; line-height: 16px; color: #717171; }
+
+
+/* ---- Content tab, shelf layout, small tiles (TILES switch): same card, 212px tracks, five across at 1440 ----
+   The amber chip leaves the picture (the line under it says the same thing), the hover buttons drop to icons,
+   the caption keeps one line. Nothing is removed from the popup. */
+.nf .cs-flow.cs-flow--sm { grid-template-columns: repeat(auto-fill, 212px); gap: 12px; }
+.nf .cs-flow--sm .cs-card { border-radius: 12px; }
+.nf .cs-flow--sm .cs-plat { top: 8px; left: 8px; height: 22px; padding: 0 8px 0 6px; font-size: 11px; gap: 5px; }
+.nf .cs-flow--sm .cs-plat svg { width: 11px; height: 11px; }
+.nf .cs-flow--sm .cs-card-check { top: 8px; right: 8px; width: 22px; height: 22px; border-radius: 6px; font-size: 12px; }
+.nf .cs-flow--sm .cs-hover { right: 8px; bottom: 8px; }
+.nf .cs-flow--sm .cs-dl { width: 30px; height: 30px; padding: 0; justify-content: center; }
+.nf .cs-flow--sm .cs-dl span { display: none; }
+.nf .cs-flow--sm .cs-body { padding: 10px 12px 10px; gap: 6px; }
+.nf .cs-flow--sm .cs-who { gap: 8px; }
+.nf .cs-flow--sm .cs-avatar { width: 24px; height: 24px; }
+.nf .cs-flow--sm .cs-name { font-size: 13px; line-height: 16px; }
+.nf .cs-flow--sm .cs-meta { font-size: 11px; line-height: 14px; }
+.nf .cs-flow--sm .cs-cap, .nf .cs-flow--sm .cs-cap--3 { -webkit-line-clamp: 1; min-height: 16px; font-size: 12px; line-height: 16px; }
+.nf .cs-flow--sm .cs-rightsrow { padding-top: 8px; min-height: 33px; gap: 6px; }
+.nf .cs-flow--sm .cs-rights { font-size: 12px; line-height: 16px; gap: 5px; }
+.nf .cs-flow--sm .cs-extend { height: 24px; padding: 0 9px; }
+.nf .cs-flow--sm .cs-sec { margin: 10px 0 -2px; }
+
+/* responsive rules last so they win equal-specificity ties */
+@media (max-width: 1240px) {
+  .nf .cs-wrap { grid-template-columns: minmax(0, 1fr) 272px; gap: 24px; }
+  .nf .cs-grid { grid-template-columns: repeat(auto-fill, minmax(188px, 1fr)); gap: 12px; }
+  .nf .cs-grid--prod { grid-template-columns: repeat(auto-fill, 333px); gap: 16px; }
+  .nf .cs-bucket-faces { display: none; }
+  .nf .cs-bucket { padding: 0 10px; }
+  .nf .cs-body { padding: 12px 12px; }
+}
+@media (max-width: 1240px) {
+  .nf .cs-rt-cols, .nf .cs-rt-row { grid-template-columns: 22px minmax(150px, 1.4fr) minmax(110px, .9fr) minmax(130px, 1fr) 140px; }
+  .nf .cs-rt-cols > :nth-child(3), .nf .cs-rt-row > :nth-child(3) { display: none; }   /* Posted folds away first */
+  .nf .cs-bigday { min-height: 84px; padding: 4px 4px 6px; }
+}
+@media (max-width: 900px) {
+  .nf .cs-wrap { grid-template-columns: minmax(0, 1fr); }
+  .nf .cs-rail { order: 2; }
+}
+</style>
+</head>
+<body>
+<div class="nf" id="nf"></div>
+<div class="cs-toast" id="toast" role="status"></div>
+<div class="cs-demo" id="demo"></div>
+
+<script>
+/* ==================================================================
+   DATA · Simple Skincare "Repair+ Holiday Hydration" (demo scenario)
+   Rule (contract, signed Aug 10): 90 days of full usage incl. paid ads,
+   clock starts the day the post goes live (Katherine, Sep 25 call).
+   Creators and clips are demo footage from the review popup, not real people.
+   ================================================================== */
+const D = (s) => new Date(s + 'T12:00:00');
+const DAY = 86400000;
+const addDays = (d, n) => new Date(d.getTime() + n * DAY);
+const diffDays = (a, b) => Math.round((a - b) / DAY);
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const fmt = (d) => `${MON[d.getMonth()]} ${d.getDate()}`;
+const iso = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+const RIGHTS_DAYS = 90;
+const BRAND = 'Simple';
+const CAMPAIGN = 'Repair+ Holiday Hydration';
+const R = 'assets/review/';
+const KL = { 'TikTok': 'TikTok', 'IG Reel': 'Reel', 'IG Story': 'Story' };          /* one short name per format, as on production's card pill */
+const PLATFORM = (k) => k === 'TikTok' ? 'TikTok' : 'Instagram';
+
+const CREATORS = {
+  quinn:  { name: 'Quinn Hale',   handle: '@quinn.hale',   av: R+'posters/quinn-1.jpg' },
+  emery:  { name: 'Emery Vance',  handle: '@emeryvance',   av: R+'posters/emery-1.jpg' },
+  jasper: { name: 'Jasper Okafor',handle: '@jasper.ok',    av: R+'posters/jasper-1.jpg' },
+  maya:   { name: 'Maya Lindqvist',handle: '@mayalind',    av: R+'posters/quinn-2.jpg' },
+  priya:  { name: 'Priya Raman',  handle: '@priya.skin',   av: R+'posters/emery-2.jpg' },
+  lena:   { name: 'Lena Ortiz',   handle: '@lenaortiz',    av: R+'posters/jasper-1.jpg' },
+  noor:   { name: 'Noor Haddad',  handle: '@noorglow',     av: R+'posters/quinn-1.jpg' },
+  sofia:  { name: 'Sofia Brandt', handle: '@sofiabrandt',  av: R+'posters/emery-1.jpg' },
+  amara:  { name: 'Amara Diallo', handle: '@amara.d',      av: R+'posters/quinn-2.jpg' },
+};
+
+/* posted = the day the post went live (rights clock t0). ext = extension events with dates. */
+const PIECES = [
+  { id:'q1', c:'quinn',  kind:'TikTok',   clip:'quinn-1',  posted:'2026-11-18', size:'48 MB', dl:'2026-12-01',
+    cap:['my honest PM routine ft. Simple Repair+ 🧴 the hydration is real','#simplepartner'],
+    url:'tiktok.com/@quinn.hale/video/7451…' },
+  { id:'q2', c:'quinn',  kind:'IG Reel',  clip:'quinn-2',  posted:'2026-11-21', size:'41 MB', dl:'2026-12-01',
+    cap:['skin ready for the holidays with @simpleskincare Repair+ ✨','#simplepartner'],
+    url:'instagram.com/reel/C9x…', ext:{ state:'extended', requested:'2027-02-10', accepted:'2027-02-15', days:90, offer:75 } },
+  { id:'e1', c:'emery',  kind:'IG Reel',  clip:'emery-1',  posted:'2026-11-25', size:'52 MB', dl:'2026-12-12',
+    cap:['three ingredients, zero drama: why Repair+ stays on my shelf','#simplepartner'],
+    url:'instagram.com/reel/C9z…', ext:{ state:'requested', requested:'2027-02-24', days:90, offer:75 } },
+  { id:'e2', c:'emery',  kind:'IG Story', clip:'emery-2',  posted:'2026-11-26', size:'19 MB',
+    cap:['Link sticker to the Repair+ bundle on frame 2'],
+    url:'instagram.com/stories/emeryvance/…' },
+  { id:'j1', c:'jasper', kind:'TikTok',   clip:'jasper-1', posted:'2026-11-29', size:'63 MB', dl:'2026-12-12',
+    cap:['POV: your skin barrier after two weeks of Repair+ 🙌','#simplepartner'],
+    url:'tiktok.com/@jasper.ok/video/7462…' },
+  { id:'m1', c:'maya',   kind:'IG Reel',  clip:'quinn-2',  posted:'2026-12-02', size:'44 MB',
+    cap:['come get ready with me, Smooth+ then Repair+ edition','#simplepartner'],
+    url:'instagram.com/reel/DAa…' },
+  { id:'p1', c:'priya',  kind:'TikTok',   clip:'emery-1',  posted:'2026-12-05', size:'57 MB', dl:'2026-12-20',
+    cap:['ceramides explained in 30 seconds (with Repair+)','#simplepartner'],
+    url:'tiktok.com/@priya.skin/video/7470…' },
+  { id:'p2', c:'priya',  kind:'IG Reel',  clip:'emery-2',  posted:'2026-12-09', size:'39 MB',
+    cap:['the hydration check, day 14 💧','#simplepartner'],
+    url:'instagram.com/reel/DAc…' },
+  { id:'l1', c:'lena',   kind:'TikTok',   clip:'jasper-1', posted:'2026-12-14', approved:'2026-12-05', size:'61 MB',
+    cap:['winter skin, meet Repair+ ❄️ a gentle glow up','#simplepartner'],
+    url:'tiktok.com/@lenaortiz/video/7478…' },
+  { id:'n1', c:'noor',   kind:'IG Reel',  clip:'quinn-1',  posted:'2026-12-20', approved:'2026-12-11', size:'46 MB',
+    cap:['holiday reset: Smooth+ in the AM, Repair+ at night','#simplepartner'],
+    url:'instagram.com/reel/DAf…' },
+  { id:'s1', c:'sofia',  kind:'TikTok',   clip:'emery-1',  posted:'2027-01-06', approved:'2026-12-28', size:'55 MB',
+    cap:['new year, same barrier: my Repair+ verdict after a month','#simplepartner'],
+    url:'tiktok.com/@sofiabrandt/video/7490…' },
+  { id:'a1', c:'amara',  kind:'IG Reel',  clip:'quinn-2',  posted:null, approved:'2027-02-19', size:'42 MB',
+    cap:['a week of Repair+ on dry winter skin, the before and after','#simplepartner'], url:null },
+];
+
+/* ---- forks (prototype scaffolding; deep links ?today=&remind=&extend=&cal=&view=&tab=&open=&embed) ---- */
+const TODAYS = [
+  { key:'2026-12-10', label:'Dec 10', hint:'first posts live' },
+  { key:'2027-02-24', label:'Feb 24', hint:'mixed: ended, ending, live' },
+  { key:'2027-04-02', label:'Apr 2',  hint:'most ended' },
+];
+const qs = new URLSearchParams(location.search);
+function load(k, d) { try { const v = JSON.parse(localStorage.getItem('chs-v2') || '{}')[k]; return v === undefined ? d : v; } catch { return d; } }
+function save(k, v) { try { const o = JSON.parse(localStorage.getItem('chs-v2') || '{}'); o[k] = v; localStorage.setItem('chs-v2', JSON.stringify(o)); } catch {} }
+const FORKS = {
+  today:  qs.get('today')  || load('today',  '2027-02-24'),
+  remind: Number(qs.get('remind') || load('remind', 7)),      /* 7 = agreed with Katherine Sep 25 · 5 = Julia, Sep 30 */
+  extend: qs.get('extend') || load('extend', 'ask'),         /* ask = one button to Katie's team (V0) · price = duration + offer (V1) */
+  cal:    qs.get('cal')    || load('cal', 'month'),          /* month | faces | timeline */
+  view:   qs.get('view')   || load('view', 'new'),           /* new = proposed · prod = what production shows today */
+  tile:   qs.get('tile')   || load('tile', 'lg'),            /* Content tab, shelf layout: lg = production's 333px tile · sm = a denser 212px tile (Julia, Oct 1) */
+  clay:   qs.get('clay')   || load('clay', 'shelf'),          /* Content tab layout: shelf = production grid + a week shelf (new) · rail = cards + right rail (the Sep 30 version) */
+  where:  qs.get('where')  || load('where', 'content'),      /* where rights live: content = cards + rail · tab = its own Rights tab · dash = inside the Dashboard's Creators table */
+};
+if (FORKS.extend === 'secure') FORKS.extend = 'price';
+if (qs.get('cal') && !qs.get('clay')) FORKS.clay = 'rail';
+if (FORKS.tile !== 'sm') FORKS.tile = 'lg';
+if (qs.has('embed')) document.body.classList.add('embed');
+/* a fork changed from the demo bar wins over the URL on the next reload */
+function setFork(k, v) { FORKS[k] = v; save(k, v); try { const u = new URL(location.href); let ch = false; if (u.searchParams.has(k)) { u.searchParams.delete(k); ch = true; } if (k === 'clay' && u.searchParams.has('cal')) { save('cal', FORKS.cal); u.searchParams.delete('cal'); ch = true; } if (ch) history.replaceState(null, '', u); } catch {} }
+
+/* session state: downloads + extension requests made in this prototype */
+const S = { downloads: load('downloads', {}), ext: load('ext', {}), dismissed: false, filter:'all', day:null, tab: qs.get('tab') || (FORKS.view !== 'prod' && FORKS.where === 'tab' ? 'rights' : FORKS.view !== 'prod' && FORKS.where === 'dash' ? 'dashboard' : 'content'), open:null, sheet:null, sheetFor:null, sheetDays:90, sheetOffer:75, sheetText:'', tlAll:false, demoPinned:false, rtFilter:'all', rtSort:{ key:'attention', dir:1 }, rtView:'table', sel:[], sheetIds:[], sheetSolo:false, sheetSkipped:0, bucket:null, bigDay:null, rowsOpen:[], sheetOpener:null };
+
+/* ---- derived model for one piece at "today" ---- */
+function model(p) {
+  const today = D(FORKS.today);
+  const c = CREATORS[p.c];
+  const m = { p, c, today, kind:p.kind, plat: p.kind === 'TikTok' ? 'tt' : 'ig' };
+  const posted = p.posted ? D(p.posted) : null;
+  if (!posted || posted > today) { m.state = 'pending'; m.chip = 'pending'; m.approved = p.approved && D(p.approved) <= today ? D(p.approved) : null; return m; }
+  m.posted = posted;
+  m.ends0 = addDays(posted, RIGHTS_DAYS);
+  m.ends = m.ends0;
+  let ext = p.ext || null;
+  const local = S.ext[p.id];
+  if (local) ext = local;                        /* prototype-made request wins */
+  if (ext && ext.requested && D(ext.requested) > today) ext = null;   /* not yet happened at this "today" */
+  if (ext && ext.state === 'extended' && ext.accepted && D(ext.accepted) > today) ext = { ...ext, state:'requested' };
+  m.ext = ext;
+  if (ext && ext.state === 'extended') {
+    /* accepted before the old end: the new period follows on; accepted after: it starts at acceptance */
+    const base = D(ext.accepted) <= m.ends0 ? m.ends0 : D(ext.accepted);
+    m.extStart = base; m.ends = addDays(base, ext.days); m.extended = true;
+  }
+  m.daysLeft = diffDays(m.ends, today);
+  m.dayOf = diffDays(today, posted);
+  m.state = m.daysLeft < 0 ? 'ended' : (m.daysLeft <= FORKS.remind ? 'ending' : 'active');
+  if (ext && ext.state === 'requested') m.requested = true;
+  /* the meter counts days of rights, never the gap between an end and a late extension */
+  m.total = RIGHTS_DAYS + (m.extended ? ext.days : 0);
+  m.dayNum = !m.extended || today <= m.ends0 ? Math.min(Math.max(m.dayOf, 0), RIGHTS_DAYS) : RIGHTS_DAYS + Math.min(Math.max(diffDays(today, m.extStart), 0), ext.days);
+  m.reminderSent = m.daysLeft <= FORKS.remind && !m.extended;
+  m.reminderDate = addDays(m.ends, -FORKS.remind);
+  const dl = S.downloads[p.id] || (p.dl && D(p.dl) <= today ? p.dl : null);
+  m.downloaded = dl ? D(dl) : null;
+  m.chip = m.requested ? 'requested' : (m.extended && m.state !== 'ended') ? 'extended' : m.state;   /* the chip */
+  m.tone = m.state === 'ended' ? 'ended' : m.extended ? 'extended' : m.state;                          /* the meter colour follows the clock, not the request */
+  return m;
+}
+const MODELS = () => PIECES.map(model);
+const isProd = () => FORKS.view === 'prod';
+const WHERE = () => isProd() ? 'content' : FORKS.where;
+/* which of a creator's videos to open: the one that needs attention first */
+function bestPiece(list) {
+  const live = list.filter(m => m.state !== 'pending');
+  const by = (f) => live.filter(f).sort((a, b) => a.ends - b.ends)[0];
+  return by(m => m.state === 'ending' && !m.requested) || by(m => m.state === 'ended' && !m.requested) || by(m => m.state !== 'ended') || live[0] || list[0];
+}
+
+/* ---- copy (brand-facing; "Katie's team", no long dashes, first names) ---- */
+const first = (c) => c.name.split(' ')[0];
+const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+const inDays = (n) => n === 0 ? 'today' : n === 1 ? 'tomorrow' : `in ${n} days`;
+const agoDays = (n) => n === 1 ? 'yesterday' : `${n} days ago`;
+function rightsLine(m) {
+  if (m.state === 'pending') return { cls:'is-pending', html:'Rights start when it goes live' };
+  if (m.requested) return { cls:'is-req', html:`<b>Extension requested</b> · ${m.state === 'ended' ? 'ended' : 'ends'} ${fmt(m.ends)}` };
+  if (m.state === 'ended') return { cls:'is-ended', html:`<b>Rights ended ${fmt(m.ends)}</b>` };
+  if (m.extended) return { cls:'is-ext', html:`<b>Extended</b> · until ${fmt(m.ends)}` };
+  if (m.state === 'ending') return { cls:'is-ending', html: m.daysLeft === 0 ? `<b>Rights end today</b>` : `<b>Rights end ${inDays(m.daysLeft)}</b>` };
+  return { cls:'', html:`Rights until <b>${fmt(m.ends)}</b>` };
+}
+const CHIP = { active:'Rights active', ending:'Ending soon', ended:'Ended', requested:'Extension requested', extended:'Extended', pending:'Not posted yet' };
+const fileName = (m) => m.posted ? `${BRAND}_${first(m.c)}_${m.kind.replace(' ', '')}_${iso(m.posted)}.mp4` : '';
+const EXTEND_CTA = 'Extend';
+
+/* ---- icons ---- */
+const I = {
+  dl: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2.5v8M4.8 7.4 8 10.6l3.2-3.2M2.8 13.2h10.4"/></svg>',
+  ig: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#fff" stroke="none"/></svg>',
+  tt: '<svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M16.5 3c.4 2.4 1.9 4 4.5 4.3v3.4c-1.7 0-3.2-.5-4.5-1.4v6.4c0 3.4-2.7 6.3-6.2 6.3S4 19.1 4 15.7s2.8-6.3 6.3-6.3c.4 0 .7 0 1 .1v3.5c-.3-.1-.6-.2-1-.2-1.6 0-2.9 1.3-2.9 2.9s1.3 2.9 2.9 2.9 2.9-1.3 2.9-2.9V3h3.3z"/></svg>',
+  copy: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5v-2a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2"/></svg>',
+  eye: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 8s2.4-4.5 6.5-4.5S14.5 8 14.5 8s-2.4 4.5-6.5 4.5S1.5 8 1.5 8z"/><circle cx="8" cy="8" r="2"/></svg>',
+  chevL: '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 2.5 4 6l3.5 3.5"/></svg>',
+  chevR: '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 2.5 8 6l-3.5 3.5"/></svg>',
+  out: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h4v4M13 3 7.5 8.5M12 9.5V12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h2.5"/></svg>',
+};
+
+/* ==================================================================
+   CHROME · captured production sidebar + header (Aug 18 capture; UGC Studio
+   lost its Soon tag per the Oct 1 capture), brand card patched to Simple.
+   ================================================================== */
+const SIDEBAR = `<aside id="brand-workspace-sidebar" class="sidebar svelte-187rxgr"><div class="sidebar-shell svelte-187rxgr"><div class="sidebar-header svelte-187rxgr"><a class="brand-lockup svelte-187rxgr" href="#" aria-label="Benable brand collabs home"><img src="https://benable.com/images/biz/logo.svg" alt="Benable" class="svelte-187rxgr"></a></div> <nav class="sidebar-primary-nav svelte-187rxgr" aria-label="Primary"><span class="sidebar-kicker svelte-187rxgr">Platform</span> <div class="nav-list svelte-187rxgr"><a class="nav-item active svelte-187rxgr" href="#"><span class="nav-icon svelte-187rxgr" aria-hidden="true"><div class="icon svelte-1aopmtt" aria-hidden="true" style="width: 16px; height: 16px; color: currentColor;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.25 17C8.25 17 15.25 18 18.25 21H19.25C19.8023 21 20.25 20.5523 20.25 20V13.937C21.1126 13.715 21.75 12.9319 21.75 12C21.75 11.0681 21.1126 10.285 20.25 10.063V4C20.25 3.44772 19.8023 3 19.25 3H18.25C15.25 6 8.25 7 8.25 7H4.25C3.14543 7 2.25 7.89543 2.25 9V15C2.25 16.1046 3.14543 17 4.25 17H5.25L6.25 22H8.25V17ZM10.25 8.6612C10.9333 8.5146 11.7775 8.31193 12.6893 8.04373C14.3675 7.55014 16.5 6.77262 18.25 5.57458V18.4254C16.5 17.2274 14.3675 16.4499 12.6893 15.9563C11.7775 15.6881 10.9333 15.4854 10.25 15.3388V8.6612ZM4.25 9H8.25V15H4.25V9Z" fill="currentColor"></path></svg></div></span> <span class="nav-label svelte-187rxgr">Campaigns</span> </a><a class="nav-item svelte-187rxgr" href="#"><span class="nav-icon svelte-187rxgr" aria-hidden="true"><div class="icon svelte-1aopmtt" aria-hidden="true" style="width: 16px; height: 16px; color: currentColor;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M10 8.5v7l5.5-3.5z" fill="currentColor"/></svg></div></span> <span class="nav-label svelte-187rxgr">UGC Studio</span> </a><a class="nav-item svelte-187rxgr" href="#"><span class="nav-icon svelte-187rxgr" aria-hidden="true"><div class="icon svelte-1aopmtt" aria-hidden="true" style="width: 16px; height: 16px; color: currentColor;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></div></span> <span class="nav-label svelte-187rxgr">Push Alerts</span> <span class="coming-soon-pill svelte-187rxgr">Soon</span> </a><a class="nav-item svelte-187rxgr" href="#"><span class="nav-icon svelte-187rxgr" aria-hidden="true"><div class="icon svelte-1aopmtt" aria-hidden="true" style="width: 16px; height: 16px; color: currentColor;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 17l.7 2.3L22 20l-2.3.7L19 23l-.7-2.3L16 20l2.3-.7z"/></svg></div></span> <span class="nav-label svelte-187rxgr">Brand Intelligence</span> <span class="coming-soon-pill svelte-187rxgr">Soon</span> </a></div></nav> <div class="sidebar-divider svelte-187rxgr"></div> <div class="sidebar-footer svelte-187rxgr"><nav class="nav-list nav-list--secondary svelte-187rxgr" aria-label="Secondary"><a class="nav-item svelte-187rxgr" href="#"><span class="nav-icon svelte-187rxgr" aria-hidden="true"><div class="icon svelte-1aopmtt" aria-hidden="true" style="width: 16px; height: 16px; color: currentColor;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 1L21.5 6.5V17.5L12 23L2.5 17.5V6.5L12 1ZM12 3.311L4.5 7.65311V16.3469L12 20.689L19.5 16.3469V7.65311L12 3.311ZM12 16C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12C16 14.2091 14.2091 16 12 16ZM12 14C13.1046 14 14 13.1046 14 12C14 10.8954 13.1046 10 12 10C10.8954 10 10 10.8954 10 12C10 13.1046 10.8954 14 12 14Z" fill="currentColor"></path></svg></div></span> <span class="nav-label svelte-187rxgr">Settings</span> </a></nav> <div class="sidebar-account svelte-187rxgr"> <button type="button" class="sidebar-brand-card svelte-187rxgr" aria-haspopup="menu" aria-expanded="false" aria-label="Open account menu for Simple"><div class="brand-avatar svelte-1pb8em1" title="Simple" style="display:grid;place-items:center;background:#0b6b4f;color:#fff;font-weight:700;font-size:13px;">S</div> <div class="sidebar-brand-copy svelte-187rxgr"><strong class="svelte-187rxgr">Simple</strong></div></button></div></div></div></aside>`;
+
+const HEADER = `<header class="workflow-header"><a class="workflow-header-backlink" href="#"><div class="icon svelte-1aopmtt" aria-hidden="true" style="width: 16px; height: 16px; color: #717171;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div> <span>Campaigns</span></a> <div class="workflow-header-row"><div class="workflow-header-main"><h1>${CAMPAIGN}</h1> <span class="phase-pill phase-pill--active"><span class="phase-pill-dot" aria-hidden="true"></span> <span>Active</span></span></div> <div class="header-right"><button type="button" class="workflow-header-edit-btn"><div class="icon svelte-1aopmtt" aria-hidden="true" style="width: 16px; height: 16px; color: #1a1a1a;">${I.eye.replace('viewBox','width="16" height="16" viewBox')}</div> <span>Campaign Details</span></button></div></div></header>`;
+
+/* ==================================================================
+   RENDER (keeps scroll and keyboard focus across re-renders)
+   ================================================================== */
+const root = document.getElementById('nf');
+const FOCUS_ATTRS = ['data-open','data-filter','data-day','data-extend','data-dl','data-openpost','data-tab','data-cal','data-act','data-row','data-days','data-view','data-today','data-calv','data-remind','data-extmode','data-demo-toggle','data-tl-more','data-where','data-rt-filter','data-rt-sort','data-rt-view','data-sel','data-rt-extend','data-bucket','data-csort','data-clay','data-tile'];
+function focusKey(el) {
+  if (!el || el === document.body) return null;
+  if (el.id) return '#' + el.id;
+  const scope = el.closest('.rvm') ? '.rvm' : el.closest('#demo') ? '#demo' : '#nf';
+  const cls = (el.classList && el.classList[0]) ? '.' + CSS.escape(el.classList[0]) : '';
+  for (const a of FOCUS_ATTRS) if (el.hasAttribute && el.hasAttribute(a)) return `${scope} ${cls}[${a}="${CSS.escape(el.getAttribute(a))}"]`;
+  return null;
+}
+let last = { tab: null, open: null };
+function render() {
+  const ms = MODELS();
+  const scroller = root.querySelector('.workspace-grid');
+  const pageTop = scroller && last.tab === S.tab ? scroller.scrollTop : 0;
+  const pc = document.querySelector('.rvm-panel-copy'), sd = document.querySelector('.rvm-shell-side');
+  const popTop = pc && last.open === S.open ? pc.scrollTop : 0, sideTop = sd ? sd.scrollTop : 0;
+  const fkey = focusKey(document.activeElement);
+  const endingCount = ms.filter(m => m.state === 'ending' && !m.requested).length;
+  const where = WHERE();
+  const tab = (S.tab === 'rights' && where !== 'tab') ? 'content' : S.tab;   /* S.tab itself survives a round trip through Prod today */
+  const dot = (!isProd() && endingCount) ? `<span class="cs-tabdot" title="Rights ending soon on ${plural(endingCount, 'video')}"></span>` : '';
+  const tabBtn = (k, label, d) => `<button type="button" class="workflow-dashboard-tab${tab===k?' active':''}" data-tab="${k}" aria-pressed="${tab===k}">${label}${d && tab !== k ? dot : ''}</button>`;
+  const tabs = tabBtn('dashboard', 'Dashboard', where === 'dash') + tabBtn('content', 'Content', where === 'content') + (where === 'tab' ? tabBtn('rights', 'Rights', true) : '');
+  const body = tab === 'content' ? renderContent(ms) : tab === 'rights' ? renderRights(ms) : renderDashboard(ms);
+  const panelCls = tab === 'dashboard' ? ' cs-panel--dash' : tab === 'rights' ? ' cs-panel--rights' : '';
+
+  root.innerHTML = `<div class="brand-dashboard svelte-187rxgr"><div class="dashboard-body svelte-187rxgr">${SIDEBAR}
+    <main class="workspace-content svelte-187rxgr" aria-busy="false"><div class="workspace-content-shell svelte-187rxgr"><section class="workflow-page" aria-busy="false"><div class="workspace-grid"><div class="main-column">${HEADER}
+      <div><section class="workflow-stage-shell"><section class="stage-primary-surface">
+        <div class="workflow-dashboard-controls"><nav class="workflow-dashboard-tabs" aria-label="Campaign dashboard tabs">
+          ${tabs}
+        </nav></div>
+        <article class="stage-top-card content-dashboard-panel content-dashboard-panel--tabbed svelte-p6dn97 cs-panel${panelCls}">
+          ${body}
+        </article>
+      </section></section></div>
+    </div></div></section></div></main>
+  </div></div>`;
+  renderDemo();
+  const wasOpen = last.open;
+  if (S.open && !isProd()) renderPopup(ms);
+  else { const o = document.querySelector('.rvm'); if (o) o.remove(); }
+  if (S.sheetSolo && S.sheetIds.length && !S.open && !isProd()) renderSolo(ms);
+
+  const sc2 = root.querySelector('.workspace-grid'); if (sc2) sc2.scrollTop = pageTop;
+  const pc2 = document.querySelector('.rvm-panel-copy'); if (pc2) pc2.scrollTop = popTop;
+  const sd2 = document.querySelector('.rvm-shell-side'); if (sd2) sd2.scrollTop = sideTop;
+  /* focus: back where it was; into the dialog when it opens; back to the card when it closes */
+  let target = fkey ? document.querySelector(fkey) : null;
+  if (!S.sheet && !S.sheetSolo && S.sheetOpener) { if (!target) target = document.querySelector(S.sheetOpener); S.sheetOpener = null; }
+  if (S.open && !isProd() && (!target || !target.closest('.rvm'))) target = document.querySelector('.rvm-shell');
+  if (!S.open && wasOpen && !target) target = root.querySelector(`.cs-card[data-open="${wasOpen}"]`) || root.querySelector(`[data-open="${wasOpen}"]`);
+  if (!target && fkey && !S.open && !S.sheetSolo) target = root.querySelector('.cs-filter.is-on, [data-rt-filter].is-on');
+  if (target) target.focus({ preventScroll: true });
+  last = { tab: S.tab, open: S.open && !isProd() ? S.open : null };
+}
+
+/* ---- Content tab ---- */
+function renderContent(ms) {
+  const prod = isProd() || WHERE() !== 'content';   /* with a Rights tab or the Dashboard variant, Content stays exactly as production */
+  if (!prod && FORKS.clay !== 'rail') return renderShelf(ms);
+  const today = D(FORKS.today);
+  const live = ms.filter(m => m.state !== 'pending');
+  const requested = live.filter(m => m.requested);
+  const ended = live.filter(m => m.state === 'ended' && !m.requested);
+  const ending = live.filter(m => m.state === 'ending' && !m.requested);
+  const usable = live.filter(m => m.state !== 'ended');
+  const cnt = (k) => (prod ? live : ms).filter(m => m.kind === k).length;
+  const kinds = prod
+    ? [['all','All', live.length], ['TikTok','Tiktok', cnt('TikTok')], ['IG Post','Instagram Post', 0], ['IG Reel','Instagram Reels', cnt('IG Reel')], ['IG Story','Instagram Stories', cnt('IG Story')], ['recs','Benable Recs', 0]]
+    : [['all','All', ms.length], ['TikTok','TikTok', cnt('TikTok')], ['IG Reel','Instagram Reels', cnt('IG Reel')], ['IG Story','Instagram Stories', cnt('IG Story')]];
+
+  if (!kinds.some(([k]) => k === S.filter)) S.filter = 'all';
+  let shown = (prod ? live : ms).filter(m => S.filter === 'all' || m.kind === S.filter);
+  if (S.day && !prod) shown = shown.filter(m => m.ends && iso(m.ends) === S.day);
+  const pill = ([k,l,n]) => `<button class="cs-filter${S.filter===k && !(S.day && !prod)?' is-on':''}" data-filter="${k}" aria-pressed="${S.filter===k && !(S.day && !prod)}">${l}<span class="cs-count">${n}</span></button>`;
+
+  if (prod) {
+    /* production today (Oct 1 capture): filters, cards, nothing about rights; a click opens the post on the platform */
+    return `<div class="cs-wrap cs-wrap--prod"><div class="cs-main">
+      <div class="cs-toolbar"><div class="cs-filters">${kinds.map(pill).join('')}</div></div>
+      <div class="cs-grid cs-grid--prod">${shown.length ? shown.map(m => card(m, true)).join('') : `<div class="cs-empty">No content to see yet.</div>`}</div>
+    </div></div>`;
+  }
+
+  const notice = (ended.length && !S.dismissed) ? `<div class="cs-notice" role="status"><div><b>Rights ended on ${plural(ended.length, 'video')}.</b> Pause any ads still using ${ended.length>1?'them':'it'}, or extend.</div><div class="cs-notice-actions"><button class="cs-link" data-act="show-ended">See ${ended.length>1?'them':'it'}</button><button class="cs-x" data-act="dismiss" aria-label="Dismiss">✕</button></div></div>` : '';
+
+  const dayPast = S.day && D(S.day) < today && S.day !== iso(today);
+  const sum = S.day
+    ? `<button class="cs-chipday" data-act="clear-day" title="Back to all videos">${dayPast ? 'Ended' : 'Ending'} ${fmt(D(S.day))}<span aria-hidden="true">✕</span></button><span><b>${plural(shown.length, 'video')}</b> on that day</span>`
+    : `<span><b>${plural(live.length, 'video')} live</b>${ending.length ? ` · <span class="is-amber">${ending.length} ending within ${FORKS.remind} days</span>` : ''}${requested.length ? ` · <span class="is-purple">${plural(requested.length, 'extension')} requested</span>` : ''}${ended.length ? ` · ${ended.length} ended` : ''}${ms.length - live.length ? ` · ${ms.length - live.length} not posted yet` : ''}</span>`;
+
+  return `<div class="cs-wrap"><div class="cs-main">
+    <div class="cs-toolbar">
+      <div class="cs-filters">${kinds.map(pill).join('')}</div>
+      <button class="cs-ghost" data-act="dl-all" ${usable.length?'':'disabled'} title="Downloads each video file, one after the other">${I.dl}Download all (${usable.length})</button>
+    </div>
+    ${notice}
+    <div class="cs-sum">${sum}</div>
+    <div class="cs-grid">${shown.length ? shown.map(m => card(m, false)).join('') : `<div class="cs-empty">No videos match this filter.</div>`}</div>
+  </div>
+  <aside class="cs-rail">${FORKS.cal === 'timeline' ? timeline(ms) : calendar(ms)}${FORKS.cal === 'timeline' ? '' : endingSoon(ms)}${about()}</aside></div>`;
+}
+
+/* ---- Content tab, shelf layout: production's gallery, one slim shelf, a rights line per card ----
+   One counting rule everywhere: "Ending" = inside the reminder window with no request in;
+   "Ended" = past its end date (a request does not move it); everything else is Active. */
+const shelfGroup = (m) => m.daysLeft < 0 ? 'ended' : (m.state === 'ending' && !m.requested) ? 'ending' : 'active';
+function shelfData(ms) {
+  const today = D(FORKS.today);
+  const live = ms.filter(m => m.state !== 'pending');          /* the gallery shows what is posted, as production does */
+  const byKind = live.filter(m => S.filter === 'all' || m.kind === S.filter);
+  const of = (g) => byKind.filter(m => shelfGroup(m) === g);
+  const ending = of('ending').sort((a, b) => a.ends - b.ends);
+  const ended = of('ended').sort((a, b) => b.ends - a.ends);
+  const active = of('active');
+  const buckets = [
+    { key: 'ending', label: `Next ${FORKS.remind} days`, list: ending },
+    { key: 'ended', label: 'Ended', list: ended },
+  ];
+  const months = {};
+  active.forEach(m => { const k = `${m.ends.getFullYear()}-${String(m.ends.getMonth() + 1).padStart(2, '0')}`; (months[k] ||= { key: 'm' + k, label: MONL[m.ends.getMonth()], list: [], month: true }).list.push(m); });
+  const mk = Object.keys(months).sort();
+  mk.slice(0, 4).forEach(k => buckets.push(months[k]));
+  if (mk.length > 4) { const later = { key: 'later', label: 'Later', list: [], month: true }; mk.slice(4).forEach(k => later.list.push(...months[k].list)); buckets.push(later); }
+  buckets.forEach(b => { if (b.month) b.list.sort((x, y) => x.ends - y.ends); });
+  const soonest = active.slice().sort((a, b) => a.ends - b.ends)[0];
+  const quiet = !ending.length && !ended.length && (!soonest || soonest.daysLeft > 14);
+  return { today, live, byKind, ending, ended, active, buckets, soonest, quiet };
+}
+/* the same facts in fewer words, so the line and Extend share a 212px tile */
+function rightsShort(m) {
+  if (m.requested) return `<b>Requested</b> · ${m.state === 'ended' ? 'ended' : 'ends'} ${fmt(m.ends)}`;
+  if (m.state === 'ended') return `<b>Ended ${fmt(m.ends)}</b>`;
+  if (m.extended) return `<b>Extended</b> · until ${fmt(m.ends)}`;
+  if (m.state === 'ending') return m.daysLeft === 0 ? `<b>Ends today</b>` : `<b>Ends ${inDays(m.daysLeft)}</b>`;
+  return `Until <b>${fmt(m.ends)}</b>`;
+}
+function shelfCard(m) {
+  const r = rightsLine(m);
+  const small = FORKS.tile === 'sm';
+  const full = r.html.replace(/<[^>]+>/g, '');
+  const p = m.p, c = m.c;
+  const picked = S.sel.includes(p.id);
+  const g = shelfGroup(m);
+  const canExtend = !m.requested && g !== 'active';
+  const chip = m.requested ? '' : g === 'ending' ? `<span class="cs-ends">${m.daysLeft === 0 ? 'Ends today' : `Ends ${inDays(m.daysLeft)}`}</span>` : g === 'ended' ? `<span class="cs-ends is-ended">Ended ${fmt(m.ends)}</span>` : '';
+  return `<div class="cs-card${picked ? ' is-picked' : ''}" role="button" tabindex="0" data-open="${p.id}" aria-label="${c.name}, ${KL[m.kind]}: ${full}">
+    <div class="cs-media"><img src="${R}posters/${p.clip}.jpg" alt=""><span class="cs-plat cs-plat--${m.plat}">${m.plat==='tt'?I.tt:I.ig}${KL[m.kind]}</span>${small ? '' : chip}
+      <button type="button" class="cs-check cs-card-check" role="checkbox" aria-checked="${picked}" data-sel="${p.id}" aria-label="Select ${first(c)}'s ${KL[m.kind]}">${picked ? '✓' : ''}</button>
+      <span class="cs-hover"><a class="cs-dl" href="https://${p.url}" target="_blank" rel="noopener" data-openpost="${p.id}" title="Open the live post on ${PLATFORM(m.kind)}" aria-label="See ${first(c)}'s post on ${PLATFORM(m.kind)}">${I.out}<span>See post</span></a>${m.state!=='ended' ? `<button type="button" class="cs-dl" data-dl="${p.id}" title="Download ${fileName(m)}" aria-label="Download ${first(c)}'s ${KL[m.kind]}">${I.dl}<span>Download</span></button>` : ''}</span></div>
+    <div class="cs-body">
+      <div class="cs-who"><span class="cs-avatar"><img src="${c.av}" alt=""></span><div style="min-width:0"><div class="cs-name">${c.name}</div><div class="cs-meta">${c.handle} · ${agoText(m.posted, m.today)}</div></div></div>
+      <div class="cs-cap cs-cap--3">${p.cap.join(' ')}</div>
+      <div class="cs-rightsrow"><span class="cs-rights ${r.cls}"${small ? ` title="${full}"` : ''}><i></i><span>${small ? rightsShort(m) : r.html}</span></span>${canExtend ? `<button type="button" class="cs-extend${g==='ending'?' is-amber':''}" data-rt-extend="${p.id}" aria-label="Extend the rights on ${first(c)}'s ${KL[m.kind]}">${EXTEND_CTA}</button>` : ''}</div>
+    </div></div>`;
+}
+function renderShelf(ms) {
+  const d = shelfData(ms);
+  const cnt = (k) => d.live.filter(m => m.kind === k).length;
+  const kinds = [['all','All', d.live.length], ['TikTok','Tiktok', cnt('TikTok')], ['IG Post','Instagram Post', 0], ['IG Reel','Instagram Reels', cnt('IG Reel')], ['IG Story','Instagram Stories', cnt('IG Story')], ['recs','Benable Recs', 0]];
+  if (!kinds.some(([k]) => k === S.filter)) S.filter = 'all';
+  const pill = ([k,l,n]) => `<button class="cs-filter${S.filter===k?' is-on':''}" data-filter="${k}" aria-pressed="${S.filter===k}">${l}<span class="cs-count">${n}</span></button>`;
+  if (S.bucket && !d.buckets.some(b => b.key === S.bucket && b.list.length)) S.bucket = null;
+  const cur = S.bucket ? d.buckets.find(b => b.key === S.bucket) : null;
+  const shown = cur ? cur.list : d.byKind;
+  const scoped = !!cur || S.filter !== 'all';
+  const dlIds = shown.filter(usableFile).map(m => m.p.id);
+
+  /* the shelf: one line on a quiet day, tiles once something is ending or has ended */
+  const lead = d.quiet
+    ? `90 days from each post, paid ads included.${d.soonest ? ` All ${d.byKind.length} are active, the first ends <b>${fmt(d.soonest.ends)}</b>.` : ''}`
+    : `90 days from each post, paid ads included. We email you ${FORKS.remind} days before each one ends.`;
+  const tile = (b) => {
+    const faces = b.list.slice(0, 4).map(m => `<img src="${m.c.av}" alt="" class="${b.key === 'ended' ? 'is-ended' : dotCls(m)}">`).join('');
+    const names = b.list.map(m => `${first(m.c)} · ${KL[m.kind]} · ${m.daysLeft < 0 ? 'ended ' : 'ends '}${fmt(m.ends)}`).join('\n');
+    return b.list.length
+      ? `<button type="button" class="cs-bucket${S.bucket === b.key ? ' is-on' : ''}" data-bucket="${b.key}" aria-pressed="${S.bucket === b.key}" title="${names}"><span class="cs-bucket-label">${b.label}</span><span class="cs-bucket-n">${b.list.length}</span><span class="cs-bucket-faces">${faces}${b.list.length > 4 ? `<span class="cs-bucket-more">+${b.list.length - 4}</span>` : ''}</span></button>`
+      : `<span class="cs-bucket is-empty"><span class="cs-bucket-label">${b.label}</span><span class="cs-bucket-n">none</span></span>`;
+  };
+  const head = d.buckets.filter(b => !b.month), months = d.buckets.filter(b => b.month && b.list.length);
+  const tiles = d.quiet ? '' : `<div class="cs-shelf-row" role="group" aria-label="Videos by the date their rights end">${head.filter(b => b.key === 'ending' || b.list.length).map(tile).join('')}${months.length ? `<span class="cs-bucket-sep" aria-hidden="true"></span>` : ''}${months.map(tile).join('')}</div>`;
+  const shelf = `<section class="cs-shelf cs-span" aria-label="Usage rights"><div class="cs-shelf-lead"><span class="cs-shelf-title">Usage rights</span><span class="cs-shelf-sub">${lead}</span></div>${tiles}</section>`;
+
+  const sel = S.sel.filter(id => shown.some(m => m.p.id === id));
+  const selMs = sel.map(id => ms.find(m => m.p.id === id));
+  const selDl = selMs.filter(usableFile), selExt = selMs.filter(extendable);
+  const float = sel.length ? `<div class="cs-float"><div class="cs-bulk"><b>${sel.length} selected</b><button class="cs-ghost" data-act="bulk-dl" ${selDl.length ? '' : 'disabled'} title="${selDl.length === sel.length ? 'Download the selected files' : `${sel.length - selDl.length} of these ended, so the file is not available`}">${I.dl}Download${selDl.length !== sel.length ? ` (${selDl.length})` : ''}</button><button class="cs-ghost is-dark" data-act="bulk-extend" ${selExt.length ? '' : 'disabled'} title="${selExt.length === sel.length ? 'Ask to extend the selected videos' : `${sel.length - selExt.length} already have a request in`}">${EXTEND_CTA}${selExt.length !== sel.length ? ` (${selExt.length})` : ''}</button><button class="cs-link" data-act="bulk-clear">Clear</button></div></div>` : '';
+  const chipRow = cur ? `<div class="cs-sum cs-span"><button class="cs-chipday" data-bucket="${cur.key}" title="Back to all videos">${cur.label}<span aria-hidden="true">✕</span></button><span><b>${plural(shown.length, 'video')}</b></span><span class="cs-sec-acts"><button class="cs-link" data-act="group-select" data-g="${cur.key}">Select all</button></span></div>` : '';
+
+  /* at most three groups, and only when something needs a decision; otherwise production's own order */
+  const sec = (key, label, list, dot) => {
+    const ext = list.filter(extendable);
+    return `<h3 class="cs-sec cs-span">${dot ? '<i></i>' : ''}${label} <span class="cs-sec-n">${list.length}</span><span class="cs-sec-acts"><button class="cs-link" data-act="group-select" data-g="${key}">Select all</button>${key !== 'active' && ext.length ? `<button class="cs-ghost" data-act="group-extend" data-g="${key}">${ext.length > 1 ? `${EXTEND_CTA} all ${ext.length}` : EXTEND_CTA}</button>` : ''}</span></h3>`;
+  };
+  const newest = (l) => l.slice().sort((a, b) => b.posted - a.posted);
+  let cards;
+  if (!shown.length) cards = `<div class="cs-empty cs-span">No videos match this filter.</div>`;
+  else if (cur) cards = shown.map(shelfCard).join('');
+  else if (!d.ending.length && !d.ended.length) cards = newest(d.active).map(shelfCard).join('');
+  else cards = (d.ending.length ? sec('ending', `Ending within ${FORKS.remind} days`, d.ending, true) + d.ending.map(shelfCard).join('') : '')
+    + (d.ended.length ? sec('ended', 'Ended', d.ended, false) + d.ended.map(shelfCard).join('') : '')
+    + (d.active.length ? sec('active', 'Active', d.active, false) + newest(d.active).map(shelfCard).join('') : '');
+
+  return `<div class="cs-wrap cs-wrap--shelf">
+    <div class="cs-toolbar"><div class="cs-filters">${kinds.map(pill).join('')}</div>
+      <button class="cs-ghost" data-act="dl-all" data-ids="${dlIds.join(',')}" ${dlIds.length?'':'disabled'} title="${dlIds.length ? 'Downloads each video file, one after the other' : 'No files to download here: rights ended on these videos'}">${I.dl}${!dlIds.length ? 'Download' : scoped ? `Download these (${dlIds.length})` : `Download all (${dlIds.length})`}</button></div>
+    <div class="cs-flow${FORKS.tile === 'sm' ? ' cs-flow--sm' : ''}${sel.length ? ' has-sel' : ''}">
+    ${shelf}${float}${chipRow}
+    ${cards}
+  </div></div>`;
+}
+function shelfGroupIds(key) { const d = shelfData(MODELS()); const b = d.buckets.find(x => x.key === key); return key === 'active' ? d.active.map(m => m.p.id) : b ? b.list.map(m => m.p.id) : []; }
+
+function card(m, prod) {
+  const r = rightsLine(m);
+  const p = m.p; const c = m.c;
+  const platPill = `<span class="cs-plat cs-plat--${m.plat}">${m.plat==='tt'?I.tt:I.ig}${KL[m.kind]}</span>`;
+  const who = (meta) => `<div class="cs-who"><span class="cs-avatar"><img src="${c.av}" alt=""></span><div style="min-width:0"><div class="cs-name">${c.name}</div><div class="cs-meta">${c.handle} · ${meta}</div></div></div>`;
+  if (prod) {
+    return `<div class="cs-card" role="link" tabindex="0" data-prod-card="${p.id}" aria-label="${c.name}, ${KL[m.kind]}: opens the post on ${PLATFORM(m.kind)}">
+      <div class="cs-media"><img src="${R}posters/${p.clip}.jpg" alt="">${platPill}</div>
+      <div class="cs-body">${who(agoText(m.posted, m.today))}<div class="cs-cap cs-cap--3">${p.cap.join(' ')}</div></div></div>`;
+  }
+  const meta = m.posted ? fmt(m.posted) : m.approved ? 'draft approved' : 'draft in review';
+  const canExtend = !m.requested && (m.state === 'ended' || m.state === 'ending');
+  const extendBtn = canExtend ? `<button type="button" class="cs-extend${m.state==='ending'?' is-amber':''}" data-extend="${p.id}" aria-label="Extend the rights on ${first(c)}'s ${KL[m.kind]}">${EXTEND_CTA}</button>` : '';
+  const hover = m.state === 'pending' ? `<div class="cs-soon"><span>Not posted yet</span></div>`
+    : `<span class="cs-hover"><a class="cs-dl" href="https://${p.url}" target="_blank" rel="noopener" data-openpost="${p.id}" title="Open the live post on ${PLATFORM(m.kind)}">${I.out}See post</a>${m.state!=='ended' ? `<button type="button" class="cs-dl" data-dl="${p.id}" title="Download ${fileName(m)}">${I.dl}Download</button>` : ''}</span>`;
+  return `<div class="cs-card${m.state==='pending'?' is-pending':''}" role="button" tabindex="0" data-open="${p.id}" aria-label="${c.name}, ${KL[m.kind]}: ${r.html.replace(/<[^>]+>/g, '')}">
+    <div class="cs-media"><img src="${R}posters/${p.clip}.jpg" alt="">${platPill}${hover}</div>
+    <div class="cs-body">${who(meta)}
+      <div class="cs-cap">${p.cap.join(' ')}</div>
+      <div class="cs-rightsrow"><span class="cs-rights ${r.cls}"><i></i><span>${r.html}</span></span>${extendBtn}</div>
+    </div></div>`;
+}
+function agoText(d, today) { const n = diffDays(today, d); if (n < 1) return 'today'; if (n < 7) return `${n}d ago`; if (n < 30) return `${Math.floor(n/7)}w ago`; return `${Math.max(1, Math.round(n/30))}mo ago`; }
+
+/* ---- rail: the rights calendar (month, or faces) ---- */
+let calCursor = null;   /* first-of-month being shown */
+const dotCls = (m) => m.requested ? 'is-req' : m.state==='ended' ? 'is-ended' : m.extended ? 'is-ext' : m.state==='ending' ? 'is-ending' : '';
+function calendar(ms) {
+  const today = D(FORKS.today);
+  const withEnds = ms.filter(m => m.ends);
+  if (!calCursor) {
+    /* open on this month when something ends in it, else on the month of the next end */
+    const inMonth = withEnds.some(m => m.ends.getFullYear() === today.getFullYear() && m.ends.getMonth() === today.getMonth());
+    const next = withEnds.filter(m => m.ends >= today).sort((a, b) => a.ends - b.ends)[0];
+    const anchor = inMonth || !next ? today : next.ends;
+    calCursor = new Date(anchor.getFullYear(), anchor.getMonth(), 1);
+  }
+  const y = calCursor.getFullYear(), mo = calCursor.getMonth();
+  const firstDow = (new Date(y, mo, 1).getDay() + 6) % 7;   /* Monday first */
+  const daysIn = new Date(y, mo + 1, 0).getDate();
+  const byDay = {};
+  withEnds.forEach(m => (byDay[iso(m.ends)] ||= []).push(m));
+  const faces = FORKS.cal === 'faces';
+  let cells = '';
+  for (let i = 0; i < firstDow; i++) cells += `<span class="cs-day is-blank" aria-hidden="true"></span>`;
+  for (let d = 1; d <= daysIn; d++) {
+    const date = new Date(y, mo, d, 12); const k = iso(date);
+    const list = (byDay[k] || []).slice().sort((a,b) => a.p.c.localeCompare(b.p.c));
+    const isPast = date < today && k !== iso(today);
+    const cls = ['cs-day', list.length?'has':'', isPast?'is-past':'', k===iso(today)?'is-today':'', S.day===k?'is-sel':''].join(' ');
+    const marks = faces
+      ? `<span class="cs-faces">${(list.length <= 2 ? list : list.slice(0,1)).map(m => `<img src="${m.c.av}" alt="" class="${dotCls(m)}">`).join('')}${list.length>2?`<span class="cs-more">+${list.length-1}</span>`:''}</span>`
+      : `<span class="cs-dots">${list.slice(0,3).map(m => `<i class="cs-dot ${dotCls(m)}"></i>`).join('')}</span>`;
+    const label = `${MONL[mo]} ${d}${k===iso(today)?', today':''}${list.length ? `, ${plural(list.length,'video')} ${isPast?'ended':'ending'}: ${list.map(m=>`${first(m.c)} (${KL[m.kind]})`).join(', ')}` : ''}`;
+    cells += `<button type="button" class="${cls}" aria-label="${label}" ${list.length?`data-day="${k}" aria-pressed="${S.day===k}" title="${list.map(m=>`${first(m.c)} · ${KL[m.kind]}`).join(', ')}"`:'disabled tabindex="-1"'}>${d}${marks}</button>`;
+  }
+  const tail = (7 - ((firstDow + daysIn) % 7)) % 7;
+  for (let i = 0; i < tail; i++) cells += `<span class="cs-day is-blank" aria-hidden="true"></span>`;
+  const monthKey = `${y}-${String(mo+1).padStart(2,'0')}`;
+  const inThis = withEnds.filter(m => iso(m.ends).startsWith(monthKey));
+  const allPast = inThis.length && inThis.every(m => m.daysLeft < 0);
+  const sub = inThis.length ? `${plural(inThis.length, 'video')} ${allPast ? 'ended' : `end${inThis.length>1?'':'s'}`} in ${MONL[mo]}. Click a day to see which.` : `Nothing ends in ${MONL[mo]}.`;
+  return `<div class="cs-box">
+    <div class="cs-box-h"><div class="cs-box-title">Rights calendar</div></div>
+    <div class="cs-box-sub">${sub}</div>
+    <div class="cs-cal-nav"><button class="cs-cal-btn" data-cal="-1" aria-label="Previous month">${I.chevL}</button><span class="cs-cal-month" aria-live="polite">${MONL[mo]} ${y}</span><button class="cs-cal-btn" data-cal="1" aria-label="Next month">${I.chevR}</button></div>
+    <div class="cs-cal${faces?' cs-cal--faces':''}">${['M','T','W','T','F','S','S'].map(d=>`<span class="cs-cal-dow" aria-hidden="true">${d}</span>`).join('')}${cells}</div>
+    <div class="cs-legend"><span><i style="background:#e88e2c"></i>ending soon</span><span><i style="background:#896bd9"></i>later</span><span><i style="background:#2baf87"></i>extended</span><span><i class="cs-legend-req"></i>requested</span><span><i style="background:#c2c5c4"></i>ended</span><span><i class="cs-legend-today"></i>today</span></div>
+  </div>`;
+}
+
+/* ---- rail variant C: the timeline, an agenda by week with the Extend action on the row ---- */
+function timeline(ms) {
+  const today = D(FORKS.today);
+  const items = ms.filter(m => m.ends).slice().sort((a,b) => a.ends - b.ends);
+  const past = items.filter(m => m.daysLeft < 0);
+  const ahead = items.filter(m => m.daysLeft >= 0);
+  const weekOf = (d) => { const x = new Date(d); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return iso(x); };
+  const thisWeek = weekOf(today);
+  const nextWeek = iso(addDays(D(thisWeek), 7));
+  const weekLabel = (k) => k === thisWeek ? 'This week' : k === nextWeek ? 'Next week' : `Week of ${fmt(D(k))}`;
+  const row = (m) => {
+    const sub = m.requested ? 'Extension requested' : m.state === 'ended' ? `Ended ${agoDays(-m.daysLeft)}` : m.extended ? `Extended · ends ${inDays(m.daysLeft)}` : `Ends ${inDays(m.daysLeft)}`;
+    const subCls = m.requested ? 'is-req' : m.state === 'ended' ? 'is-ended' : m.extended ? 'is-ext' : m.state === 'ending' ? 'is-ending' : '';
+    const canExtend = !m.requested && (m.state === 'ended' || m.state === 'ending');
+    return `<div class="cs-tl-row${m.state==='ended'?' is-past':''}${m.state==='ending'?' is-ending':''}" role="button" tabindex="0" data-open="${m.p.id}">
+      <span class="cs-tl-date"><b>${m.ends.getDate()}</b><span>${DOW[m.ends.getDay()]}</span></span>
+      <span class="cs-avatar"><img src="${m.c.av}" alt=""></span>
+      <span class="cs-tl-txt"><span class="cs-tl-name">${first(m.c)} · ${KL[m.kind]}</span><span class="cs-tl-sub ${subCls}">${sub}</span></span>
+      ${canExtend ? `<button type="button" class="cs-extend${m.state==='ending'?' is-amber':''}" data-extend="${m.p.id}">${EXTEND_CTA}</button>` : '<span></span>'}
+    </div>`;
+  };
+  let html = '';
+  if (past.length) {
+    const cut = 3; const shown = S.tlAll ? past : past.slice(-cut);
+    html += `<div class="cs-tl-week"><span>Past their end date · ${past.length}</span>${past.length > cut ? `<button class="cs-link" data-tl-more="1">${S.tlAll ? 'Show fewer' : `Show ${past.length - cut} earlier`}</button>` : ''}</div>` + shown.map(row).join('');
+  }
+  html += `<div class="cs-tl-today">Today · ${fmt(today)}</div>`;
+  let lastWeek = null;
+  ahead.forEach(m => { const wk = weekOf(m.ends); if (wk !== lastWeek) { html += `<div class="cs-tl-week"><span>${weekLabel(wk)}</span></div>`; lastWeek = wk; } html += row(m); });
+  if (!ahead.length) html += `<div class="cs-soon-empty">No rights ending ahead.</div>`;
+  return `<div class="cs-box"><div class="cs-box-h"><div class="cs-box-title">Rights timeline</div></div><div class="cs-box-sub">Each video's last day, soonest first. We email you ${FORKS.remind} days before each one.</div><div class="cs-tl">${html}</div></div>`;
+}
+
+function endingSoon(ms) {
+  const up = ms.filter(m => m.ends && m.daysLeft >= 0 && !m.requested).sort((a,b) => a.ends - b.ends).slice(0, 4);
+  const rows = up.length ? up.map(m => `<div class="cs-soon-row"><button class="cs-soon-main" data-open="${m.p.id}"><span class="cs-avatar"><img src="${m.c.av}" alt=""></span><span class="cs-soon-txt"><span class="cs-soon-name">${first(m.c)} · ${KL[m.kind]}</span><span class="cs-soon-when${m.state==='ending'?' is-ending':''}">${fmt(m.ends)} · ends ${inDays(m.daysLeft)}</span></span></button><button type="button" class="cs-extend${m.state==='ending'?' is-amber':''}" data-extend="${m.p.id}" aria-label="Extend the rights on ${first(m.c)}'s ${KL[m.kind]}">${EXTEND_CTA}</button></div>`).join('') : `<div class="cs-soon-empty">No rights ending soon.</div>`;
+  return `<div class="cs-box"><div class="cs-box-h"><div class="cs-box-title">Ending next</div></div><div class="cs-box-sub">We email you ${FORKS.remind} days before each one ends.</div><div class="cs-soon-list">${rows}</div></div>`;
+}
+
+function about() {
+  const how = FORKS.extend === 'price'
+    ? `Need longer? Extend from any video: pick how long and what you'd offer, and Katie's team takes it to the creator.`
+    : `Need longer? Extend from any video. Katie's team checks with the creator and comes back with a price.`;
+  return `<div class="cs-box"><div class="cs-box-title" style="margin-bottom:8px">About your rights</div><div class="cs-about">
+    <p>Every video comes with <b>90 days of full usage, paid ads included</b>, counted from the day it goes live.</p>
+    <p>Download the original file any time during those 90 days. Light re-edits are fine.</p>
+    <p>${how}</p>
+  </div></div>`;
+}
+
+/* ---- Dashboard tab: the Campaign Pulse as shipped (stat row, stage rail, creators card, rail) ---- */
+const STAGES = ['Sourcing', 'Invited', 'Accepted', 'Order shipped', 'Order delivered', 'Draft approved', 'Content published', 'Thanked'];
+const RAMP = ['#dbeee3', '#b9dfcb', '#8fceae', '#5fb98c', '#2e9e6b', '#1f8f5a', '#17864f', '#124a33'];
+const SAVED = [ { name: 'Tess Nakamura', handle: '@tess.n', av: R+'posters/jasper-1.jpg' }, { name: 'Rae Cole', handle: '@raecole', av: R+'posters/emery-2.jpg' } ];
+const relDay = (d, today) => { const n = diffDays(today, d); return n === 0 ? 'today' : n === 1 ? 'yesterday' : fmt(d); };
+
+function crewRows(ms) {
+  const today = D(FORKS.today);
+  const byC = {};
+  ms.forEach(m => (byC[m.p.c] ||= []).push(m));
+  return Object.entries(byC).map(([k, list]) => {
+    const c = CREATORS[k];
+    const live = list.filter(m => m.state !== 'pending').sort((a, b) => a.posted - b.posted);
+    if (live.length) {
+      const first_ = live[0];
+      const update = live.length > 1
+        ? `${plural(live.length, 'post')} live · ${KL[first_.kind]} since ${relDay(first_.posted, today)}`
+        : `${KL[first_.kind]} live since ${relDay(first_.posted, today)}`;
+      return { key: k, c, stage: 6, celebrate: true, update, live, pieces: list };
+    }
+    const soon = list[0];
+    const ok = !!soon.approved;
+    return { key: k, c, stage: ok ? 5 : 4, celebrate: false, update: ok ? `Draft approved ${fmt(soon.approved)}, posting soon` : 'Draft in review with Katie\'s team', live: [], pieces: list };
+  });
+}
+
+function stageHistory(row, prod) {
+  const m = row.live[0];
+  const ap = row.pieces[0].approved;
+  const base = m ? m.posted : ap ? addDays(ap, 9) : addDays(D(FORKS.today), 9);
+  const d = (n) => fmt(addDays(base, n));
+  const steps = [
+    ['Invited', d(-45), 'Matched to your brief'],
+    ['Accepted', d(-43), 'Accepted the invite'],
+    ['Order shipped', d(-38), 'Repair+ bundle on its way'],
+    ['Order delivered', d(-33), 'Package arrived'],
+    ['Draft approved', d(-9), 'Katie\'s team checked the draft against your brief'],
+    ['Live!', m ? fmt(m.posted) : 'up next', m ? `Post went live on ${PLATFORM(m.kind)}` : 'Post goes live, we track how it does for you'],
+    ['Thanked', 'up next', 'Your thank-you, right after the post'],
+  ];
+  const nowIdx = m ? 5 : ap ? 4 : 3;
+  const pick = bestPiece(row.pieces);
+  return `<div class="am-hist"><p class="am-hist-title">Stage history</p><div class="cp-crew-history am-hist-body">${steps.map(([label, when, detail], i) => {
+    const st = i < nowIdx ? 'done' : i === nowIdx ? 'now' : 'next';
+    const liveLine = (st === 'now' && m && !prod) ? `<div class="cp-hist-live"><span class="cp-live"><span class="cp-live-fact cp-live-fact--gray">${rightsLine(pick).html.replace(/<\/?b>/g, '')}</span></span><a class="tf-rowlink" role="button" tabindex="0" data-open="${pick.p.id}">View content <span aria-hidden="true">↗</span></a></div>` : '';
+    return `<div class="cp-hist-step cp-hist-step--${st}"><span class="cp-hist-dot">${st === 'done' ? '✓' : ''}</span><div class="cp-hist-body"><div class="cp-hist-top"><span class="cp-hist-label">${label}</span><span class="cp-hist-when">${st === 'next' ? 'up next' : when}</span></div><div class="cp-hist-detail">${detail}</div>${liveLine}</div></div>`;
+  }).join('')}</div></div>`;
+}
+
+function renderDashboard(ms) {
+  const prod = isProd();
+  const where = WHERE();
+  const dashRights = where === 'dash';
+  const extLink = (f) => where === 'tab' ? `<a role="button" tabindex="0" data-tab="rights" data-rtf="${f}">extend</a>` : where === 'dash' ? `extend from the creator's row` : `<a role="button" tabindex="0" data-tab="content">extend</a>`;
+  const rows = crewRows(ms);
+  const n = rows.length;
+  const pct = Math.round(rows.reduce((a, r) => a + r.stage, 0) / (n * 7) * 100);
+  const liveVideos = ms.filter(m => m.state !== 'pending').length;
+  const counts = STAGES.map((_, i) => rows.filter(r => r.stage === i).length);
+  const maxStage = Math.max(...rows.map(r => r.stage));
+  const ending = ms.filter(m => m.state === 'ending' && !m.requested).length;
+  const ended = ms.filter(m => m.state === 'ended' && !m.requested).length;
+
+  const rail = STAGES.map((label, i) => {
+    const count = counts[i];
+    const radius = i === 0 ? '74px 4px 4px 74px' : i === STAGES.length - 1 ? '4px 100px 100px 4px' : '4px';
+    let bar, hint;
+    if (count === 0 && i < maxStage) {
+      bar = `<button type="button" disabled class="am2-bar" style="background:#eff5f1;border-radius:${radius}"><span class="am2-count" style="color:#17864f"><span class="am2-check" role="img" aria-label="All ${n} moved ahead">✓</span></span></button>`;
+      hint = i === 0 ? 'All done for now' : `All ${n} moved ahead`;
+    } else if (count === 0) {
+      bar = `<button type="button" disabled class="am2-bar am-seg--sliver" style="border-radius:${radius}"><span class="am2-count" style="color:#a3a8a3">0</span></button>`;
+      hint = i === 7 ? 'After posts go live' : i === 6 ? 'Once quality checks pass' : 'Up next';
+    } else {
+      const dark = i >= 4;
+      bar = `<button type="button" tabindex="-1" aria-disabled="true" class="am2-bar" style="cursor:default;background:${RAMP[i]};border-radius:${radius}"><span class="am2-count" style="color:${dark ? '#fff' : '#06301f'}">${count}</span></button>`;
+      hint = i === 6 ? `${plural(liveVideos, 'post')} now live!` : i === 5 ? `${count} posting soon` : i === 4 ? `${plural(count, 'draft')} in review` : `${count} here now`;
+    }
+    return `<div class="am2-col">${bar}<div class="am2-leg"><p class="am2-label">${label}</p><p class="am2-hint">${hint}</p></div></div>`;
+  }).join('');
+
+  const chev = (open) => `<span class="am-chev"><img alt="" src="assets/labs/chevron.svg" style="rotate: ${open ? '-90deg' : '90deg'};"></span>`;
+  const verified = `<img alt="Verified" class="am-verified" src="${R}assets/icons/verified.svg">`;
+  const crew = rows.map(r => {
+    const pick = bestPiece(r.pieces);
+    const link = (!prod && !dashRights && r.live.length) ? `<a class="tf-rowlink" role="button" tabindex="0" data-open="${pick.p.id}">View content <span aria-hidden="true">↗</span></a>` : '';
+    const open = S.rowsOpen.includes(r.key);
+    const urgent = r.live.filter(m => !m.requested && (m.state === 'ending' || m.state === 'ended'));
+    const rl = r.live.length ? rightsLine(pick) : null;
+    const same = rl ? r.live.filter(m => rightsLine(m).html === rl.html).length : 0;
+    const scope = r.live.length > 1 ? (same === r.live.length ? ` · ${plural(same, 'video')}` : ` · ${same} of ${r.live.length} videos`) : '';
+
+    const rightsRow = (dashRights && rl) ? `<span class="cs-upd-rights ${rl.cls}"><i></i><span>${rl.html.replace(/<\/?b>/g, '')}${scope}</span>${urgent.length ? `<a class="tf-rowlink" role="button" tabindex="0" data-rt-extend="${urgent.map(m => m.p.id).join(',')}">${EXTEND_CTA}${urgent.length > 1 ? ` ${urgent.length}` : ''}</a>` : ''}</span>` : '';
+    const fact = r.celebrate ? `<span class="cp-live-fact"><span class="cp-celebrate-emoji" aria-hidden="true">🎉</span> ${r.update}</span>` : `<span class="cp-live-fact cp-live-fact--gray">${r.update}</span>`;
+    return `<div class="am-item"><div role="button" tabindex="0" class="am-row tf-row" aria-expanded="${open}" data-row="${r.key}">
+      <span class="am-who"><span><span class="am-avatar"><img alt="" src="${r.c.av}"></span></span><span class="am-names"><span class="am-name">${r.c.name}${verified}</span><span class="am-handle">${r.c.handle}</span></span></span>
+      <span class="am-update${rightsRow ? ' cs-upd2' : ''}"><span class="cp-live">${fact}</span>${link}${rightsRow}</span>
+      <span class="tf-chipslot"><span class="tf-gdot"><i style="background:${RAMP[r.stage]}"></i>${STAGES[r.stage]}</span></span>${chev(open)}</div>
+      <div class="tf-drawer${open ? ' tf-drawer--open' : ''}" aria-hidden="${!open}" ${open ? '' : 'inert'}><div class="tf-drawer-in">${dashRights && r.live.length ? dashVideos(r) : ''}${stageHistory(r, prod || dashRights)}</div></div></div>`;
+  }).join('');
+  const saved = SAVED.map(c => `<div class="am-item"><div class="am-row tf-row is-static"><span class="am-who"><span><span class="am-avatar"><img alt="" src="${c.av}"></span></span><span class="am-names"><span class="am-name">${c.name}${verified}</span><span class="am-handle">${c.handle}</span></span></span><span class="am-update"><span class="cp-live"><span class="cp-live-fact cp-live-fact--gray">Saved for your next campaign</span></span></span><span class="tf-chipslot"><span class="tf-gdot" style="color:#767676"><i style="background:#c2c5c4"></i>Invite expired<span class="tf-info-i" title="The invite ran out before an answer. The creator stays saved for your next campaign.">ⓘ</span></span></span><span class="am-chev"></span></div></div>`).join('');
+
+  const twice = rows.filter(r => r.live.length > 1).length;
+  const activity = [
+    `<div class="am-note"><span class="am-note-emoji" aria-hidden="true">🎉</span><p class="am-note-text"><strong>${plural(liveVideos, 'post')} ${liveVideos === 1 ? 'is' : 'are'} live!</strong><span> · Katie's team checked every draft against your brief before it went live${twice ? `; ${plural(twice, 'creator')} shared twice` : ''}.</span></p></div>`,
+    ...(!prod && ended ? [`<div class="am-note"><span class="am-note-emoji" aria-hidden="true">⏹️</span><p class="am-note-text"><strong>Rights ended on ${plural(ended, 'video')}</strong><span> · pause any ads still using ${ended > 1 ? 'them' : 'it'}, or ${extLink('ended')}.</span></p></div>`] : []),
+  ];
+  const upnext = [
+    ...(!prod && ending ? [`<div class="am-note"><span class="am-note-emoji" aria-hidden="true">⏳</span><p class="am-note-text"><strong>Rights on ${plural(ending, 'video')} end within ${FORKS.remind} days</strong><span> · download the files and ${extLink('ending')} to keep using them.</span></p></div>`] : []),
+    `<div class="am-note"><span class="am-note-emoji" aria-hidden="true">💌</span><p class="am-note-text"><strong>Send thank-yous to ${plural(rows.filter(r => r.live.length).length, 'creator')}</strong><span> · Thoughtful notes help strengthen your creator relationships after their posts went live.</span></p></div>`,
+  ];
+  const lastify = (arr) => arr.map((x, i) => i === arr.length - 1 ? x.replace('class="am-note"', 'class="am-note am-note--last"') : x).join('');
+
+  return `<div class="cp-root cp-root--c">
+    <div class="am-progress"><div class="am-stat"><div class="am-stat-left"><span class="am-stat-big">${pct}%</span><span class="am-stat-cap">through your campaign</span></div></div>
+      <div class="am2-rail" role="group" aria-label="Creator funnel: ${pct}% through">${rail}</div></div>
+    <div class="cp-crew2 tf-noicons tf-heads-grey"><div class="cp-crew-cols cp-crew-cols--left"><div class="cp-crew-left">
+      <section class="am-card am-table tf-table" aria-label="Creators"><div class="am-card-head tf-head"><div class="am-head-l"><div><p class="am-card-title">Creators</p><span class="am-card-sub">Review creator progress below.</span></div></div><div class="am-head-r"></div></div>${crew}${saved}</section>
+    </div>
+    <aside class="cp-tile-stack"><aside class="am-rail">
+      <section class="am-card"><div class="am-card-head"><div class="am-head-l"><div><p class="am-card-title">Recent activity</p></div></div></div><div class="am-card-body">${lastify(activity)}</div></section>
+      <section class="am-card"><div class="am-card-head"><div class="am-head-l"><div><p class="am-card-title">Up next</p></div></div></div><div class="am-card-body">${lastify(upnext)}</div></section>
+    </aside></aside></div></div></div>`;
+}
+
+/* ---- Rights tab: one row per video, sorted by the day its rights end ---- */
+const RT_LABEL = { active:'Active', ending:'Ending soon', ended:'Ended', requested:'Extension requested', extended:'Extended', pending:'Not posted yet' };
+const RT_FILTERS = [['all','All'], ['ending','Ending soon'], ['active','Active'], ['extended','Extended'], ['requested','Requested'], ['ended','Ended'], ['pending','Not posted']];
+const selectable = (m) => m.state !== 'pending';
+const extendable = (m) => m.state !== 'pending' && !m.requested;
+const usableFile = (m) => m.state !== 'pending' && m.state !== 'ended';
+function rtRows(ms) {
+  const k = S.rtSort.key, dir = S.rtSort.dir;
+  const RANK = { ending: 0, active: 1, requested: 2, extended: 3, ended: 4 };
+  const val = (m) => k === 'creator' ? m.c.name.toLowerCase() : k === 'posted' ? m.posted.getTime() : m.ends.getTime();
+  const cmp = k === 'attention'
+    ? (a, b) => (RANK[a.chip] - RANK[b.chip]) || (a.chip === 'ended' ? b.ends - a.ends : a.ends - b.ends)
+    : (a, b) => { const x = val(a), y = val(b); return (x < y ? -1 : x > y ? 1 : 0) * dir; };
+  const rows = ms.filter(m => S.rtFilter === 'all' || m.chip === S.rtFilter);
+  const live = rows.filter(selectable).sort(cmp);
+  return live.concat(rows.filter(m => !selectable(m)));   /* not-posted rows always sit last */
+}
+function endCell(m) {
+  if (m.state === 'pending') return `<span class="cs-rt-muted">Starts with the post</span>`;
+  const sub = m.daysLeft < 0 ? agoDays(-m.daysLeft) : m.daysLeft === 0 ? 'today' : `in ${plural(m.daysLeft, 'day')}`;
+  return `<span class="cs-rt-end${m.state === 'ending' && !m.requested ? ' is-ending' : m.state === 'ended' ? ' is-ended' : ''}"><b>${fmt(m.ends)}</b><span>${sub}</span></span>`;
+}
+function rowActions(m) {
+  if (m.state === 'pending') return '';
+  const dl = `<button type="button" class="cs-iconbtn" data-dl="${m.p.id}" ${usableFile(m) ? '' : 'disabled'} title="${usableFile(m) ? `Download ${fileName(m)}` : m.requested ? `Rights ended ${fmt(m.ends)}. Download comes back if ${first(m.c)} says yes.` : `Rights ended ${fmt(m.ends)}. Extend to download again.`}" aria-label="Download ${first(m.c)}'s ${KL[m.kind]}">${I.dl}</button>`;
+  const post = `<a class="cs-iconbtn" href="https://${m.p.url}" target="_blank" rel="noopener" data-openpost="${m.p.id}" title="Open the live post on ${PLATFORM(m.kind)}" aria-label="Open the live post">${I.out}</a>`;
+  const ext = (m.requested || (m.state !== 'ending' && m.state !== 'ended')) ? '' : `<button type="button" class="cs-extend${m.state === 'ending' ? ' is-amber' : ''}" data-rt-extend="${m.p.id}" aria-label="Extend the rights on ${first(m.c)}'s ${KL[m.kind]}">${EXTEND_CTA}</button>`;
+  return ext + post + dl;
+}
+function renderRights(ms) {
+  const live = ms.filter(selectable);
+  const counts = {}; ms.forEach(m => counts[m.chip] = (counts[m.chip] || 0) + 1);
+  if (S.rtFilter !== 'all' && !counts[S.rtFilter]) S.rtFilter = 'all';
+  const pills = RT_FILTERS.filter(([k]) => k === 'all' || counts[k]).map(([k, l]) => `<button class="cs-filter${S.rtFilter===k?' is-on':''}" data-rt-filter="${k}" aria-pressed="${S.rtFilter===k}">${l}<span class="cs-count">${k === 'all' ? ms.length : counts[k]}</span></button>`).join('');
+  const rows = rtRows(ms);
+  const sel = S.sel.filter(id => rows.some(m => m.p.id === id));
+  const selMs = sel.map(id => ms.find(m => m.p.id === id));
+  const selDl = selMs.filter(usableFile), selExt = selMs.filter(extendable);
+  const usable = live.filter(usableFile);
+  const ending = live.filter(m => m.state === 'ending' && !m.requested), ended = live.filter(m => m.state === 'ended' && !m.requested), requested = live.filter(m => m.requested);
+
+  const line = sel.length
+    ? `<div class="cs-bulk"><b>${sel.length} selected</b><button class="cs-ghost" data-act="bulk-dl" ${selDl.length ? '' : 'disabled'}>${I.dl}Download${selDl.length && selDl.length !== sel.length ? ` (${selDl.length})` : ''}</button><button class="cs-ghost is-dark" data-act="bulk-extend" ${selExt.length ? '' : 'disabled'}>${EXTEND_CTA}${selExt.length && selExt.length !== sel.length ? ` (${selExt.length})` : ''}</button><button class="cs-link" data-act="bulk-clear">Clear</button></div>`
+    : `<div class="cs-sum"><span><b>${plural(live.length, 'video')}</b>, 90 days of usage rights each${ending.length ? ` · <span class="is-amber">${ending.length} ending within ${FORKS.remind} days</span>` : ''}${requested.length ? ` · <span class="is-purple">${plural(requested.length, 'extension')} requested</span>` : ''}${ended.length ? ` · ${ended.length} ended` : ''}</span></div>`;
+
+  const arrow = (k) => S.rtSort.key === k ? `<span aria-hidden="true">${S.rtSort.dir === 1 ? '▲' : '▼'}</span>` : '';
+  const sortBtn = (k, label) => `<button type="button" class="cs-rt-sort${S.rtSort.key===k?' is-on':''}" data-rt-sort="${k}" aria-label="Sort by ${label.toLowerCase()}">${label}${arrow(k)}</button>`;
+  const selRows = rows.filter(selectable);
+  const allState = !sel.length ? 'false' : sel.length === selRows.length ? 'true' : 'mixed';
+  const check = (m) => `<button type="button" class="cs-check" role="checkbox" aria-checked="${S.sel.includes(m.p.id)}" data-sel="${m.p.id}" ${selectable(m) ? '' : 'disabled'} aria-label="Select ${first(m.c)}'s ${KL[m.kind]}">${S.sel.includes(m.p.id) ? '✓' : ''}</button>`;
+
+  const table = `<div class="cs-rt-card">
+    <div class="cs-rt-cols"><button type="button" class="cs-check" role="checkbox" aria-checked="${allState}" data-sel="all" aria-label="Select all" ${selRows.length ? '' : 'disabled'}>${allState === 'true' ? '✓' : allState === 'mixed' ? '-' : ''}</button>${sortBtn('creator', 'Video')}${sortBtn('posted', 'Posted')}${sortBtn('ends', 'Rights end')}<span>Status</span><span></span></div>
+    ${rows.length ? rows.map(m => `<div class="cs-rt-row${S.sel.includes(m.p.id) ? ' is-sel' : ''}${m.state === 'pending' ? ' is-pending' : ''}" role="button" tabindex="0" data-open="${m.p.id}">
+      ${check(m)}
+      <span class="cs-rt-video"><span class="cs-rt-thumb"><img src="${R}posters/${m.p.clip}.jpg" alt=""></span><span class="cs-rt-names"><span class="cs-name">${m.c.name}</span><span class="cs-meta">${m.c.handle} · ${KL[m.kind]}</span></span></span>
+      <span class="cs-rt-date">${m.posted ? fmt(m.posted) : '<span class="cs-rt-muted">Soon</span>'}</span>
+      ${endCell(m)}
+      <span class="cs-rt-status is-${m.chip}"><i></i>${RT_LABEL[m.chip]}</span>
+      <span class="cs-rt-actions">${rowActions(m)}</span>
+    </div>`).join('') : `<div class="cs-empty">No videos match this filter.</div>`}
+  </div>`;
+
+  return `<div class="cs-toolbar"><div class="cs-filters">${pills}</div></div>
+    ${(ended.length && !S.dismissed && S.rtFilter !== 'ended') ? `<div class="cs-notice" role="status"><div><b>Rights ended on ${plural(ended.length, 'video')}.</b> Pause any ads still using ${ended.length>1?'them':'it'}, or extend.</div><div class="cs-notice-actions"><button class="cs-link" data-act="rt-ended">See ${ended.length>1?'them':'it'}</button><button class="cs-x" data-act="dismiss" aria-label="Dismiss">✕</button></div></div>` : ''}
+    <div class="cs-rt-bar">${line}
+      <div class="cs-rt-tools"><div class="cs-seg" role="group" aria-label="View"><button data-rt-view="table" class="${S.rtView==='table'?'is-on':''}" aria-pressed="${S.rtView==='table'}">Table</button><button data-rt-view="calendar" class="${S.rtView==='calendar'?'is-on':''}" aria-pressed="${S.rtView==='calendar'}">Calendar</button></div>
+        <button class="cs-ghost" data-act="dl-all" ${usable.length?'':'disabled'} title="Downloads each video file, one after the other">${I.dl}Download all (${usable.length})</button></div>
+    </div>
+    ${S.rtView === 'calendar' ? bigCalendar(ms) : table}`;
+}
+
+/* the month, Vendr style: each video sits on its last day as a named chip; a click opens it */
+function ensureCursor(ms) {
+  if (calCursor) return;
+  const today = D(FORKS.today);
+  const withEnds = ms.filter(m => m.ends && (S.tab !== 'rights' || S.rtFilter === 'all' || m.chip === S.rtFilter));
+  const inMonth = withEnds.some(m => m.ends.getFullYear() === today.getFullYear() && m.ends.getMonth() === today.getMonth());
+  const next = withEnds.filter(m => m.ends >= today).sort((a, b) => a.ends - b.ends)[0];
+  const anchor = inMonth || !next ? today : next.ends;
+  calCursor = new Date(anchor.getFullYear(), anchor.getMonth(), 1);
+}
+function bigCalendar(ms) {
+  ensureCursor(ms);
+  const today = D(FORKS.today);
+  const y = calCursor.getFullYear(), mo = calCursor.getMonth();
+  const firstDow = (new Date(y, mo, 1).getDay() + 6) % 7;
+  const daysIn = new Date(y, mo + 1, 0).getDate();
+  const cellsN = Math.ceil((firstDow + daysIn) / 7) * 7;
+  const byDay = {};
+  ms.filter(m => m.ends && (S.rtFilter === 'all' || m.chip === S.rtFilter)).forEach(m => (byDay[iso(m.ends)] ||= []).push(m));
+  let cells = '';
+  for (let i = 0; i < cellsN; i++) {
+    const date = new Date(y, mo, i - firstDow + 1, 12); const k = iso(date);
+    const out = date.getMonth() !== mo;
+    const list = byDay[k] || [];
+    const chips = (S.bigDay === k ? list : list.slice(0, 2)).map(m => `<button type="button" class="cs-bigchip ${dotCls(m)}" data-open="${m.p.id}" title="${m.c.name} · ${KL[m.kind]} · ${RT_LABEL[m.chip]}"><img src="${m.c.av}" alt=""><span>${first(m.c)} · ${KL[m.kind]}</span></button>`).join('');
+    cells += `<div class="cs-bigday${out ? ' is-out' : ''}${k === iso(today) ? ' is-today' : ''}"><span class="cs-bigday-n">${date.getDate()}</span>${chips}${list.length > 2 ? `<button type="button" class="cs-bigmore" data-bigday="${k}">${S.bigDay === k ? 'Show fewer' : `${list.length - 2} more`}</button>` : ''}</div>`;
+  }
+  return `<div class="cs-rt-card">
+    <div class="cs-bigcal-head"><span style="display:flex;align-items:baseline;gap:12px"><span class="cs-cal-month" aria-live="polite">${MONL[mo]} ${y}</span>${Object.keys(byDay).some(k => k.startsWith(`${y}-${String(mo+1).padStart(2,'0')}`)) ? '' : `<span class="cs-rt-muted">Nothing ends this month${S.rtFilter !== 'all' ? ' with this filter' : ''}</span>`}</span><div class="cs-bigcal-nav"><button class="cs-ghost" style="height:30px;font-size:13px" data-act="cal-today">Today</button><button class="cs-cal-btn" data-cal="-1" aria-label="Previous month">${I.chevL}</button><button class="cs-cal-btn" data-cal="1" aria-label="Next month">${I.chevR}</button></div></div>
+    <div class="cs-bigcal-dows">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d => `<span>${d}</span>`).join('')}</div>
+    <div class="cs-bigcal">${cells}</div>
+  </div>`;
+}
+
+/* Dashboard variant: the creator's videos listed at the top of the row drawer */
+function dashVideos(r) {
+  return `<div class="cs-dvids"><p class="cs-dvids-title">Videos and usage rights</p>${r.live.map(m => `<div class="cs-dvid" role="button" tabindex="0" data-open="${m.p.id}">
+      <span class="cs-rt-thumb"><img src="${R}posters/${m.p.clip}.jpg" alt=""></span>
+      <span class="cs-rt-names"><span class="cs-name">${KL[m.kind]} · posted ${fmt(m.posted)}</span><span class="cs-rt-status is-${m.chip}" style="font-size:12px"><i></i>${RT_LABEL[m.chip]}</span></span>
+      ${endCell(m)}
+      <span class="cs-rt-actions">${rowActions(m)}</span>
+    </div>`).join('')}</div>`;
+}
+
+/* ==================================================================
+   POPUP · the review shell, reused: creators left, video centre, rights right
+   ================================================================== */
+function meter(m) {
+  if (m.state === 'pending') return `<div class="cs-meter cs-meter--pending"><div class="cs-meter-top"><b>Not posted yet</b><span>90 days from the post</span></div><div class="cs-meter-bar"></div><div class="cs-meter-labels"><span>Post goes live</span><span>Rights end</span></div></div>`;
+  const pct = (m.dayNum / m.total) * 100;
+  const ext = m.extended ? `<span class="cs-meter-ext" style="left:${(RIGHTS_DAYS / m.total) * 100}%"></span>` : '';
+  const top = m.state === 'ended'
+    ? `<b>Ended ${agoDays(-m.daysLeft)}</b><span>${m.total} days used</span>`
+    : `<b>Day ${m.dayNum} of ${m.total}</b><span>${m.daysLeft === 0 ? 'ends today' : plural(m.daysLeft, 'day') + ' left'}</span>`;
+  return `<div class="cs-meter cs-meter--${m.tone}"><div class="cs-meter-top">${top}</div><div class="cs-meter-bar" role="img" aria-label="${m.state === 'ended' ? `Rights ended ${fmt(m.ends)}` : `Day ${m.dayNum} of ${m.total}, rights end ${fmt(m.ends)}`}">${ext}<span class="cs-meter-fill" style="width:${pct}%"></span>${m.state !== 'ended' ? `<span class="cs-meter-today" style="left:${pct}%" title="Today"></span>` : ''}</div>
+    <div class="cs-meter-labels"><span>Posted ${fmt(m.posted)}</span><span>${m.state==='ended'?'Ended':'Ends'} ${fmt(m.ends)}</span></div></div>`;
+}
+
+function renderPopup(ms) {
+  const cur = ms.find(m => m.p.id === S.open) || ms[0];
+  const creators = [];
+  ms.forEach(m => { let g = creators.find(x => x.key === m.p.c); if (!g) { g = { key:m.p.c, c:m.c, list:[] }; creators.push(g); } g.list.push(m); });
+  const grp = creators.find(g => g.key === cur.p.c);
+  const idx = grp.list.indexOf(cur);
+  const n = first(cur.c);
+  const live = cur.state !== 'pending';
+
+  const side = creators.map(g => {
+    const lv = g.list.filter(m => m.state !== 'pending');
+    let line, lineCls = '', slot = '';
+    const tick = `<span class="rvm-side-tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2.4 6.4 5 9l4.6-6" stroke="#12A150" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
+    if (!lv.length) line = 'Not posted yet';
+    else {
+      const ending = lv.filter(m => m.state === 'ending' && !m.requested).sort((a,b)=>a.ends-b.ends);
+      const endedOpen = lv.filter(m => m.state === 'ended' && !m.requested).sort((a,b)=>a.ends-b.ends);
+      const soonest = lv.slice().sort((a,b)=>a.ends-b.ends)[0];
+      if (ending.length) { line = `Rights end ${inDays(ending[0].daysLeft)}`; lineCls = 'is-ending'; slot = `<span class="rvm-side-dot" aria-label="Ending soon"></span>`; }
+      else if (endedOpen.length) { line = `Rights ended ${fmt(endedOpen[0].ends)}`; lineCls = 'is-ended'; slot = `<span class="rvm-side-tick cs-tick-grey">•</span>`; }
+      else if (lv.some(m => m.requested)) { line = 'Extension requested'; lineCls = 'is-req'; slot = `<span class="rvm-side-tick cs-tick-req">…</span>`; }
+      else if (lv.some(m => m.extended)) { line = `Extended · until ${fmt(lv.find(m=>m.extended).ends)}`; lineCls = 'is-ext'; slot = tick; }
+      else line = `${plural(lv.length, 'video')} · until ${fmt(soonest.ends)}`;
+    }
+    return `<button type="button" class="rvm-side-row${g.key===cur.p.c?' is-active':''}${lv.length?'':' is-pending-row'}" data-open="${bestPiece(g.list).p.id}">
+      <span class="rvm-side-avatar"><img src="${g.c.av}" alt=""></span>
+      <span class="rvm-side-names"><span class="rvm-side-name">${g.c.name}<img src="${R}assets/icons/verified.svg" alt="" class="rvm-side-verified"></span><span class="rvm-side-line ${lineCls}">${line}</span></span>
+      <span class="rvm-side-slot">${slot}</span></button>`;
+  }).join('');
+
+  const kindIcon = cur.kind === 'TikTok'
+    ? `<span class="rvm-ig-icon"><img src="${R}assets/icons/tiktok-inner.svg" alt="" class="rvm-ig-icon-inner"><img src="${R}assets/icons/tiktok-outer.svg" alt="" class="rvm-tiktok-icon-outer"></span>`
+    : cur.kind === 'IG Story' ? `<span class="rvm-ig-icon"><img src="${R}assets/icons/instagram-story.svg" alt="" class="rvm-ig-icon-outer"></span>`
+    : `<span class="rvm-ig-icon"><img src="${R}assets/icons/instagram-outer.svg" alt="" class="rvm-ig-icon-outer"><img src="${R}assets/icons/instagram-inner.svg" alt="" class="rvm-ig-icon-inner"></span>`;
+
+  const stage = `<div class="rvm-stage-pill">
+      ${grp.list.length>1 ? `<button type="button" class="rvm-pill-arrow" ${idx<=0?'disabled':''} data-open="${idx>0?grp.list[idx-1].p.id:''}" title="Previous video" aria-label="Previous video"><img src="${R}assets/icons/chevron-12.svg" alt="" class="rvm-chev12-left"></button>` : ''}
+      <span class="rvm-pill-label">Video ${idx+1} of ${grp.list.length} · ${KL[cur.kind]}${cur.state==='ended'?' (ended)':''}</span>
+      ${grp.list.length>1 ? `<button type="button" class="rvm-pill-arrow" ${idx>=grp.list.length-1?'disabled':''} data-open="${idx<grp.list.length-1?grp.list[idx+1].p.id:''}" title="Next video" aria-label="Next video"><img src="${R}assets/icons/chevron-12.svg" alt=""></button>` : ''}
+    </div>
+    <div class="rvm-stage-content"><div class="rvm-stage-video-slot"><div class="rvm-video-frame">
+        <video class="rvm-video-el" id="vid" src="${R}videos/${cur.p.clip}.mp4" poster="${R}posters/${cur.p.clip}.jpg" preload="metadata" playsinline muted loop></video>
+        <div class="rvm-video-badge">${kindIcon}${cur.kind}</div>
+        <button type="button" class="rvm-video-sound is-muted" id="snd" title="Unmute" aria-label="Unmute"><img src="${R}assets/video/sound-btn.svg" alt=""></button>
+        <button type="button" class="rvm-video-play-overlay" id="playo" title="Play" aria-label="Play"><img src="${R}assets/video/play-btn.svg" alt=""></button>
+      </div></div>
+      <div class="rvm-stage-caption-slot"><div class="rvm-stage-caption"><p class="rvm-stage-caption-label">Caption</p><div class="rvm-stage-caption-body">${cur.p.cap.map(l => `<p>${l.replace(/(@\w[\w.]*)/g,'<span class="rvm-caption-mention">$1</span>').replace(/(#\w+)/g,'<span class="rvm-caption-hashtag">$1</span>')}</p>`).join('')}</div></div></div>
+    </div>`;
+
+  /* ---- right panel copy by state (heading never repeats the chip) ---- */
+  let h, sub, foot, note = '';
+  const ends = cur.ends ? fmt(cur.ends) : '';
+  const dlBtn = () => `<a class="rvm-foot-approve cs-foot-dl" href="${R}videos/${cur.p.clip}.mp4" download="${fileName(cur)}" data-dl="${cur.p.id}">${I.dl}Download video</a>`;
+  const extBtn = (label) => `<button type="button" class="rvm-foot-flag" data-act="sheet" data-id="${cur.p.id}">${label || EXTEND_CTA}</button>`;
+  const rail = (cls, strong, rest) => `<p class="rvm-footer-status cs-rail ${cls}"><i></i><b>${strong}</b>${rest ? `<span>${rest}</span>` : ''}</p>`;
+  if (!live) {
+    h = 'Waiting for the post'; sub = `${n}'s draft is ${cur.approved ? 'approved' : 'in review with Katie\'s team'}. The 90 days start the day the post goes live, and the file appears here the same day.`;
+    foot = rail('is-grey', 'Not posted yet', 'The file and the clock arrive with the post.');
+  } else if (cur.requested) {
+    h = `Waiting on ${n}`;
+    sub = `Katie's team is asking ${n} about ${cur.ext.days} more days${FORKS.extend === 'price' && cur.ext.offer ? ` at $${cur.ext.offer}` : ''}. We'll email you as soon as there's an answer.${cur.state !== 'ended' ? ` You can keep using the video until ${ends}.` : ''}`;
+    foot = cur.state === 'ended' ? rail('', `Sent ${fmt(D(cur.ext.requested))}`, `Waiting on ${n}.`) : `<span class="cs-foot-status"><i></i><span><b>Sent ${fmt(D(cur.ext.requested))}</b> · waiting on ${n}</span></span>${dlBtn()}`;
+    note = `<div class="cs-p-demo"><button data-act="demo-accept" data-id="${cur.p.id}">Demo: ${n} accepts</button></div>`;
+  } else if (cur.state === 'ended') {
+    h = `Rights ended ${ends}`; sub = `The ${cur.total} days on this video are over. Pause any ads still running it. To keep using it, extend and Katie's team will check with ${n}.`;
+    foot = `<button type="button" class="rvm-foot-approve" data-act="sheet" data-id="${cur.p.id}">${EXTEND_CTA}</button>`;
+  } else if (cur.extended) {
+    h = `Rights run to ${ends}`; sub = `${n} agreed to ${cur.ext.days} more days. Ads and reposts can keep running until then.`;
+    foot = `${extBtn('Extend again')}${dlBtn()}`;
+  } else if (cur.state === 'ending') {
+    h = cur.daysLeft === 0 ? 'Rights end today' : `Rights end in ${plural(cur.daysLeft, 'day')}`;
+    sub = `${cur.downloaded ? '' : 'Download the file now. '}After ${ends}, ads and reposts using this video should stop unless you extend.`;
+    foot = `${extBtn()}${dlBtn()}`;
+  } else {
+    h = 'Ready to use'; sub = `Full usage rights, paid ads included, until ${ends}. The original file is yours to download.`;
+    foot = `${extBtn()}${dlBtn()}`;
+  }
+
+  const tick = `<img src="${R}assets/icons/precheck-tick.svg" alt="" class="rvm-precheck-tick">`;
+  const dim = `<img src="${R}assets/icons/precheck-tick.svg" alt="" class="rvm-precheck-tick cs-tick-dim">`;
+  const item = (t, x, d) => `<li class="rvm-precheck-item${d ? ' is-dim' : ''}">${t}${x}</li>`;
+  const rightsItems = !live
+    ? item(tick, '90 days of full usage, paid ads included') + item(dim, 'Starts the day the post goes live', true) + item(dim, 'Original file, light re-edits are fine', true)
+    : item(tick, `${RIGHTS_DAYS} days of full usage, paid ads included`) + item(tick, `Started ${fmt(cur.posted)}, the day the post went live`)
+      + (cur.extended ? item(tick, `Extended by ${cur.ext.days} days${cur.ext.accepted ? `, ${n} agreed ${fmt(D(cur.ext.accepted))}` : ''}`) : '')
+      + (cur.state !== 'ended' ? item(tick, `Ends ${ends}${cur.reminderSent ? ` · reminder emailed ${fmt(cur.reminderDate)}` : ''}`) : '')
+      + item(tick, 'Original file, light re-edits are fine');
+
+  const files = !live ? '' : `<div class="cs-p-block"><div class="cs-p-block-title">Files</div>
+      <div class="cs-p-row"><div class="cs-p-row-txt"><span class="cs-p-row-name">Video file</span><span class="cs-p-row-meta">MP4 · 1080 × 1920 · ${cur.p.size}</span></div>
+        ${cur.state==='ended' ? `<button class="cs-p-btn" disabled title="${cur.requested ? `Rights ended ${ends}. Download comes back if ${n} says yes.` : `Rights ended ${ends}. Extend to download again.`}">${I.dl}Download</button>` : `<a class="cs-p-btn" href="${R}videos/${cur.p.clip}.mp4" download="${fileName(cur)}" data-dl="${cur.p.id}">${I.dl}Download</a>`}</div>
+      <div class="cs-p-row"><div class="cs-p-row-txt"><span class="cs-p-row-name">Caption</span><span class="cs-p-row-meta">${cur.p.cap.join(' ')}</span></div><button class="cs-p-btn" data-act="copy" data-id="${cur.p.id}">${I.copy}Copy</button></div>
+      <div class="cs-p-row"><div class="cs-p-row-txt"><span class="cs-p-row-name">Live post</span><span class="cs-p-row-meta">${cur.p.url}</span></div><a class="cs-p-btn" href="https://${cur.p.url}" target="_blank" rel="noopener" data-openpost="${cur.p.id}">${I.out}Open</a></div>
+      ${cur.downloaded ? `<div class="cs-receipt">You downloaded this file on ${fmt(cur.downloaded)}.</div>` : ''}
+    </div>`;
+
+  const footnote = !live || cur.requested ? '' : cur.state === 'ended'
+    ? `<p class="cs-p-note">${FORKS.extend==='price' ? `Pick how long and what you'd offer. Katie's team sends it to ${n}; if ${n} says yes, the new period starts right away.` : `Tell Katie's team how long you'd like. They check with ${n} and come back with a price, usually $50 to $100 per video.`}</p>`
+    : `<p class="cs-p-note">Downloading is part of your campaign. To keep using this video after <b>${ends}</b>, extend before it ends and the new period follows on without a gap.</p>`;
+
+  const sheet = S.sheet ? renderSheet(cur) : '';
+  const liveCount = ms.filter(m=>m.state!=='pending').length;
+
+  const html = `<div class="rvm"><div class="rvm-shell-overlay" data-act="close-scrim"><div class="rvm-shell" role="dialog" aria-modal="true" aria-label="Your content" tabindex="-1">
+    <header class="rvm-shell-head"><div><p class="rvm-shell-title">Your content</p><p class="rvm-shell-sub">${CAMPAIGN} · ${plural(liveCount, 'video')} · rights run 90 days from each post</p></div>
+      <button type="button" class="rvm-shell-close" data-act="close" title="Close" aria-label="Close"><img src="${R}assets/icons/close-16.svg" alt=""></button></header>
+    <div class="rvm-shell-body">
+      <aside class="rvm-shell-side"><p class="rvm-side-label">Creators</p>${side}</aside>
+      <div class="rvm-shell-stage"><div class="rvm-stage-gradient-clip" aria-hidden="true"><img src="${R}assets/modal/gradient-bg.webp" alt="" class="rvm-stage-gradient"></div>${stage}</div>
+      <div class="rvm-shell-panel"><div class="rvm-panel-copy">
+        <span class="cs-state cs-state--${cur.chip}"><i></i>${CHIP[cur.chip]}</span>
+        <h2 class="rvm-panel-h">${h}</h2><p class="rvm-panel-hsub">${sub}</p>
+        ${meter(cur)}
+        <div class="rvm-precheck" style="margin-top:20px"><p class="rvm-precheck-title">Usage rights</p><ul class="rvm-precheck-list">${rightsItems}</ul></div>
+        ${files}${footnote}${note}
+      </div>
+      <div class="rvm-shell-foot${/rvm-footer-status/.test(foot)?' is-decided':''}">${foot}</div></div>
+    </div>${sheet}</div></div></div>`;
+
+  let host = document.querySelector('.rvm');
+  if (host) host.outerHTML = html; else document.body.insertAdjacentHTML('beforeend', html);
+  wireVideo();
+}
+
+const sheetUntil = (cur, days) => fmt(addDays(cur.state === 'ended' ? D(FORKS.today) : cur.ends, days));
+const sheetList = () => (S.sheetSolo ? S.sheetIds : [S.sheet]).filter(Boolean).map(id => model(pieceOf(id)));
+const sheetHint = (list) => {
+  if (list.length === 1) return list[0].state === 'ended' ? `Rights would run ${S.sheetDays} days from the day ${first(list[0].c)} says yes.` : `Rights would run to ${sheetUntil(list[0], S.sheetDays)}.`;
+  const ended = list.filter(m => m.state === 'ended').length;
+  return ended === list.length ? `Each video's new period starts when the creator says yes.`
+    : ended ? `New periods follow on from each video's end date. Videos whose rights already ended start again when the creator says yes.`
+    : `Each video's new period follows on from its own end date.`;
+};
+function sheetHtml(list, solo) {
+  const one = list.length === 1 ? list[0] : null;
+  const n = one ? first(one.c) : null;
+  const price = FORKS.extend === 'price';
+  const title = one ? (one.extended ? `Extend ${n}'s video again` : `Extend ${n}'s video`) : `Extend ${list.length} videos`;
+  const sub = one
+    ? (price
+      ? `Pick how long and what you'd offer ${n}. Katie's team sends the offer; if ${n} accepts, the new period ${one.state==='ended' ? 'starts right away' : `follows on from ${fmt(one.ends)}`}.`
+      : `Tell us how long you'd like to keep using ${n}'s video. Katie's team checks with ${n} and comes back with a price, usually $50 to $100 per video.`)
+    : (price
+      ? `Pick how long and what you'd offer per video. Katie's team sends the offer to each creator and tells you who accepts.`
+      : `Tell us how long you'd like to keep using these ${list.length} videos. Katie's team checks with each creator and comes back with a price, usually $50 to $100 per video.`);
+  const chips = [30,60,90].map(d => `<button type="button" class="cs-chip${S.sheetDays===d?' is-on':''}" data-days="${d}" aria-pressed="${S.sheetDays===d}">${d} days</button>`).join('');
+  const offerLabel = one ? `Your offer to ${n}` : 'Your offer per video';
+  const offerHint = one ? `Most creators accept $50 to $100 per video. ${n} can say no or ask for more.` : `Most creators accept $50 to $100 per video. Each one can say no or ask for more.`;
+  return `<div class="${solo ? 'cs-solo-scrim' : 'rvm-changes-scrim'}" data-act="sheet-close"><div class="rvm-changes-card cs-sheet" role="dialog" aria-modal="true" aria-label="${title}">
+    <button type="button" class="rvm-changes-close" data-act="sheet-close" title="Close" aria-label="Close"><img src="${R}assets/icons/close-16.svg" alt=""></button>
+    <div class="rvm-changes-body"><span class="rvm-changes-icon" aria-hidden="true">🗓️</span><p class="rvm-changes-title">${title}</p><p class="rvm-changes-sub">${sub}</p>
+      ${one ? '' : `<p class="cs-sheet-names">${list.map(m => `${first(m.c)} · ${KL[m.kind]}`).join(', ')}${S.sheetSkipped ? `. ${plural(S.sheetSkipped, 'selected video')} already ${S.sheetSkipped > 1 ? 'have' : 'has'} a request in and ${S.sheetSkipped > 1 ? 'are' : 'is'} left out.` : ''}</p>`}
+      <div class="cs-sheet-field"><span class="cs-sheet-label" id="lblDays">How long</span><div class="cs-chips" role="group" aria-labelledby="lblDays">${chips}</div><span class="cs-sheet-hint" id="sheetHint">${sheetHint(list)}</span></div>
+      ${price ? `<div class="cs-sheet-field"><label class="cs-sheet-label" for="offer">${offerLabel}</label><div class="cs-money"><span aria-hidden="true">$</span><input id="offer" type="number" min="1" step="5" value="${S.sheetOffer}" inputmode="numeric"></div><span class="cs-sheet-hint">${offerHint}</span></div>` : ''}
+      <div class="cs-sheet-field"><label class="cs-sheet-label" for="sheetText">Anything to add <span style="color:#767676;font-weight:400">· optional</span></label><textarea class="rvm-changes-textarea" id="sheetText" placeholder="For example, where you plan to run it">${esc(S.sheetText)}</textarea></div>
+    </div>
+    <div class="rvm-changes-footer"><button type="button" class="rvm-changes-send" data-act="sheet-send" data-id="${one ? one.p.id : ''}" ${price && !(S.sheetOffer > 0) ? 'disabled' : ''}>${price ? (one ? 'Send offer' : `Send ${list.length} offers`) : "Send to Katie's team"}</button></div>
+  </div></div>`;
+}
+const renderSheet = (cur) => sheetHtml([cur], false);
+function renderSolo(ms) {
+  const list = S.sheetIds.map(id => ms.find(m => m.p.id === id)).filter(Boolean);
+  if (!list.length) { S.sheetSolo = false; return; }
+  document.body.insertAdjacentHTML('beforeend', `<div class="rvm cs-solo">${sheetHtml(list, true)}</div>`);
+}
+
+function wireVideo() {
+  const v = document.getElementById('vid'); const po = document.getElementById('playo'); const snd = document.getElementById('snd');
+  if (!v) return;
+  const toggle = () => { if (v.paused) v.play().catch(()=>{}); else v.pause(); };
+  v.addEventListener('click', toggle); po.addEventListener('click', toggle);
+  v.addEventListener('play', () => po.style.display = 'none'); v.addEventListener('pause', () => po.style.display = '');
+  snd.addEventListener('click', () => { v.muted = !v.muted; snd.classList.toggle('is-muted', v.muted); const t = v.muted ? 'Unmute' : 'Mute'; snd.title = t; snd.setAttribute('aria-label', t); });
+}
+
+/* ---- demo bar: full on the page; tucks into a chip under the popup so it never covers the footer ---- */
+function renderDemo() {
+  const el = document.getElementById('demo');
+  const popup = (S.open || S.sheetSolo) && !isProd();
+  if (popup && !S.demoPinned) { el.className = 'cs-demo is-min'; el.innerHTML = `<button class="cs-demo-chip" data-demo-toggle="1" title="Show the prototype controls">Demo controls ▴</button>`; return; }
+  el.className = 'cs-demo';
+  const on = (a, b) => a === b ? 'is-on' : '';
+  const off = isProd() ? ' is-off' : '';
+  el.innerHTML = `<span class="cs-demo-group"><span class="cs-demo-k">VIEW</span><button data-view="prod" class="${on(FORKS.view,'prod')} is-prod" title="What production shows today (Oct 1 capture)">Prod today</button><button data-view="new" class="${on(FORKS.view,'new')}" title="The proposed surface">Proposed</button></span><span class="cs-demo-sep"></span>
+    <span class="cs-demo-group${off}"><span class="cs-demo-k">RIGHTS IN</span><button data-where="content" class="${on(FORKS.where,'content')}" title="Cards and a calendar rail inside the Content tab">Content tab</button><button data-where="tab" class="${on(FORKS.where,'tab')}" title="A third tab with every video and its end date in one table; Content stays as production">Own tab</button><button data-where="dash" class="${on(FORKS.where,'dash')}" title="Inside the Dashboard's Creators table; Content stays as production">Dashboard</button></span><span class="cs-demo-sep"></span>
+    <span class="cs-demo-group"><span class="cs-demo-k">TODAY</span>${TODAYS.map(t => `<button data-today="${t.key}" class="${on(FORKS.today,t.key)}" title="${t.hint}">${t.label}</button>`).join('')}</span><span class="cs-demo-sep"></span>
+    ${isProd() || FORKS.where !== 'content' ? '<!--' : ''}<span class="cs-demo-group"><span class="cs-demo-k">CONTENT LAYOUT</span><button data-clay="shelf" class="${on(FORKS.clay,'shelf')}" title="Production's grid, a week shelf above it, attention first">Shelf</button><button data-clay="rail" class="${on(FORKS.clay,'rail')}" title="The Sep 30 version: cards plus a right rail with a calendar">Rail</button></span><span class="cs-demo-sep"></span>${isProd() || FORKS.where !== 'content' ? '-->' : ''}
+    ${isProd() || FORKS.where !== 'content' || FORKS.clay === 'rail' ? '<!--' : ''}<span class="cs-demo-group"><span class="cs-demo-k">TILES</span><button data-tile="lg" class="${on(FORKS.tile,'lg')}" title="Production's tile size, three across">Large</button><button data-tile="sm" class="${on(FORKS.tile,'sm')}" title="Smaller tiles, five across: more videos on one screen">Small</button></span><span class="cs-demo-sep"></span>${isProd() || FORKS.where !== 'content' || FORKS.clay === 'rail' ? '-->' : ''}
+    ${isProd() || FORKS.where !== 'content' || FORKS.clay !== 'rail' ? '<!--' : ''}<span class="cs-demo-group"><span class="cs-demo-k">CALENDAR</span><button data-calv="month" class="${on(FORKS.cal,'month')}">Month</button><button data-calv="faces" class="${on(FORKS.cal,'faces')}">Faces</button><button data-calv="timeline" class="${on(FORKS.cal,'timeline')}">Timeline</button></span><span class="cs-demo-sep"></span>${isProd() || FORKS.where !== 'content' || FORKS.clay !== 'rail' ? '-->' : ''}
+    <span class="cs-demo-group${off}"><span class="cs-demo-k">REMINDER</span>${[7,5].map(d => `<button data-remind="${d}" class="${on(FORKS.remind,d)}" title="${d===7?'7 days: agreed with Katherine, Sep 25':'5 days: Julia, Sep 30'}">${d} days</button>`).join('')}</span><span class="cs-demo-sep"></span>
+    <span class="cs-demo-group${off}"><span class="cs-demo-k">EXTEND</span><button data-extmode="ask" class="${on(FORKS.extend,'ask')}" title="V0: one button to Katie's team">Ask the team</button><button data-extmode="price" class="${on(FORKS.extend,'price')}" title="V1: pick a duration and a price, creator accepts">With a price</button></span><span class="cs-demo-sep"></span>
+    <a href="#" data-reset title="Forget prototype downloads and requests">↺</a>${popup ? `<button data-demo-toggle="1" title="Hide the prototype controls">▾</button>` : ''}`;
+  document.documentElement.style.setProperty('--demo-h', (document.body.classList.contains('embed') ? 0 : Math.round(el.getBoundingClientRect().height)) + 'px');
+}
+
+/* ==================================================================
+   EVENTS (one delegated handler)
+   ================================================================== */
+function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('is-on'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('is-on'), 1800); }
+function markDownloaded(id) { S.downloads[id] = FORKS.today; save('downloads', S.downloads); }
+function downloadPiece(m) { const a = document.createElement('a'); a.href = `${R}videos/${m.p.clip}.mp4`; a.download = fileName(m); document.body.appendChild(a); a.click(); a.remove(); markDownloaded(m.p.id); }
+function openSheet(id) {
+  S.sheetOpener = focusKey(document.activeElement);
+  if (S.sheetFor !== id) { S.sheetDays = 90; S.sheetOffer = 75; S.sheetText = ''; }   /* a draft survives closing and reopening the same video */
+  S.open = id; S.sheet = id; S.sheetFor = id; render();
+  setTimeout(() => { const f = document.getElementById(FORKS.extend === 'price' ? 'offer' : 'sheetText'); if (f) f.focus(); }, 30);
+}
+function openSolo(ids) {
+  S.sheetOpener = focusKey(document.activeElement);
+  const key = ids.join(',');
+  if (S.sheetFor !== key) { S.sheetDays = 90; S.sheetOffer = 75; S.sheetText = ''; }
+  S.sheetIds = ids; S.sheetSolo = true; S.sheetFor = key; S.sheet = null; S.open = null; render();
+  setTimeout(() => { const f = document.getElementById(FORKS.extend === 'price' ? 'offer' : 'sheetText'); if (f) f.focus(); }, 30);
+}
+function closeSheet() { const ta = document.getElementById('sheetText'); if (ta) S.sheetText = ta.value; const of = document.getElementById('offer'); if (of) S.sheetOffer = Number(of.value) || 0; S.sheet = null; S.sheetSolo = false; render(); }
+const pieceOf = (id) => PIECES.find(p => p.id === id);
+
+document.addEventListener('click', (e) => {
+  const t = e.target;
+  const el = (sel) => t.closest(sel);
+  let x;
+  if ((x = el('[data-demo-toggle]'))) { S.demoPinned = !S.demoPinned; renderDemo(); return; }
+  if ((x = el('[data-where]'))) { const v = x.dataset.where; setFork('where', v); S.day = null; S.bucket = null; S.sel = []; S.filter = 'all'; S.rtFilter = 'all'; calCursor = null; S.open = null; S.sheet = null; S.sheetSolo = false; S.tab = v === 'tab' ? 'rights' : v === 'dash' ? 'dashboard' : 'content'; render(); return; }
+  if ((x = el('[data-bucket]'))) { S.bucket = S.bucket === x.dataset.bucket ? null : x.dataset.bucket; render(); return; }
+  if ((x = el('[data-csort]'))) { S.csort = x.dataset.csort; S.bucket = null; render(); return; }
+  if ((x = el('[data-tile]'))) { setFork('tile', x.dataset.tile); render(); return; }
+  if ((x = el('[data-clay]'))) { setFork('clay', x.dataset.clay); S.day = null; S.bucket = null; S.sel = []; S.filter = 'all'; calCursor = null; render(); return; }
+  if ((x = el('[data-rt-filter]'))) { S.rtFilter = x.dataset.rtFilter; S.sel = []; calCursor = null; S.bigDay = null; render(); return; }
+  if ((x = el('[data-bigday]'))) { S.bigDay = S.bigDay === x.dataset.bigday ? null : x.dataset.bigday; render(); return; }
+  if ((x = el('[data-rt-sort]'))) { const k = x.dataset.rtSort; S.rtSort = S.rtSort.key === k ? { key: k, dir: -S.rtSort.dir } : { key: k, dir: 1 }; render(); return; }
+  if ((x = el('[data-rt-view]'))) { S.rtView = x.dataset.rtView; render(); return; }
+  if ((x = el('[data-sel]'))) {
+    e.stopPropagation();
+    const id = x.dataset.sel;
+    if (id === 'all') { const ids = rtRows(MODELS()).filter(selectable).map(m => m.p.id); const on = ids.filter(i => S.sel.includes(i)); S.sel = on.length === ids.length ? [] : ids; }
+    else S.sel = S.sel.includes(id) ? S.sel.filter(i => i !== id) : S.sel.concat(id);
+    render(); return;
+  }
+  if ((x = el('[data-rt-extend]'))) { e.stopPropagation(); S.sheetSkipped = 0; openSolo(x.dataset.rtExtend.split(',')); return; }
+  if ((x = el('[data-view]'))) { setFork('view', x.dataset.view); S.day = null; S.filter = 'all'; S.open = null; S.sheet = null; S.sheetSolo = false; S.sel = []; render(); return; }
+  if ((x = el('[data-today]'))) { setFork('today', x.dataset.today); calCursor = null; S.day = null; S.bucket = null; S.sel = []; S.dismissed = false; render(); return; }
+  if ((x = el('[data-calv]'))) { setFork('cal', x.dataset.calv); S.day = null; render(); return; }
+  if ((x = el('[data-remind]'))) { setFork('remind', Number(x.dataset.remind)); render(); return; }
+  if ((x = el('[data-extmode]'))) { setFork('extend', x.dataset.extmode); render(); return; }
+  if ((x = el('[data-reset]'))) { e.preventDefault(); S.downloads = {}; S.ext = {}; save('downloads', {}); save('ext', {}); toast('Prototype state reset'); render(); return; }
+  if ((x = el('[data-tl-more]'))) { S.tlAll = !S.tlAll; render(); return; }
+  if ((x = el('[data-tab]'))) { S.tab = x.dataset.tab; if (x.dataset.rtf) { S.rtFilter = x.dataset.rtf; S.rtView = 'table'; S.sel = []; } render(); return; }
+  if ((x = el('[data-filter]'))) { S.filter = x.dataset.filter; S.day = null; S.sel = []; render(); return; }
+  if ((x = el('[data-cal]'))) { calCursor = new Date(calCursor.getFullYear(), calCursor.getMonth() + Number(x.dataset.cal), 1); S.day = null; S.bigDay = null; render(); return; }
+  if ((x = el('[data-day]'))) { S.day = S.day === x.dataset.day ? null : x.dataset.day; S.filter = 'all'; render(); return; }
+  if ((x = el('[data-prod-card]'))) { toast(`Opens the post on ${PLATFORM(pieceOf(x.dataset.prodCard).kind)} in a new tab`); return; }
+  if ((x = el('[data-openpost]'))) { e.preventDefault(); e.stopPropagation(); toast(`Opens the post on ${PLATFORM(pieceOf(x.dataset.openpost).kind)} in a new tab`); return; }
+  if ((x = el('.cs-extend[data-extend]'))) { e.stopPropagation(); openSheet(x.dataset.extend); return; }
+  if ((x = el('[data-dl]'))) {
+    /* a real download of the demo file; the card's Download must not open the popup */
+    e.stopPropagation();
+    const id = x.dataset.dl;
+    if (x.tagName === 'A') markDownloaded(id); else downloadPiece(model(pieceOf(id)));
+    toast('Downloading video'); setTimeout(render, 50); return;
+  }
+  if ((x = el('.tf-rowlink[data-open]'))) { e.stopPropagation(); S.open = x.dataset.open; S.sheet = null; render(); return; }
+  if ((x = el('[data-row]'))) {
+    const k = x.dataset.row; const open = !S.rowsOpen.includes(k);
+    S.rowsOpen = open ? S.rowsOpen.concat(k) : S.rowsOpen.filter(i => i !== k);
+    x.setAttribute('aria-expanded', String(open));
+    const drawer = x.nextElementSibling; drawer.classList.toggle('tf-drawer--open', open); drawer.setAttribute('aria-hidden', String(!open)); drawer.toggleAttribute('inert', !open);
+    const img = x.querySelector('.am-chev img'); if (img) img.style.rotate = open ? '-90deg' : '90deg';
+    return;
+  }
+  if ((x = el('[data-open]'))) { if (!x.dataset.open) return; S.open = x.dataset.open; S.sheet = null; render(); return; }
+  if ((x = el('[data-days]'))) {
+    /* update in place: no re-render, the text box keeps its caret */
+    S.sheetDays = Number(x.dataset.days);
+    document.querySelectorAll('.cs-chip').forEach(c => { const on = Number(c.dataset.days) === S.sheetDays; c.classList.toggle('is-on', on); c.setAttribute('aria-pressed', String(on)); });
+    const hint = document.getElementById('sheetHint'); if (hint) hint.textContent = sheetHint(sheetList());
+    return;
+  }
+  if ((x = el('[data-act]'))) {
+    const act = x.dataset.act; const id = x.dataset.id;
+    if (act === 'dismiss') { S.dismissed = true; render(); }
+    else if (act === 'show-ended') { S.filter = 'all'; S.day = null; const ended = MODELS().filter(m => m.state === 'ended' && !m.requested)[0]; if (ended) S.open = ended.p.id; render(); }
+    else if (act === 'clear-day') { S.day = null; render(); }
+    else if (act === 'cal-today') { const t = D(FORKS.today); calCursor = new Date(t.getFullYear(), t.getMonth(), 1); S.day = null; S.bigDay = null; render(); }
+    else if (act === 'shelf-ended') { S.bucket = 'ended'; S.filter = 'all'; S.sel = []; render(); }
+    else if (act === 'rt-ended') { S.rtFilter = 'ended'; S.rtView = 'table'; S.sel = []; render(); }
+    else if (act === 'bulk-clear') { S.sel = []; render(); }
+    else if (act === 'bulk-extend') { const ids = S.sel.filter(i => extendable(model(pieceOf(i)))); S.sheetSkipped = S.sel.length - ids.length; if (ids.length) openSolo(ids); }
+    else if (act === 'bulk-dl') {
+      const list = S.sel.map(i => model(pieceOf(i))).filter(usableFile);
+      list.forEach((m, i) => setTimeout(() => { downloadPiece(m); if (i === list.length - 1) render(); }, i * 350));
+      toast(`Downloading ${plural(list.length, 'video')}`);
+    }
+    else if (act === 'group-select') { const ids = shelfGroupIds(x.dataset.g); const on = ids.filter(i => S.sel.includes(i)); S.sel = on.length === ids.length ? S.sel.filter(i => !ids.includes(i)) : [...new Set(S.sel.concat(ids))]; render(); }
+    else if (act === 'group-extend') { const ids = shelfGroupIds(x.dataset.g).filter(i => extendable(model(pieceOf(i)))); S.sheetSkipped = 0; if (ids.length) openSolo(ids); }
+    else if (act === 'dl-all') {
+      const only = x.dataset.ids !== undefined ? x.dataset.ids.split(',') : null;
+      const list = MODELS().filter(m => m.state !== 'pending' && m.state !== 'ended' && (!only || only.includes(m.p.id)));
+      list.forEach((m, i) => setTimeout(() => { downloadPiece(m); if (i === list.length - 1) render(); }, i * 350));
+      toast(`Downloading ${plural(list.length, 'video')}`);
+    }
+    else if (act === 'close' || (act === 'close-scrim' && t === x)) { S.open = null; S.sheet = null; render(); }
+    else if (act === 'copy') { if (navigator.clipboard) navigator.clipboard.writeText(pieceOf(id).cap.join('\n')).catch(()=>{}); toast('Caption copied'); }
+    else if (act === 'sheet') { openSheet(id); }
+    else if (act === 'sheet-close' && (t === x || el('.rvm-changes-close'))) { closeSheet(); }
+    else if (act === 'sheet-send') {
+      const of = document.getElementById('offer');
+      const offer = FORKS.extend === 'price' ? Number(of && of.value) || 0 : null;
+      if (FORKS.extend === 'price' && !(offer > 0)) { toast('Add an offer above $0'); if (of) of.focus(); return; }
+      const ta = document.getElementById('sheetText');
+      const ids = S.sheetSolo ? S.sheetIds.slice() : [id];
+      ids.forEach(i => { S.ext[i] = { state:'requested', requested: FORKS.today, days: S.sheetDays, offer, note: ta ? ta.value : '' }; });
+      save('ext', S.ext); S.sheet = null; S.sheetSolo = false; S.sheetIds = []; S.sheetFor = null; S.sheetText = ''; S.sel = [];
+      toast(ids.length > 1 ? `${ids.length} requests sent to Katie's team` : FORKS.extend === 'price' ? 'Offer sent to Katie\'s team' : 'Sent to Katie\'s team'); render();
+    }
+    else if (act === 'demo-accept') { const cur = S.ext[id] || pieceOf(id).ext; S.ext[id] = { ...cur, state:'extended', accepted: FORKS.today }; save('ext', S.ext); toast(`${first(CREATORS[pieceOf(id).c])} accepted`); render(); }
+    return;
+  }
+});
+document.addEventListener('pointerdown', () => document.body.classList.add('is-pointer'), true);
+document.addEventListener('keydown', (e) => { if (e.key === 'Tab' || e.key.startsWith('Arrow')) document.body.classList.remove('is-pointer'); }, true);
+document.addEventListener('input', (e) => {
+  if (e.target.id === 'offer') { S.sheetOffer = Number(e.target.value) || 0; const b = document.querySelector('.rvm-changes-send'); if (b) b.disabled = !(S.sheetOffer > 0); }
+  if (e.target.id === 'sheetText') S.sheetText = e.target.value;
+});
+document.addEventListener('keydown', (e) => {
+  /* Enter or Space on our own role=button / role=link elements acts like a click */
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[role="button"], [role="link"]') && !e.target.matches('button, a[href], input, textarea')) { e.preventDefault(); e.target.click(); return; }
+  if (e.key === 'Escape') { if (S.sheet || S.sheetSolo) closeSheet(); else if (S.open) { S.open = null; render(); } return; }
+  if ((S.open || S.sheetSolo) && !isProd() && e.key === 'Tab') {
+    /* keep Tab inside the dialog (or inside the sheet when it is up) */
+    const inSheet = S.sheet || S.sheetSolo;
+    const scope = document.querySelector(inSheet ? '.rvm-changes-card' : '.rvm-shell'); if (!scope) return;
+    const items = [...scope.querySelectorAll('a[href], button:not([disabled]), input, textarea, [tabindex="0"]')].filter(n => n.offsetParent !== null && (inSheet || !n.closest('.rvm-changes-scrim')));
+    if (!items.length) return;
+    const i = items.indexOf(document.activeElement);
+    if (e.shiftKey && (i <= 0)) { e.preventDefault(); items[items.length - 1].focus(); }
+    else if (!e.shiftKey && (i === -1 || i === items.length - 1)) { e.preventDefault(); items[0].focus(); }
+    return;
+  }
+  if (S.open && !S.sheet && (e.key === 'ArrowLeft' || e.key === 'ArrowRight') && !e.target.matches('input, textarea')) {
+    const ms = MODELS(); const cur = ms.find(m => m.p.id === S.open); const sib = ms.filter(m => m.p.c === cur.p.c); const i = sib.indexOf(cur);
+    const nx = sib[i + (e.key === 'ArrowRight' ? 1 : -1)]; if (nx) { S.open = nx.p.id; render(); }
+  }
+});
+if (qs.get('open') && pieceOf(qs.get('open'))) S.open = qs.get('open');
+render();
+</script>
+</body>
+</html>

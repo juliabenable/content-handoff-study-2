@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Repair+ Holiday Hydration · Content · Benable</title>
+<link rel="icon" href="https://benable.com/images/biz/logo.svg">
+<!-- Captured production chrome (Aug 18 capture, scoped under .nf) + the review popup's own styles (rvm-) + the shipped Campaign Pulse (pulse.css). -->
+<link rel="stylesheet" href="assets/newflow-extra.css">
+<link rel="stylesheet" href="assets/newflow-production.css">
+<link rel="stylesheet" href="assets/reviewModal.css">
+<link rel="stylesheet" href="assets/pulse.css">
+<style>
+/* ------------------------------------------------------------------
+   Content + rights surface. Every class is cs- prefixed; the captured
+   production CSS owns the chrome (sidebar, header, tabs, stage card).
+   Chrome-side rules are written as `.nf .cs-*` (0,2,0) because the
+   captured CSS carries `.nf :where(.workflow-page) button` at (0,1,1).
+   Type ramp 12/13/14/16/20 · spacing 4/8/12/16/24/32 · radii 8/12/16/999
+   ------------------------------------------------------------------ */
+html, body { margin: 0; }
+body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+.nf { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+.nf .brand-dashboard { display: flex; flex-direction: column; height: 100vh; }
+.nf .dashboard-body { flex: 1 1 0; min-height: 0; }
+.nf .main-column { padding-bottom: 120px; }   /* the demo bar never hides the last row */
+
+/* neutralise the captured chrome's bare button/anchor styling inside the panel (same specificity, loads later) */
+.nf :where(.cs-panel) button, .nf :where(.cs-panel) a { margin: 0; padding: 0; border: 0; background: none; border-radius: 0; min-height: 0; font: inherit; color: inherit; line-height: inherit; text-decoration: none; }
+.nf .cs-panel :focus-visible, .rvm :focus-visible, .cs-demo :focus-visible { outline: 2px solid #7a5cfa; outline-offset: 2px; }
+.nf .cs-seg button:focus-visible { outline-offset: -2px; }
+body.is-pointer .nf .cs-panel :focus-visible, body.is-pointer .rvm :focus-visible, body.is-pointer .cs-demo :focus-visible { outline: none; }
+
+/* production has no "active" pill in the capture we hold; mirror the recruiting pill in green */
+.nf .phase-pill.phase-pill--active { background: #e8f7ef; color: #15803d; }
+.nf .phase-pill.phase-pill--active .phase-pill-dot { background: #2baf87; }
+.nf .workflow-dashboard-tab { position: relative; }
+.nf .workflow-dashboard-tab .cs-tabdot { position: absolute; top: 10px; right: -6px; width: 6px; height: 6px; border-radius: 999px; background: #e88e2c; }
+
+/* the stage card becomes a two-column workspace: grid + rail */
+.nf .stage-top-card.cs-panel { padding: 0; overflow: visible; }
+.nf .cs-wrap { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 32px; padding: 24px; align-items: start; }
+.nf .cs-wrap.cs-wrap--prod { grid-template-columns: minmax(0, 1fr); padding: 24px 0; }
+
+/* toolbar: production filter pills + download all */
+.nf .cs-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+.nf .cs-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.nf .cs-filter { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px 0 16px; border-radius: 999px; border: 1px solid #e3e3e3; background: #fff; color: #1a1a1a; font: 500 14px/1 Inter, sans-serif; cursor: pointer; transition: background-color .12s, border-color .12s; }
+.nf .cs-filter:hover { border-color: #c6c6c6; }
+.nf .cs-filter.is-on { background: #1a1a1a; border-color: #1a1a1a; color: #fff; }
+.nf .cs-filter .cs-count { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; background: #f1f1f1; color: #4b4b4b; font-size: 12px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.nf .cs-filter.is-on .cs-count { background: rgba(255,255,255,.18); color: #fff; }
+.nf .cs-ghost { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: 10px; border: 1px solid #e3e3e3; background: #fff; color: #1a1a1a; font: 500 14px/1 Inter, sans-serif; cursor: pointer; transition: background-color .12s, border-color .12s; white-space: nowrap; }
+.nf .cs-ghost:hover { background: #f7f7f8; border-color: #c6c6c6; }
+.nf .cs-ghost svg { width: 16px; height: 16px; }
+.nf .cs-ghost:disabled { color: #aaa; cursor: default; }
+.nf .cs-ghost:disabled:hover { background: #fff; border-color: #e3e3e3; }
+
+/* the quiet notice (logs in after something ended) */
+.nf .cs-notice { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 16px; border: 1px solid #f3dfc0; background: #fff8ee; border-radius: 12px; margin-bottom: 20px; font-size: 14px; line-height: 1.5; color: #1a1a1a; }
+.nf .cs-notice b { font-weight: 600; }
+.nf .cs-notice-actions { display: flex; gap: 12px; align-items: center; flex: none; }
+.nf .cs-link { background: none; border: 0; padding: 0; color: #5b3fd6; font: 500 14px/1.4 Inter, sans-serif; cursor: pointer; }
+.nf .cs-link:hover { text-decoration: underline; }
+.nf .cs-x { width: 28px; height: 28px; border-radius: 8px; border: 0; background: none; cursor: pointer; color: #717171; display: grid; place-items: center; font-size: 13px; }
+.nf .cs-x:hover { background: rgba(0,0,0,.05); }
+
+/* summary line above the grid, with the active day as a removable chip */
+.nf .cs-sum { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 14px; line-height: 20px; color: #6b7280; margin: 0 0 16px; min-height: 28px; }
+.nf .cs-sum b { color: #1a1a1a; font-weight: 600; }
+.nf .cs-sum .is-amber { color: #b45309; font-weight: 600; }
+.nf .cs-sum .is-purple { color: #5b3fd6; font-weight: 600; }
+.nf .cs-chipday { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 6px 0 10px; border-radius: 999px; background: #1a1a1a; color: #fff; font: 500 13px/1 Inter, sans-serif; border: 0; cursor: pointer; }
+.nf .cs-chipday span { display: grid; place-items: center; width: 18px; height: 18px; border-radius: 999px; background: rgba(255,255,255,.18); font-size: 11px; }
+.nf .cs-chipday:hover span { background: rgba(255,255,255,.32); }
+
+/* the cards (production anatomy: media, platform pill, creator row, caption) */
+.nf .cs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.nf .cs-grid--prod { grid-template-columns: repeat(auto-fill, 333px); justify-content: start; }
+.nf .cs-card { position: relative; display: flex; flex-direction: column; border: 1px solid #ebebeb; border-radius: 16px; background: #fff; overflow: hidden; cursor: pointer; text-align: left; padding: 0; font: inherit; color: inherit; transition: box-shadow .15s, border-color .15s, transform .15s; }
+.nf .cs-card:hover { border-color: #e3e3e3; box-shadow: 0 1px 2px rgba(16,24,40,.05), 0 12px 28px rgba(16,24,40,.10); transform: translateY(-2px); }
+.nf .cs-media { position: relative; aspect-ratio: 4 / 5; background: #eee; overflow: hidden; }
+.nf .cs-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.nf .cs-plat { position: absolute; top: 12px; left: 12px; display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px 0 8px; border-radius: 999px; color: #fff; font-size: 12px; font-weight: 600; line-height: 1; }
+.nf .cs-plat--ig { background: linear-gradient(90deg, #e8771f, #cf2371 55%, #7a2fa8); }
+.nf .cs-plat--tt { background: #111; }
+.nf .cs-plat svg { width: 12px; height: 12px; }
+.nf .cs-hover { position: absolute; right: 12px; bottom: 12px; display: flex; gap: 6px; opacity: 0; transform: translateY(4px); transition: opacity .15s, transform .15s; }
+.nf .cs-card:hover .cs-hover, .nf .cs-card:focus-within .cs-hover { opacity: 1; transform: none; }
+.nf .cs-dl { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; background: rgba(255,255,255,.94); color: #1a1a1a; font: 500 13px/1 Inter, sans-serif; border: 0; cursor: pointer; text-decoration: none; box-shadow: 0 1px 2px rgba(16,24,40,.08); }
+.nf .cs-dl:hover { background: #fff; }
+.nf .cs-dl svg { width: 14px; height: 14px; }
+.nf .cs-body { flex: 1; padding: 14px 16px 14px; display: flex; flex-direction: column; gap: 8px; }
+.nf .cs-who { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.nf .cs-avatar { width: 28px; height: 28px; border-radius: 999px; overflow: hidden; background: #f1f1f1; flex: none; display: grid; place-items: center; font-size: 12px; font-weight: 600; color: #4b4b4b; }
+.nf .cs-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 15%; display: block; }
+.nf .cs-name { font-size: 14px; font-weight: 600; line-height: 18px; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nf .cs-meta { font-size: 12px; line-height: 16px; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nf .cs-cap { font-size: 13px; line-height: 18px; color: #4b4b4b; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 36px; }
+.nf .cs-cap--3 { -webkit-line-clamp: 3; min-height: 54px; }
+.nf .cs-rightsrow { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 10px; border-top: 1px solid #f1f1f1; min-height: 37px; }
+.nf .cs-rights { font-size: 13px; line-height: 18px; color: #6b7280; font-variant-numeric: tabular-nums; display: inline-flex; align-items: center; gap: 6px; min-width: 0; flex: 1; }
+.nf .cs-rights > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.nf .cs-rights i { width: 6px; height: 6px; border-radius: 999px; background: #c2c5c4; flex: none; }
+.nf .cs-rights.is-ext i { background: #2baf87; }
+.nf .cs-rights b { font-weight: 500; color: #1a1a1a; }
+.nf .cs-rights.is-ending i { background: #e88e2c; }
+.nf .cs-rights.is-ending b { color: #b45309; }
+.nf .cs-rights.is-ended i { background: #c2c5c4; }
+.nf .cs-rights.is-ended, .nf .cs-rights.is-ended b { color: #767676; }
+.nf .cs-rights.is-ext b { color: #15803d; }
+.nf .cs-rights.is-req i { background: #896bd9; }
+.nf .cs-rights.is-req b { color: #5b3fd6; }
+.nf .cs-rights.is-pending i { background: #e3e3e3; }
+.nf .cs-extend { flex: none; height: 26px; padding: 0 10px; border-radius: 999px; border: 1px solid #e3e3e3; background: #fff; color: #1a1a1a; font: 500 12px/1 Inter, sans-serif; cursor: pointer; display: inline-flex; align-items: center; }
+.nf .cs-extend:hover { border-color: #1a1a1a; }
+.nf .cs-extend.is-amber { border-color: #f3dfc0; background: #fff8ee; color: #b45309; }
+.nf .cs-extend.is-amber:hover { border-color: #e88e2c; }
+.nf .cs-empty { grid-column: 1 / -1; padding: 48px 24px; text-align: center; color: #6b7280; font-size: 14px; }
+
+/* pending piece (draft approved, not live) */
+.nf .cs-card.is-pending .cs-media { background: #f5f5f7; }
+.nf .cs-card.is-pending .cs-media img { opacity: .35; filter: grayscale(1); }
+.nf .cs-soon { position: absolute; inset: 0; display: grid; place-items: center; }
+.nf .cs-soon span { padding: 6px 12px; border-radius: 999px; background: #fff; border: 1px solid #ebebeb; font-size: 12px; font-weight: 500; color: #4b4b4b; }
+
+/* ---- the rail: calendar + ending next + about ---- */
+.nf .cs-rail { display: flex; flex-direction: column; gap: 16px; }
+.nf .cs-box { border: 1px solid #ebebeb; border-radius: 16px; background: #fff; padding: 16px; min-width: 0; }
+.nf .cs-box-h { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; }
+.nf .cs-box-title { font-size: 14px; font-weight: 600; line-height: 20px; color: #1a1a1a; }
+.nf .cs-box-sub { font-size: 13px; line-height: 18px; color: #6b7280; margin-bottom: 12px; }
+
+.nf .cs-cal-nav { display: flex; align-items: center; justify-content: space-between; margin: 4px 0 8px; }
+.nf .cs-cal-month { font-size: 14px; font-weight: 600; color: #1a1a1a; }
+.nf .cs-cal-btn { width: 28px; height: 28px; border-radius: 8px; border: 1px solid #ebebeb; background: #fff; display: grid; place-items: center; cursor: pointer; color: #4b4b4b; padding: 0; }
+.nf .cs-cal-btn:hover { background: #f7f7f8; }
+.nf .cs-cal-btn svg { width: 12px; height: 12px; }
+.nf .cs-cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; }
+.nf .cs-cal-dow { text-align: center; font-size: 11px; font-weight: 500; letter-spacing: .04em; color: #767676; padding: 4px 0 6px; }
+.nf .cs-day { position: relative; height: 36px; padding: 0; margin: 0; border-radius: 8px; border: 0; background: none; font: 500 13px/1 Inter, sans-serif; color: #1a1a1a; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: default; font-variant-numeric: tabular-nums; min-width: 0; }
+.nf .cs-day.is-blank { visibility: hidden; }
+.nf .cs-day.is-past { color: #8a8a8a; }
+.nf .cs-day.has { cursor: pointer; }
+.nf .cs-day.has:hover { background: #f5f3fc; }
+.nf .cs-day.is-today { font-weight: 600; color: #5b3fd6; background: #efecf7; border-radius: 999px; }
+.nf .cs-cal--faces .cs-day.is-today { border-radius: 12px; }
+.nf .cs-day.is-today.has:hover { background: #e6e0f7; }
+.nf .cs-day.is-sel, .nf .cs-day.is-sel:hover, .nf .cs-day.is-sel.has:hover, .nf .cs-day.is-today.is-sel.has:hover { background: #1a1a1a; color: #fff; }
+.nf .cs-day.is-sel .cs-dot { background: #fff !important; box-shadow: none !important; }
+.nf .cs-dots { display: flex; gap: 2px; height: 5px; }
+.nf .cs-dot { width: 5px; height: 5px; border-radius: 999px; background: #896bd9; }
+.nf .cs-dot.is-ending { background: #e88e2c; }
+.nf .cs-dot.is-ended { background: #c2c5c4; }
+.nf .cs-dot.is-ext { background: #2baf87; }
+.nf .cs-dot.is-req { background: #fff; box-shadow: inset 0 0 0 1.5px #896bd9; }
+.nf .cs-legend { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 6px 14px; margin-top: 12px; font-size: 12px; color: #6b7280; }
+.nf .cs-legend span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.nf .cs-legend i { width: 6px; height: 6px; border-radius: 999px; display: inline-block; flex: none; }
+.nf .cs-legend .cs-legend-today { width: 10px; height: 10px; background: #efecf7; box-shadow: inset 0 0 0 1px #c9bcff; }
+.nf .cs-legend .cs-legend-req { background: #fff; box-shadow: inset 0 0 0 1.5px #896bd9; }
+
+/* calendar variant B: faces in the cells */
+.nf .cs-cal--faces .cs-day { height: 46px; gap: 2px; }
+.nf .cs-faces { display: flex; height: 16px; }
+.nf .cs-faces img { width: 16px; height: 16px; border-radius: 999px; object-fit: cover; object-position: 50% 15%; border: 1.5px solid #fff; margin-left: -5px; box-shadow: 0 0 0 1px #896bd9; }
+.nf .cs-faces img:first-child { margin-left: 0; }
+.nf .cs-faces img.is-ending { box-shadow: 0 0 0 1px #e88e2c; }
+.nf .cs-faces img.is-ended { box-shadow: 0 0 0 1px #c2c5c4; filter: grayscale(1); opacity: .7; }
+.nf .cs-faces img.is-ext { box-shadow: 0 0 0 1px #2baf87; }
+.nf .cs-faces .cs-more { width: 16px; height: 16px; border-radius: 999px; background: #f1f1f1; color: #4b4b4b; font-size: 9px; font-weight: 600; display: grid; place-items: center; margin-left: -5px; border: 1.5px solid #fff; }
+
+/* calendar variant C: the timeline (agenda by week) */
+.nf .cs-tl { display: flex; flex-direction: column; }
+.nf .cs-tl-week { display: flex; justify-content: space-between; align-items: baseline; font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: #767676; padding: 12px 0 6px; border-top: 1px solid #f1f1f1; }
+.nf .cs-tl-week:first-child { border-top: 0; padding-top: 4px; }
+.nf .cs-tl-week .cs-link { font-size: 12px; text-transform: none; letter-spacing: 0; }
+.nf .cs-tl-row { display: grid; grid-template-columns: 30px 22px minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 7px 0; width: 100%; text-align: left; cursor: pointer; border-radius: 8px; }
+.nf .cs-tl-row .cs-avatar { width: 22px; height: 22px; }
+.nf .cs-tl-row .cs-extend { padding: 0 8px; height: 24px; }
+.nf .cs-tl-row:hover { background: #fafafa; }
+.nf .cs-tl-date { display: flex; flex-direction: column; align-items: center; line-height: 1; }
+.nf .cs-tl-date b { font-size: 15px; font-weight: 600; color: #1a1a1a; font-variant-numeric: tabular-nums; }
+.nf .cs-tl-date span { font-size: 10px; color: #767676; margin-top: 2px; text-transform: uppercase; letter-spacing: .04em; }
+.nf .cs-tl-row.is-past .cs-tl-date b { color: #8a8a8a; }
+.nf .cs-tl-row.is-ending .cs-tl-date b { color: #b45309; }
+.nf .cs-tl-txt { min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.nf .cs-tl-name { font-size: 13px; font-weight: 500; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nf .cs-tl-sub { font-size: 12px; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nf .cs-tl-sub.is-ending { color: #b45309; }
+.nf .cs-tl-sub.is-ended { color: #767676; }
+.nf .cs-tl-sub.is-ext { color: #15803d; }
+.nf .cs-tl-sub.is-req { color: #5b3fd6; }
+.nf .cs-tl-today { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; color: #5b3fd6; padding: 8px 0; }
+.nf .cs-tl-today::before, .nf .cs-tl-today::after { content: ""; flex: 1; height: 1px; background: #c9bcff; }
+
+/* ending next */
+.nf .cs-soon-list { display: flex; flex-direction: column; }
+.nf .cs-soon-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid #f1f1f1; }
+.nf .cs-soon-row:first-child { border-top: 0; }
+.nf .cs-soon-main { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; background: none; border: 0; text-align: left; cursor: pointer; font: inherit; color: inherit; padding: 0; }
+.nf .cs-soon-main:hover .cs-soon-name { text-decoration: underline; }
+.nf .cs-soon-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.nf .cs-soon-name { font-size: 13px; font-weight: 500; line-height: 18px; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nf .cs-soon-when { font-size: 12px; line-height: 16px; color: #6b7280; font-variant-numeric: tabular-nums; }
+.nf .cs-soon-when.is-ending { color: #b45309; }
+.nf .cs-soon-empty { font-size: 13px; color: #6b7280; padding: 8px 0 4px; }
+.nf .cs-about { font-size: 13px; line-height: 18px; color: #4b4b4b; }
+.nf .cs-about p + p { margin-top: 8px; }
+.nf .cs-about b { font-weight: 600; color: #1a1a1a; }
+
+/* ---- Dashboard tab: the shipped Campaign Pulse (pulse.css from v47; am-/am2-/tf-/cp- classes) ---- */
+.nf .stage-primary-surface:has(> .cs-panel--dash) { gap: 0; }
+.nf .stage-top-card.cs-panel--dash { background: #f9fafb; border: 0; border-radius: 0; box-shadow: none; margin: 0 -20px -140px; padding: 20px 20px 148px; min-height: calc(100vh - 187px); }
+.nf .cs-panel--dash .cp-root { margin: 0 0 16px; }
+.nf .cs-panel--dash .am2-bar { height: 40px; }
+.nf .cs-panel--dash .am-row { height: 64px; padding: 0 20px; cursor: pointer; }
+.nf .cs-panel--dash .am-row.is-static { cursor: default; }
+.nf .cs-panel--dash .am-row.is-static:hover { background: none; }
+.nf .cs-panel--dash .tf-rowlink { cursor: pointer; }
+.nf .cs-panel--dash .tf-info-i { margin-left: 6px; font-size: 12px; color: #767676; cursor: help; }
+.nf .cs-panel--dash .am-note-text a { color: #1c1c1c; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+.nf .cs-panel--dash .am-card, .nf .cs-panel--dash .am-progress { animation: none; }
+
+/* ---- popup additions (rvm shell reused as-is; these are the right panel's new blocks) ---- */
+.rvm-side-line.is-ending { color: #b45309; }
+.rvm-side-line.is-ended { color: #767676; }
+.rvm-side-line.is-ext { color: #15803d; }
+.rvm-side-line.is-req { color: #5b3fd6; }
+.rvm-shell-side .rvm-side-row .rvm-side-avatar img { object-position: 50% 15%; }
+.rvm-shell-side .rvm-side-row.is-pending-row .rvm-side-avatar { opacity: .6; }
+.rvm-side-tick.cs-tick-grey { background: #f1f1f3; color: #767676; font-weight: 600; font-size: 11px; }
+.rvm-side-tick.cs-tick-req { background: #efecf7; color: #5b3fd6; font-weight: 700; font-size: 12px; }
+.rvm-shell:focus { outline: none; }
+.rvm .rvm-panel-copy { -webkit-mask-image: linear-gradient(#000 calc(100% - 28px), transparent); mask-image: linear-gradient(#000 calc(100% - 28px), transparent); padding-bottom: 32px; }
+@media (max-width: 1100px) {
+  .rvm .rvm-shell-body { grid-template-columns: minmax(0, 1fr) 360px; }
+  .rvm .rvm-shell-side { display: none; }
+}
+
+/* state chip + 90-day meter: the "where are we" the panel was missing */
+.cs-state { display: inline-flex; align-items: center; gap: 7px; height: 26px; padding: 0 10px 0 9px; border-radius: 999px; font-size: 12px; font-weight: 600; letter-spacing: .01em; margin-bottom: 12px; }
+.cs-state i { width: 7px; height: 7px; border-radius: 999px; background: currentColor; }
+.cs-state--active { background: #e8f7ef; color: #15803d; }
+.cs-state--ending { background: #fff4e5; color: #b45309; }
+.cs-state--ended { background: #f1f1f3; color: #52525b; }
+.cs-state--requested { background: #efecf7; color: #5b3fd6; }
+.cs-state--extended { background: #e8f7ef; color: #15803d; }
+.cs-state--pending { background: #f1f1f3; color: #5f5f66; }
+.cs-meter { margin-top: 20px; }
+.cs-meter-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 8px; font-size: 13px; line-height: 18px; color: #717171; font-variant-numeric: tabular-nums; }
+.cs-meter-top b { font-weight: 600; color: #1c1c1c; }
+.cs-meter--ending .cs-meter-top b { color: #b45309; }
+.cs-meter--extended .cs-meter-top b { color: #15803d; }
+.cs-meter--ended .cs-meter-top b { color: #52525b; }
+.cs-meter-bar { position: relative; height: 6px; border-radius: 999px; background: #ececf1; }
+.cs-meter-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: #2baf87; }
+.cs-meter--ending .cs-meter-fill { background: #e88e2c; }
+.cs-meter--ended .cs-meter-fill { background: #c2c5c4; }
+.cs-meter-ext { position: absolute; top: 0; bottom: 0; right: 0; border-radius: 0 999px 999px 0; background: #e8f7ef; box-shadow: inset 0 0 0 1px #9fdcc4; }
+.cs-meter-today { position: absolute; top: -4px; width: 2px; height: 14px; background: #1c1c1c; border-radius: 2px; transform: translateX(-1px); }
+.cs-meter-labels { display: flex; justify-content: space-between; gap: 8px; margin-top: 8px; font-size: 12px; line-height: 16px; color: #717171; font-variant-numeric: tabular-nums; }
+
+.cs-p-block { margin-top: 20px; border: 1px solid #ececf1; border-radius: 14px; overflow: hidden; }
+.cs-p-block-title { font-size: 13px; font-weight: 600; color: #1c1c1c; padding: 12px 16px 0; }
+.cs-p-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; }
+.cs-p-row + .cs-p-row { border-top: 1px solid #f1f1f3; }
+.cs-p-row-txt { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.cs-p-row-name { font-size: 14px; font-weight: 500; color: #1c1c1c; line-height: 18px; }
+.cs-p-row-meta { font-size: 12px; color: #717171; line-height: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+.cs-p-btn { flex: none; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #e3e3e3; background: #fff; color: #1c1c1c; font: 500 13px/1 Inter, sans-serif; cursor: pointer; transition: background-color .12s; text-decoration: none; }
+.cs-p-btn:hover { background: #f7f7f8; }
+.cs-p-btn:disabled { color: #aaa; cursor: default; }
+.cs-p-btn svg { width: 14px; height: 14px; }
+.cs-receipt { font-size: 12px; color: #717171; padding: 0 16px 12px; }
+.cs-p-note { margin-top: 16px; font-size: 13.5px; line-height: 20px; color: #717171; }
+.cs-p-note b { color: #1c1c1c; font-weight: 500; }
+.cs-p-demo { margin-top: 12px; }
+.cs-p-demo button { background: none; border: 1px dashed #c9bcff; color: #5b3fd6; border-radius: 8px; padding: 6px 10px; font: 500 12px/1 Inter, sans-serif; cursor: pointer; }
+.rvm-shell-foot .rvm-foot-approve.cs-foot-dl { display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+.rvm-shell-foot .rvm-foot-approve.cs-foot-dl svg { width: 16px; height: 16px; }
+/* one quiet status rail for every settled state: grey field, dark words, colour only in the dot */
+.rvm-shell-foot .rvm-footer-status.cs-rail { width: 100%; background: #f6f6f8; color: #1c1c1c; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 400; }
+.rvm-shell-foot .rvm-footer-status.cs-rail i, .cs-foot-status i { width: 8px; height: 8px; border-radius: 999px; background: #896bd9; flex: none; }
+.rvm-shell-foot .rvm-footer-status.cs-rail.is-grey i { background: #c2c5c4; }
+.rvm-shell-foot .rvm-footer-status.cs-rail b { font-weight: 600; }
+.rvm-shell-foot .rvm-footer-status.cs-rail span { color: #717171; }
+.cs-foot-status { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; line-height: 17px; color: #52525b; white-space: nowrap; padding: 0 4px; flex: 1; min-width: 0; }
+.cs-foot-status b { font-weight: 600; color: #1c1c1c; }
+.rvm-precheck-tick.cs-tick-dim { opacity: .28; filter: grayscale(1); }
+.rvm-precheck-item.is-dim { color: #717171; }
+
+/* extend sheet (reuses the flag sheet card): the close X and Send stay put, the middle scrolls when the window is short */
+.rvm-changes-card.cs-sheet { max-height: calc(100vh - 24px); display: flex; flex-direction: column; overflow: hidden; }
+.rvm-changes-card.cs-sheet .rvm-changes-body { align-items: stretch; padding: 28px 28px 24px; flex: 1 1 auto; min-height: 0; overflow: auto; }
+.rvm-changes-card.cs-sheet .rvm-changes-close { top: 26px; right: 22px; background: #fff; border-radius: 999px; z-index: 2; }
+.rvm-changes-card.cs-sheet.is-more .rvm-changes-footer { box-shadow: 0 -10px 14px -10px rgba(16,24,40,.18); }   /* more below: scroll */
+.cs-sheet-list { list-style: none; margin: 14px 0 0; padding: 12px 14px; width: 100%; box-sizing: border-box; border-radius: 10px; background: #f6f6f7; display: flex; flex-direction: column; gap: 6px; text-align: left; }
+.cs-sheet-list li { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; line-height: 18px; color: #4b4b4b; }
+.cs-sheet-list li b { font-weight: 600; color: #1c1c1c; white-space: nowrap; }
+.cs-sheet-list li span { text-align: right; }
+.cs-money input::-webkit-inner-spin-button, .cs-money input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.cs-money input { -moz-appearance: textfield; }
+.rvm-changes-card.cs-sheet .rvm-changes-icon { font-size: 22px; width: 44px; height: 44px; }
+.rvm-changes-card.cs-sheet .rvm-changes-title { margin: 0; padding-right: 40px; text-align: left; font-size: 18px; line-height: 24px; letter-spacing: -0.2px; }
+/* footer rhythm: 20 above the button, the caption 10 under it, 20 below (the base rule's 16px gap is switched off) */
+.rvm-changes-card.cs-sheet .rvm-changes-footer { flex: none; margin-top: 0; gap: 0; background: #fff; padding: 20px 28px 20px; border-top: 1px solid #e3e3e3; }
+.cs-sent-body { align-items: center !important; text-align: center; padding: 44px 32px 28px !important; }
+.cs-sent-check { width: 56px; height: 56px; border-radius: 999px; background: #17a34a; display: grid; place-items: center; }
+.cs-sent-check svg { width: 28px; height: 28px; }
+.cs-sent-title { margin: 18px 0 0; font-size: 20px; line-height: 26px; font-weight: 700; color: #1c1c1c; letter-spacing: -0.2px; }
+.cs-sent-sub { margin: 8px 0 0; font-size: 14px; line-height: 20px; color: #52525b; }
+.cs-sheet-next { margin: 10px 0 0; font-size: 12px; line-height: 16px; color: #717171; text-align: center; text-wrap: balance; }
+.cs-sheet-field { margin-top: 20px; display: flex; flex-direction: column; gap: 8px; text-align: left; width: 100%; }
+.cs-sheet-label { font-size: 13px; font-weight: 600; color: #1c1c1c; }
+.cs-chips { display: flex; gap: 8px; }
+.cs-chip { height: 34px; padding: 0 14px; border-radius: 999px; border: 1px solid #e3e3e3; background: #fff; color: #1c1c1c; font: 500 13px/1 Inter, sans-serif; cursor: pointer; }
+.cs-chip.is-on { background: #1c1c1c; border-color: #1c1c1c; color: #fff; }
+.cs-money { display: flex; align-items: center; gap: 6px; height: 44px; padding: 0 14px; border: 1px solid #e3e3e3; border-radius: 10px; font-size: 16px; color: #1c1c1c; }
+.cs-money:focus-within { border-color: #1c1c1c; }
+.cs-money input { width: 100%; border: 0; outline: 0; font: 500 16px/1 Inter, sans-serif; color: #1c1c1c; background: transparent; font-variant-numeric: tabular-nums; }
+.cs-sheet-hint { font-size: 12px; color: #717171; line-height: 16px; }
+.cs-sheet-label + .cs-sheet-hint { margin-top: -4px; }   /* the small line belongs to its title */
+.rvm-changes-card.cs-sheet .rvm-changes-textarea { margin: 0; box-sizing: border-box; min-height: 66px; height: 66px; max-height: 180px; resize: vertical; padding: 12px 14px; border: 1px solid #e3e3e3; border-radius: 10px; font-size: 14px; line-height: 20px; width: 100%; }
+.rvm-changes-card.cs-sheet .rvm-changes-textarea:focus { border-color: #1c1c1c; }
+.rvm-changes-send:disabled { opacity: .4; cursor: default; }
+
+/* toast: top of the window so it never lands on the demo bar */
+.cs-toast { position: fixed; left: 50%; top: 18px; transform: translateX(-50%) translateY(-8px); background: #1a1a1a; color: #fff; padding: 10px 16px; border-radius: 10px; font: 500 13px/1.3 Inter, ui-sans-serif, system-ui, sans-serif; opacity: 0; pointer-events: none; transition: opacity .15s, transform .15s; z-index: 600; }
+.cs-toast.is-on { opacity: 1; transform: translateX(-50%); }
+
+/* ---- demo bar (prototype scaffolding, not product) ---- */
+.cs-demo { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 450; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px 12px; min-height: 40px; padding: 7px 10px 7px 14px; border-radius: 20px; background: #111; color: #fff; font: 500 12px/1 Inter, ui-sans-serif, system-ui, sans-serif; box-shadow: 0 8px 24px rgba(0,0,0,.28); white-space: nowrap; max-width: calc(100vw - 32px); }
+.cs-demo.is-min { bottom: 3px; min-height: 0; padding: 0; background: none; box-shadow: none; }
+.cs-demo-group { display: flex; align-items: center; gap: 6px; }
+.cs-demo-group.is-off { opacity: .32; pointer-events: none; }
+.cs-demo-k { color: #9c9c9c; letter-spacing: .04em; font-size: 11px; }
+.cs-demo button { height: 26px; padding: 0 10px; border-radius: 999px; border: 0; background: rgba(255,255,255,.08); color: #ddd; font: 500 12px/1 Inter, sans-serif; cursor: pointer; }
+.cs-demo button:hover { background: rgba(255,255,255,.16); }
+.cs-demo button.is-on { background: #fff; color: #111; }
+.cs-demo button.is-on.is-prod { background: #ffd166; }
+.cs-demo button.cs-demo-chip { height: 22px; padding: 0 12px; background: #111; color: #ddd; font-size: 11px; letter-spacing: .02em; }
+.cs-demo-sep { width: 1px; height: 18px; background: rgba(255,255,255,.18); flex: none; }
+.cs-demo a { color: #bbb; text-decoration: none; padding: 0 6px; }
+.cs-demo a:hover { color: #fff; }
+body.embed .cs-demo { display: none; }
+
+
+/* ---- Rights tab: every video and its end date in one table (Creators-card anatomy) ---- */
+.nf .stage-top-card.cs-panel--rights { padding: 24px 0; }
+.nf .cs-rt-tools { display: flex; align-items: center; gap: 8px; flex: none; }
+/* the bar keeps one height whether it shows the summary or the selection, so the table never jumps under the pointer */
+.nf .cs-rt-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 0; flex-wrap: nowrap; min-height: 40px; }
+.nf .cs-rt-bar .cs-sum, .nf .cs-rt-bar .cs-bulk { margin: 0; min-width: 0; flex: 1 1 auto; }
+.nf .cs-panel--rights > .cs-toolbar { margin-bottom: 0; flex-wrap: nowrap; align-items: flex-start; }
+.nf .cs-panel--rights > .cs-toolbar > .cs-ghost { flex: none; }
+/* with rows ticked, the header row shows what can be done with them */
+.nf .cs-rt-cols.is-bulk { display: flex; align-items: center; gap: 14px; }
+.nf .cs-rt-cols.is-bulk .cs-bulk { margin: 0; flex: 1; flex-wrap: nowrap; font-size: 13px; font-weight: 500; }
+.nf .cs-rt-cols.is-bulk .cs-bulk .cs-ghost { height: 28px; font-size: 13px; border-radius: 8px; padding: 0 10px; }
+.nf .cs-rt-cols.is-bulk .cs-bulk .cs-ghost svg { width: 13px; height: 13px; }
+.nf .cs-rt-sort .cs-rt-idle { opacity: .35; font-size: 11px; }
+.nf .cs-seg { display: inline-flex; border: 1px solid #e3e3e3; border-radius: 10px; overflow: hidden; background: #fff; }
+.nf .cs-seg button { height: 34px; padding: 0 12px; font: 500 13px/1 Inter, sans-serif; color: #4b4b4b; cursor: pointer; }
+.nf .cs-seg button + button { border-left: 1px solid #e3e3e3; }
+.nf .cs-seg button.is-on { background: #1a1a1a; color: #fff; }
+.nf .cs-rt-card { border: 1px solid #e3e3e3; border-radius: 16px; background: #fff; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,.03); }
+.nf .cs-rt-cols, .nf .cs-rt-row { display: grid; grid-template-columns: 22px minmax(190px, 1.5fr) 84px minmax(140px, .9fr) minmax(150px, 1fr) 212px; gap: 14px; align-items: center; padding: 0 20px; }
+.nf .cs-rt-cols { height: 40px; background: #f8f9fa; border-bottom: 1px solid #e3e3e3; font-size: 12px; font-weight: 600; color: #717171; }
+.nf .cs-rt-sort { display: inline-flex; align-items: center; gap: 4px; font: inherit; font-weight: 600; color: inherit; cursor: pointer; }
+.nf .cs-rt-sort.is-on { color: #1a1a1a; }
+.nf .cs-rt-sort span { font-size: 10px; }
+.nf .cs-rt-row { min-height: 64px; border-bottom: 1px solid #eeeeee; }
+.nf .cs-rt-row:last-child { border-bottom: 0; }
+.nf .cs-rt-row:hover { background: #fcfcfc; }
+.nf .cs-rt-row.is-sel { background: #faf9ff; }
+.nf .cs-rt-video { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.nf .cs-rt-thumb { width: 36px; height: 48px; border-radius: 6px; overflow: hidden; background: #eee; flex: none; }
+.nf .cs-rt-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.nf .cs-rt-row.is-pending .cs-rt-thumb img { opacity: .4; filter: grayscale(1); }
+.nf .cs-rt-names { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.nf .cs-rt-date { font-size: 14px; color: #1a1a1a; font-variant-numeric: tabular-nums; }
+.nf .cs-rt-muted { font-size: 13px; color: #767676; }
+.nf .cs-rt-end { display: flex; flex-direction: column; gap: 2px; font-variant-numeric: tabular-nums; }
+.nf .cs-rt-end b { font-size: 14px; font-weight: 500; color: #1a1a1a; }
+.nf .cs-rt-end span { font-size: 12px; color: #6b7280; }
+.nf .cs-rt-end.is-ending span { color: #b45309; font-weight: 500; }
+.nf .cs-rt-end.is-ended b { color: #767676; }
+.nf .cs-rt-status { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 500; color: #444; white-space: nowrap; }
+.nf .cs-rt-status i { width: 8px; height: 8px; border-radius: 999px; background: #2baf87; flex: none; }
+.nf .cs-rt-st { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.nf .cs-rt-st em { font-style: normal; font-weight: 400; font-size: 12px; line-height: 16px; color: #767676; }
+.nf .cs-rt-status.is-ending { color: #b45309; }
+.nf .cs-rt-status.is-ending i { background: #e88e2c; }
+.nf .cs-rt-status.is-ended { color: #767676; }
+.nf .cs-rt-status.is-ended i { background: #c2c5c4; }
+.nf .cs-rt-status.is-requested { color: #5b3fd6; }
+.nf .cs-rt-status.is-requested i { background: #fff; box-shadow: inset 0 0 0 2px #896bd9; }
+.nf .cs-rt-status.is-extended { color: #15803d; }
+.nf .cs-rt-status.is-pending { color: #767676; }
+.nf .cs-rt-status.is-pending i { background: #e3e3e3; }
+.nf .cs-rt-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+.nf .cs-rt-actions .cs-extend { height: 32px; padding: 0 12px; font-size: 13px; }
+.nf .cs-iconbtn { width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e3e3e3; background: #fff; display: grid; place-items: center; color: #1a1a1a; cursor: pointer; flex: none; }
+.nf .cs-iconbtn:hover { background: #f7f7f8; }
+.nf .cs-iconbtn svg { width: 15px; height: 15px; }
+.nf .cs-iconbtn:disabled { color: #c6c6c6; cursor: default; background: #fff; }
+.nf .cs-check { width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid #c6c6c6; background: #fff; display: grid; place-items: center; cursor: pointer; color: #fff; font-size: 11px; line-height: 1; }
+.nf .cs-check[aria-checked="true"], .nf .cs-check[aria-checked="mixed"] { background: #7a5cfa; border-color: #7a5cfa; }
+.nf .cs-check:disabled { opacity: .35; cursor: default; }
+.nf .cs-bulk { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 14px; color: #1a1a1a; min-height: 28px; margin: 0 0 16px; }
+.nf .cs-bulk b { font-weight: 600; }
+.nf .cs-bulk .cs-ghost { padding: 0 12px; }
+.nf .cs-bulk .cs-ghost.is-dark { background: #1a1a1a; border-color: #1a1a1a; color: #fff; }
+
+/* the same dates as a month, behind the Table / Calendar toggle (Vendr's pairing) */
+.nf .cs-bigcal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px; border-bottom: 1px solid #e3e3e3; background: #f8f9fa; }
+.nf .cs-bigcal-head .cs-cal-month { font-size: 15px; }
+.nf .cs-bigcal-nav { display: flex; align-items: center; gap: 8px; }
+.nf .cs-bigcal-dows, .nf .cs-bigcal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.nf .cs-bigcal-dows span { padding: 8px 10px; font-size: 11px; font-weight: 600; letter-spacing: .04em; color: #767676; text-transform: uppercase; border-bottom: 1px solid #eee; }
+.nf .cs-bigday { min-height: 98px; padding: 6px 8px 8px; border-right: 1px solid #f1f1f1; border-bottom: 1px solid #f1f1f1; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.nf .cs-bigday:nth-child(7n) { border-right: 0; }
+.nf .cs-bigday-n { font-size: 12px; font-weight: 500; color: #1a1a1a; width: 22px; height: 22px; display: grid; place-items: center; border-radius: 999px; font-variant-numeric: tabular-nums; }
+.nf .cs-bigday.is-out .cs-bigday-n { color: #b3b3b3; }
+.nf .cs-bigday.is-today .cs-bigday-n { background: #7a5cfa; color: #fff; font-weight: 600; }
+.nf .cs-bigchip { display: flex; align-items: center; gap: 6px; height: 24px; padding: 0 8px 0 3px; border-radius: 999px; background: #f5f3fc; font-size: 12px; font-weight: 500; color: #1a1a1a; cursor: pointer; min-width: 0; width: 100%; text-align: left; }
+.nf .cs-bigchip img { width: 18px; height: 18px; border-radius: 999px; object-fit: cover; object-position: 50% 15%; flex: none; }
+.nf .cs-bigchip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nf .cs-bigchip.is-ending { background: #fff4e5; color: #b45309; }
+.nf .cs-bigchip.is-ended { background: #f1f1f3; color: #767676; }
+.nf .cs-bigchip.is-ext { background: #e8f7ef; color: #15803d; }
+.nf .cs-bigchip.is-req { background: #fff; box-shadow: inset 0 0 0 1px #c9bcff; color: #5b3fd6; }
+.nf .cs-bigmore { font-size: 11px; font-weight: 500; color: #5b3fd6; padding-left: 4px; cursor: pointer; text-align: left; }
+.nf .cs-panel--dash .am-update.cs-upd2 > .cp-live { max-width: 100%; min-width: 0; }
+.nf .cs-upd-rights > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.nf .cs-upd-rights .tf-rowlink { flex: none; }
+
+/* ---- Dashboard variant: a second quiet line under each creator's update + the videos in the drawer ---- */
+.nf .cs-panel--dash .am-update.cs-upd2 { flex-direction: column; align-items: flex-start; justify-content: center; gap: 3px; }
+.nf .cs-upd-rights { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; line-height: 16px; color: #6b7280; white-space: nowrap; max-width: 100%; }
+.nf .cs-upd-rights i { width: 6px; height: 6px; border-radius: 999px; background: #2baf87; flex: none; }
+.nf .cs-upd-rights.is-ending { color: #b45309; font-weight: 500; }
+.nf .cs-upd-rights.is-ending i { background: #e88e2c; }
+.nf .cs-upd-rights.is-ended { color: #767676; }
+.nf .cs-upd-rights.is-ended i { background: #c2c5c4; }
+.nf .cs-upd-rights.is-req { color: #5b3fd6; }
+.nf .cs-upd-rights.is-req i { background: #896bd9; }
+.nf .cs-upd-rights.is-ext { color: #15803d; }
+.nf .cs-panel--dash .cs-upd-rights .tf-rowlink { margin-left: 4px; font-weight: 600; }
+.nf .cs-dvids { padding: 16px 20px 6px; border-top: 1px dashed #e3e3e3; background: #fcfcfc; }
+.nf .cs-dvids-title { margin: 0 0 6px; font-size: 12px; font-weight: 600; letter-spacing: .6px; text-transform: uppercase; color: #717171; }
+.nf .cs-dvid { display: grid; grid-template-columns: 36px minmax(0, 1fr) minmax(130px, auto) auto; gap: 12px; align-items: center; padding: 8px 0; border-top: 1px solid #f1f1f1; cursor: pointer; }
+.nf .cs-dvid:first-of-type { border-top: 0; }
+.nf .cs-dvids + .am-hist { border-top: 0; }
+
+/* the extend sheet on its own (table rows and bulk): same card, centred on a scrim */
+/* anchored near the top, so the card does not jump under the pointer when a choice makes it taller */
+.rvm.cs-solo .cs-solo-scrim { position: fixed; inset: 0; z-index: 420; background: rgba(0,0,0,.45); display: grid; justify-items: center; align-items: start; padding: clamp(12px, calc((100vh - 800px) / 2), 96px) 24px 12px; }
+.rvm.cs-solo .rvm-changes-card { position: relative; right: auto; bottom: auto; width: 520px; max-width: 100%; min-height: 0; }   /* wider, twice (Julia, Oct 5) */
+
+
+/* ---- Content tab, shelf layout: production's grid untouched, one slim shelf above it ----
+   Everything sits on the same 333px tracks, so the shelf, the headings and the cards share one right edge. */
+.nf .cs-wrap.cs-wrap--shelf { display: block; padding: 24px 0; }
+.nf .cs-flow { display: grid; grid-template-columns: repeat(auto-fill, 333px); gap: 16px; justify-content: start; }
+.nf .cs-flow > .cs-span { grid-column: 1 / -1; min-width: 0; }
+.nf .cs-wrap--shelf > .cs-toolbar { margin-bottom: 20px; }
+.nf .cs-shelf { border: 1px solid #ebebeb; border-radius: 14px; background: #fff; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+.nf .cs-shelf-lead { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; min-width: 0; }
+.nf .cs-shelf-title { font-size: 14px; font-weight: 600; color: #1a1a1a; }
+.nf .cs-shelf-sub { font-size: 13px; color: #6b7280; }
+.nf .cs-shelf-sub b { font-weight: 500; color: #1a1a1a; }
+.nf .cs-shelf-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.nf .cs-bucket { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 12px; border-radius: 10px; border: 1px solid #ebebeb; background: #fff; cursor: pointer; white-space: nowrap; transition: background-color .12s, border-color .12s; }
+.nf .cs-bucket:hover { background: #fafafa; border-color: #d9d9d9; }
+.nf .cs-bucket.is-on { border-color: #1a1a1a; box-shadow: inset 0 0 0 1px #1a1a1a; }
+.nf .cs-bucket.is-empty { cursor: default; background: #fcfcfc; }
+.nf .cs-bucket.is-empty:hover { background: #fcfcfc; border-color: #ebebeb; }
+.nf .cs-bucket-label { font-size: 13px; font-weight: 600; color: #1a1a1a; }
+.nf .cs-bucket-n { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: #f1f1f1; color: #4b4b4b; font-size: 12px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.nf .cs-bucket.is-empty .cs-bucket-n { background: none; padding: 0; color: #767676; font-weight: 400; }
+.nf .cs-bucket.is-empty .cs-bucket-label { color: #767676; font-weight: 500; }
+.nf .cs-bucket-faces { display: inline-flex; align-items: center; }
+.nf .cs-bucket-faces img { width: 22px; height: 22px; border-radius: 999px; object-fit: cover; object-position: 50% 15%; border: 2px solid #fff; margin-left: -6px; }
+.nf .cs-bucket-faces img:first-child { margin-left: 0; }
+.nf .cs-bucket-faces img.is-ending { box-shadow: 0 0 0 1.5px #e88e2c; }
+.nf .cs-bucket-faces img.is-ended { filter: grayscale(1); opacity: .7; }
+.nf .cs-bucket-faces img.is-ext { box-shadow: 0 0 0 1.5px #2baf87; }
+.nf .cs-bucket-faces img.is-req { box-shadow: 0 0 0 1.5px #896bd9; }
+.nf .cs-bucket-more { margin-left: 4px; font-size: 12px; color: #6b7280; }
+.nf .cs-bucket-sep { width: 1px; background: #ebebeb; margin: 6px 4px; }
+.nf .cs-sec { display: flex; align-items: center; gap: 10px; margin: 12px 0 -4px; font-size: 14px; font-weight: 600; color: #1a1a1a; }
+.nf .cs-sec .cs-sec-n { font-weight: 400; color: #6b7280; font-variant-numeric: tabular-nums; }
+.nf .cs-sec i { width: 7px; height: 7px; border-radius: 999px; background: #e88e2c; flex: none; }
+.nf .cs-sec-acts { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+.nf .cs-sec .cs-link { font-size: 13px; }
+.nf .cs-sec .cs-ghost { height: 30px; font-size: 13px; padding: 0 12px; border-radius: 8px; }
+.nf .cs-ends { position: absolute; left: 12px; bottom: 12px; display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; background: #fff4e5; color: #b45309; font-size: 12px; font-weight: 600; box-shadow: 0 1px 2px rgba(16,24,40,.12); }
+.nf .cs-ends.is-ended { background: rgba(255,255,255,.94); color: #52525b; }
+.nf .cs-card-check { position: absolute; top: 10px; right: 10px; width: 24px; height: 24px; border-radius: 7px; border: 1.5px solid #fff; background: rgba(0,0,0,.45); color: #fff; font-size: 13px; opacity: 0; transition: opacity .15s; z-index: 2; box-shadow: 0 1px 3px rgba(0,0,0,.35); }
+.nf .cs-card:hover .cs-card-check, .nf .cs-card:focus-within .cs-card-check, .nf .cs-flow.has-sel .cs-card-check { opacity: 1; }
+.nf .cs-card-check[aria-checked="true"] { background: #7a5cfa; border-color: #7a5cfa; opacity: 1; }
+.nf .cs-card.is-picked { border-color: #7a5cfa; box-shadow: 0 0 0 1px #7a5cfa; }
+/* the selection bar floats: it never pushes the grid down */
+.nf .cs-float { position: fixed; left: calc(50% + 110px); bottom: calc(var(--demo-h, 56px) + 28px); transform: translateX(-50%); z-index: 300; }
+.nf .cs-float .cs-bulk { margin: 0; padding: 8px 10px 8px 16px; border-radius: 14px; background: #fff; border: 1px solid #e3e3e3; box-shadow: 0 1px 2px rgba(16,24,40,.06), 0 12px 32px rgba(16,24,40,.18); min-height: 0; flex-wrap: nowrap; white-space: nowrap; }
+.nf .cs-flow .cs-sum { margin: 0; }
+.cs-sheet-names { margin-top: 8px; font-size: 12px; line-height: 16px; color: #717171; }
+
+
+/* ---- Content tab, shelf layout, small tiles (TILES switch): same card, 212px tracks, five across at 1440 ----
+   The amber chip leaves the picture (the line under it says the same thing), the hover buttons drop to icons,
+   the caption keeps one line. Nothing is removed from the popup. */
+.nf .cs-flow.cs-flow--sm { grid-template-columns: repeat(auto-fill, 212px); gap: 12px; }
+.nf .cs-flow--sm .cs-card { border-radius: 12px; }
+.nf .cs-flow--sm .cs-plat { top: 8px; left: 8px; height: 22px; padding: 0 8px 0 6px; font-size: 11px; gap: 5px; }
+.nf .cs-flow--sm .cs-plat svg { width: 11px; height: 11px; }
+.nf .cs-flow--sm .cs-card-check { top: 8px; right: 8px; width: 22px; height: 22px; border-radius: 6px; font-size: 12px; }
+.nf .cs-flow--sm .cs-hover { right: 8px; bottom: 8px; }
+.nf .cs-flow--sm .cs-dl { width: 30px; height: 30px; padding: 0; justify-content: center; }
+.nf .cs-flow--sm .cs-dl span { display: none; }
+.nf .cs-flow--sm .cs-body { padding: 10px 12px 10px; gap: 6px; }
+.nf .cs-flow--sm .cs-who { gap: 8px; }
+.nf .cs-flow--sm .cs-avatar { width: 24px; height: 24px; }
+.nf .cs-flow--sm .cs-name { font-size: 13px; line-height: 16px; }
+.nf .cs-flow--sm .cs-meta { font-size: 11px; line-height: 14px; }
+.nf .cs-flow--sm .cs-cap, .nf .cs-flow--sm .cs-cap--3 { -webkit-line-clamp: 1; min-height: 16px; font-size: 12px; line-height: 16px; }
+.nf .cs-flow--sm .cs-rightsrow { padding-top: 8px; min-height: 33px; gap: 6px; }
+.nf .cs-flow--sm .cs-rights { font-size: 12px; line-height: 16px; gap: 5px; }
+.nf .cs-flow--sm .cs-extend { height: 24px; padding: 0 9px; }
+.nf .cs-flow--sm .cs-sec { margin: 10px 0 -2px; }
+
+/* responsive rules last so they win equal-specificity ties */
+@media (max-width: 1240px) {
+  .nf .cs-wrap { grid-template-columns: minmax(0, 1fr) 272px; gap: 24px; }
+  .nf .cs-grid { grid-template-columns: repeat(auto-fill, minmax(188px, 1fr)); gap: 12px; }
+  .nf .cs-grid--prod { grid-template-columns: repeat(auto-fill, 333px); gap: 16px; }
+  .nf .cs-bucket-faces { display: none; }
+  .nf .cs-bucket { padding: 0 10px; }
+  .nf .cs-body { padding: 12px 12px; }
+}
+@media (max-width: 1240px) {
+  .nf .cs-rt-cols, .nf .cs-rt-row { grid-template-columns: 22px minmax(150px, 1.4fr) minmax(110px, .9fr) minmax(130px, 1fr) 196px; }
+  .nf .cs-rt-cols > :nth-child(3), .nf .cs-rt-row > :nth-child(3) { display: none; }   /* Posted folds away first */
+  .nf .cs-bigday { min-height: 84px; padding: 4px 4px 6px; }
+}
+/* on a 1280 window the seven pills and Download all still share one line */
+@media (max-width: 1340px) {
+  .nf .cs-panel--rights .cs-filters { gap: 6px; }
+  .nf .cs-panel--rights .cs-filter { padding: 0 10px 0 12px; gap: 6px; }
+}
+@media (max-width: 900px) {
+  .nf .cs-wrap { grid-template-columns: minmax(0, 1fr); }
+  .nf .cs-rail { order: 2; }
+}
+
+/* ================= Oct 2 (Tony's review): rights live in their own tab; Content stays production ================= */
+/* three-dot menu on a production Content card: Download, Extend rights */
+.nf .cs-kebab { margin-left: auto; flex: none; width: 30px; height: 30px; display: grid; place-items: center; padding: 0; border-radius: 8px; border: 0; background: transparent; color: #6b7280; cursor: pointer; }
+.nf .cs-kebab svg { width: 16px; height: 16px; }
+.nf .cs-kebab:hover, .nf .cs-kebab[aria-expanded="true"] { background: #f1f1f3; color: #1a1a1a; }
+.nf .cs-body { position: relative; }
+.nf .cs-card.is-menu { overflow: visible; z-index: 6; transform: translateY(-2px); }   /* stays where the hover lift put it */
+.nf .cs-card.is-menu .cs-media { border-radius: 15px 15px 0 0; }
+/* opens upward, over the bottom of the poster, so it never falls off the window or under the demo bar */
+.nf .cs-menu { position: absolute; right: 12px; top: auto; bottom: calc(100% - 12px); z-index: 20; min-width: 196px; padding: 6px; border-radius: 12px; border: 1px solid #e3e3e3; background: #fff; box-shadow: 0 12px 32px rgba(16,24,40,.16); display: flex; flex-direction: column; cursor: default; }
+.nf .cs-menu.is-down { top: 48px; bottom: auto; }
+.nf .cs-menu button { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 36px; padding: 7px 10px; border: 0; border-radius: 8px; background: none; font: 500 14px/1 Inter, sans-serif; color: #1a1a1a; text-align: left; cursor: pointer; }
+.nf .cs-menu button:hover { background: #f5f5f7; }
+.nf .cs-menu button[disabled] { color: #a3a3a3; cursor: default; background: none; }
+.nf .cs-menu button svg { width: 16px; height: 16px; color: #6b7280; flex: none; }
+.nf .cs-menu-txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.nf .cs-menu-txt em { font-style: normal; font-weight: 400; font-size: 12px; line-height: 15px; color: #8a8a8a; }
+.nf .cs-menu button[disabled] svg { color: #c2c5c4; }
+/* extend sheet: what you hold now, the type of rights, how long, your offer */
+.cs-sheet-status { display: flex; align-items: flex-start; gap: 8px; width: 100%; box-sizing: border-box; margin: 14px 0 0; padding: 12px 14px; border-radius: 10px; background: #f6f6f7; font-size: 13px; line-height: 18px; color: #4b4b4b; text-align: left; }
+.cs-sheet-status i { width: 8px; height: 8px; border-radius: 999px; background: #2baf87; margin-top: 5px; flex: none; }
+.cs-sheet-status b { color: #1c1c1c; font-weight: 600; }
+.cs-sheet-status.is-ending { background: #fff8ee; }
+.cs-sheet-status.is-ending i { background: #e88e2c; }
+.cs-sheet-status.is-ended i { background: #c2c5c4; }
+.cs-types { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cs-type { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; border: 1px solid #e3e3e3; border-radius: 12px; background: #fff; text-align: left; cursor: pointer; font: inherit; color: #1c1c1c; }
+.cs-type:hover { border-color: #b9b9b9; }
+.cs-type.is-on { border-color: #1c1c1c; box-shadow: inset 0 0 0 1px #1c1c1c; }
+.cs-type-top { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 6px; font-size: 13px; font-weight: 600; line-height: 18px; }
+.cs-type-top > span:first-child { white-space: nowrap; }
+.cs-type-cur { font-size: 11px; font-weight: 600; line-height: 14px; color: #15803d; background: #e7f6ec; border-radius: 999px; padding: 1px 7px; }
+.cs-type-sub { font-size: 12px; line-height: 16px; color: #717171; font-weight: 400; }
+.cs-sheet-label .cs-opt { color: #767676; font-weight: 400; }
+.cs-sheet-label svg { width: 13px; height: 13px; margin-right: 6px; vertical-align: -1.5px; color: #52525b; }
+</style>
+</head>
+<body>
+<div class="nf" id="nf"></div>
+<div class="cs-toast" id="toast" role="status"></div>
+<div class="cs-demo" id="demo"></div>
+
+<script>
+/* ==================================================================
+   DATA · demo scenario on the "Repair+ Holiday Hydration" campaign
+   The demo brand is Simple. By contract (PCA, signed Aug 10) every Simple
+   video comes with 90 days of full usage, paid ads included, and the clock
+   starts the day the post goes live. Everything on screen is computed from
+   those 90 days (Julia, Oct 5). Most brands start from 30 days of organic
+   rights instead (Tony, Oct 2): see BASE below, it is a PER-BRAND FIELD.
+   Anything longer, or paid use for a brand that starts organic, is an
+   extension the brand makes the creator an offer for. Creators and clips
+   are demo footage, not real people.
+
+   Oct 2, Tony's review of the three placements: rights live in their OWN
+   TAB. The Content tab stays exactly as production, plus a three-dot menu
+   per card (Download, Extend rights). The Dashboard is production's.
+   Gone: rights inside the Content tab (shelf, rail, calendars), rights
+   inside the Dashboard, the calendar view, the "ask the team" extend,
+   the reminder switch (expiry emails are a later version).
+   The version before this pass is surface.before-tony-oct2.html.
+   ================================================================== */
+const D = (s) => new Date(s + 'T12:00:00');
+const DAY = 86400000;
+const addDays = (d, n) => new Date(d.getTime() + n * DAY);
+const diffDays = (a, b) => Math.round((a - b) / DAY);
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const fmt = (d) => `${MON[d.getMonth()]} ${d.getDate()}`;
+const iso = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+/* >>> FOR ENGINEERING: PER-BRAND FIELD (Julia, Oct 5). The rights every video starts with are a setting on
+   the brand (or its campaign), never a constant. Two values: how many days, and the type.
+     Simple (PCA contract):  90 days, organic + paid
+     Basic plan, most brands: 30 days, organic only (Tony, Oct 2)
+   Everything derives from it: each end date, Ending soon, "Current" in the extend sheet, the meter,
+   what an extension adds to. Change the two values here to see another brand. <<< */
+const BASE = { days: 90, type: 'paid' };
+const RIGHTS_DAYS = BASE.days;
+const ENDING_DAYS = 7;      /* "Ending soon" = inside the last 7 days (Julia likes the orange; Tony: fine) */
+const BRAND = 'Simple';
+const CAMPAIGN = 'Repair+ Holiday Hydration';
+const R = 'assets/review/';
+const KL = { 'TikTok': 'TikTok', 'IG Reel': 'Reel', 'IG Story': 'Story' };          /* one short name per format, as on production's card pill */
+const PLATFORM = (k) => k === 'TikTok' ? 'TikTok' : 'Instagram';
+
+/* the two kinds of rights and the three lengths an extension can ask for (Tony + Julia, Oct 2).
+   PRICE prefills the offer. AGREED (Julia, Oct 5: "let's go with your pricing"): organic + paid is
+   $75 / $150 / $200, the ladder she gave on Oct 2 and Tony agreed to; organic only is $50 / $100 / $150,
+   one step below. Claude proposed the table when she asked which type the ladder prices. */
+const TYPES = {
+  organic: { label: 'Organic only', word: 'organic', sub: 'Use it on your own channels.' },
+  paid:    { label: 'Organic + paid', word: 'organic + paid', sub: 'Also run it as a paid ad.' },
+};
+const TERMS = [
+  { key: '90', days: 90, label: '90 days', more: '90 more days of', of: '90 days of' },
+  { key: '365', days: 365, label: '1 year', more: '1 more year of', of: '1 year of' },
+  { key: 'forever', days: null, label: 'Perpetual', more: 'perpetual', of: 'perpetual' },
+];
+const PRICE = { paid: { 90: 75, 365: 150, forever: 200 }, organic: { 90: 50, 365: 100, forever: 150 } };
+const termOf = (k) => TERMS.find(t => t.key === String(k)) || TERMS[0];
+/* the end of a term that starts on d: 1 year is the same date next year, not 365 days; no end is null */
+const addTerm = (d, t) => t.days == null ? null : t.key === '365' ? new Date(d.getFullYear() + 1, d.getMonth(), d.getDate(), 12) : addDays(d, t.days);
+const FAR = D('2999-12-31');   /* stands in for "no end date" so sorting still works */
+const fmtY = (d) => `${fmt(d)}, ${d.getFullYear()}`;
+/* a date more than half a year away carries its year, so Jan 1, 2028 never reads like next week */
+const fmtEnd = (d) => Math.abs(diffDays(d, D(FORKS.today))) > 180 ? fmtY(d) : fmt(d);
+
+const CREATORS = {
+  quinn:  { name: 'Quinn Hale',   handle: '@quinn.hale',   av: R+'posters/quinn-1.jpg' },
+  emery:  { name: 'Emery Vance',  handle: '@emeryvance',   av: R+'posters/emery-1.jpg' },
+  jasper: { name: 'Jasper Okafor',handle: '@jasper.ok',    av: R+'posters/jasper-1.jpg' },
+  maya:   { name: 'Maya Lindqvist',handle: '@mayalind',    av: R+'posters/quinn-2.jpg' },
+  priya:  { name: 'Priya Raman',  handle: '@priya.skin',   av: R+'posters/emery-2.jpg' },
+  lena:   { name: 'Lena Ortiz',   handle: '@lenaortiz',    av: R+'posters/jasper-1.jpg' },
+  noor:   { name: 'Noor Haddad',  handle: '@noorglow',     av: R+'posters/quinn-1.jpg' },
+  sofia:  { name: 'Sofia Brandt', handle: '@sofiabrandt',  av: R+'posters/emery-1.jpg' },
+  amara:  { name: 'Amara Diallo', handle: '@amara.d',      av: R+'posters/quinn-2.jpg' },
+};
+
+/* posted = the day the post went live (rights clock t0). ext = extension events with dates. */
+const PIECES = [
+  { id:'q1', c:'quinn',  kind:'TikTok',   clip:'quinn-1',  posted:'2026-11-18', size:'48 MB', dl:'2026-12-01',
+    cap:['my honest PM routine ft. Simple Repair+ 🧴 the hydration is real','#simplepartner'],
+    url:'tiktok.com/@quinn.hale/video/7451…' },
+  { id:'q2', c:'quinn',  kind:'IG Reel',  clip:'quinn-2',  posted:'2026-11-21', size:'41 MB', dl:'2026-12-01',
+    cap:['skin ready for the holidays with @simpleskincare Repair+ ✨','#simplepartner'],
+    url:'instagram.com/reel/C9x…', ext:{ state:'extended', requested:'2027-02-10', accepted:'2027-02-15', term:'90', type:'paid', offer:75 } },
+  { id:'e1', c:'emery',  kind:'IG Reel',  clip:'emery-1',  posted:'2026-11-25', size:'52 MB', dl:'2026-12-12',
+    cap:['three ingredients, zero drama: why Repair+ stays on my shelf','#simplepartner'],
+    url:'instagram.com/reel/C9z…', ext:{ state:'requested', requested:'2027-02-24', term:'90', type:'paid', offer:75 } },
+  { id:'e2', c:'emery',  kind:'IG Story', clip:'emery-2',  posted:'2026-11-26', size:'19 MB',
+    cap:['Link sticker to the Repair+ bundle on frame 2'],
+    url:'instagram.com/stories/emeryvance/…' },
+  { id:'j1', c:'jasper', kind:'TikTok',   clip:'jasper-1', posted:'2026-11-29', size:'63 MB', dl:'2026-12-12',
+    cap:['POV: your skin barrier after two weeks of Repair+ 🙌','#simplepartner'],
+    url:'tiktok.com/@jasper.ok/video/7462…' },
+  { id:'m1', c:'maya',   kind:'IG Reel',  clip:'quinn-2',  posted:'2026-12-02', size:'44 MB',
+    cap:['come get ready with me, Smooth+ then Repair+ edition','#simplepartner'],
+    url:'instagram.com/reel/DAa…' },
+  { id:'p1', c:'priya',  kind:'TikTok',   clip:'emery-1',  posted:'2026-12-05', size:'57 MB', dl:'2026-12-20',
+    cap:['ceramides explained in 30 seconds (with Repair+)','#simplepartner'],
+    url:'tiktok.com/@priya.skin/video/7470…' },
+  { id:'p2', c:'priya',  kind:'IG Reel',  clip:'emery-2',  posted:'2026-12-09', size:'39 MB',
+    cap:['the hydration check, day 14 💧','#simplepartner'],
+    url:'instagram.com/reel/DAc…' },
+  { id:'l1', c:'lena',   kind:'TikTok',   clip:'jasper-1', posted:'2026-12-14', approved:'2026-12-05', size:'61 MB',
+    cap:['winter skin, meet Repair+ ❄️ a gentle glow up','#simplepartner'],
+    url:'tiktok.com/@lenaortiz/video/7478…' },
+  { id:'n1', c:'noor',   kind:'IG Reel',  clip:'quinn-1',  posted:'2026-12-20', approved:'2026-12-11', size:'46 MB',
+    cap:['holiday reset: Smooth+ in the AM, Repair+ at night','#simplepartner'],
+    url:'instagram.com/reel/DAf…' },
+  { id:'s1', c:'sofia',  kind:'TikTok',   clip:'emery-1',  posted:'2027-01-06', approved:'2026-12-28', size:'55 MB',
+    cap:['new year, same barrier: my Repair+ verdict after a month','#simplepartner'],
+    url:'tiktok.com/@sofiabrandt/video/7490…' },
+  { id:'a1', c:'amara',  kind:'IG Reel',  clip:'quinn-2',  posted:null, approved:'2027-02-19', size:'42 MB',
+    cap:['a week of Repair+ on dry winter skin, the before and after','#simplepartner'], url:null },
+];
+
+/* ---- prototype scaffolding: only the day is switchable (deep links ?today=&tab=&filter=&embed) ---- */
+const TODAYS = [
+  { key:'2026-12-10', label:'Dec 10', hint:'first posts live, everything active' },
+  { key:'2027-02-24', label:'Feb 24', hint:'mixed: ended, ending, active, extended' },
+  { key:'2027-04-02', label:'Apr 2',  hint:'most ended' },
+];
+const qs = new URLSearchParams(location.search);
+function load(k, d) { try { const v = JSON.parse(localStorage.getItem('chs-v4') || '{}')[k]; return v === undefined ? d : v; } catch { return d; } }
+function save(k, v) { try { const o = JSON.parse(localStorage.getItem('chs-v4') || '{}'); o[k] = v; localStorage.setItem('chs-v4', JSON.stringify(o)); } catch {} }
+const qDay = qs.get('today');
+const FORKS = { today: (qDay && !isNaN(D(qDay))) ? qDay : load('today', '2027-02-24') };
+if (qs.has('embed')) document.body.classList.add('embed');
+/* a day changed from the demo bar wins over the URL on the next reload */
+function setFork(k, v) { FORKS[k] = v; save(k, v); try { const u = new URL(location.href); if (u.searchParams.has(k)) { u.searchParams.delete(k); history.replaceState(null, '', u); } } catch {} }
+
+/* session state: downloads + extension requests made in this prototype */
+const S = { downloads: load('downloads', {}), ext: load('ext', {}), filter:'all', tab: ['dashboard','content','rights'].includes(qs.get('tab')) ? qs.get('tab') : 'rights', sheetFor:null, sheetType:'organic', sheetTerm:'90', sheetOffer:75, sheetText:'', demoPinned:false, rtFilter: ['ending','active','extended','requested','ended','pending'].includes(qs.get('filter')) ? qs.get('filter') : 'all', rtSort:{ key:'attention', dir:1 }, sel:[], sheetIds:[], sheetSolo:false, sheetSkipped:0, rowsOpen:[], sheetOpener:null, menu:null };
+
+/* the requests on one video, oldest first; an accepted one stays reachable under `prev` when a new offer goes out */
+function extChain(p) { const chain = []; for (let e = S.ext[p.id] || p.ext || null; e; e = e.prev) chain.unshift(e); return chain; }
+/* ---- derived model for one piece at "today" ---- */
+function model(p) {
+  const today = D(FORKS.today);
+  const c = CREATORS[p.c];
+  const m = { p, c, today, kind:p.kind, plat: p.kind === 'TikTok' ? 'tt' : 'ig', type: BASE.type };
+  const posted = p.posted ? D(p.posted) : null;
+  if (!posted || posted > today) { m.state = 'pending'; m.chip = 'pending'; m.approved = p.approved && D(p.approved) <= today ? D(p.approved) : null; return m; }
+  m.posted = posted;
+  m.ends0 = addDays(posted, RIGHTS_DAYS);
+  /* periods of rights in order: the 30 days that come with the post, then every accepted extension.
+     A new offer never erases what is already held: sheet-send keeps the accepted one under `prev`. */
+  const periods = [{ start: posted, end: m.ends0, type: BASE.type }];
+  const accepted = [];
+  let pendingReq = null;
+  extChain(p).forEach(raw => {
+    if (raw.requested && D(raw.requested) > today) return;                       /* not yet happened at this "today" */
+    const t = termOf(raw.term);
+    const e = { ...raw, type: raw.type || BASE.type, days: t.days, t };
+    if (!(e.state === 'extended' && e.accepted && D(e.accepted) <= today)) { pendingReq = { ...e, state: 'requested' }; return; }
+    const acc = D(e.accepted), prev = periods[periods.length - 1];
+    if (prev.end == null) return;                                                 /* nothing follows rights with no end date */
+    /* PROPOSED (Claude, Oct 5; OPEN with Julia and Tony): adding paid starts the day the creator says yes.
+       More time on the same type follows on from the current end, or starts at the yes when that end has passed. */
+    const liveAtYes = acc <= prev.end;
+    const addsPaid = e.type === 'paid' && prev.type !== 'paid';
+    if (addsPaid && liveAtYes) {
+      /* paid takes over from the day of the yes. Whatever was already bought beyond the paid term stays: it runs on afterwards. */
+      const heldEnd = prev.end, heldType = prev.type;
+      periods.forEach(q => { if (q.end > acc) q.end = q.start > acc ? q.start : acc; });
+      const paidEnd = addTerm(acc, t);
+      periods.push({ start: acc, end: paidEnd, type: 'paid' });
+      if (paidEnd != null && heldEnd > paidEnd) periods.push({ start: paidEnd, end: heldEnd, type: heldType });
+    } else {
+      const start = liveAtYes ? prev.end : acc;
+      periods.push({ start, end: addTerm(start, t), type: e.type, late: !liveAtYes });
+    }
+    for (let i = periods.length - 1; i > 0; i--) if (periods[i].end != null && periods[i].end <= periods[i].start) periods.splice(i, 1);   /* drop anything the cut left empty */
+    accepted.push(e);
+  });
+  const lastP = periods[periods.length - 1];
+  const nowP = periods.filter(q => q.start <= today).pop() || periods[0];
+  m.periods = periods; m.accepted = accepted; m.acc = accepted[accepted.length - 1] || null;
+  m.extended = accepted.length > 0;
+  m.perpetual = lastP.end == null;
+  m.ends = m.perpetual ? FAR : lastP.end;
+  m.extStart = m.extended ? lastP.start : null;
+  m.lateStart = m.extended && !!lastP.late;                                       /* the last yes came after the rights had ended */
+  /* the type in force today and until when: a later period of another type waits its turn */
+  m.type = nowP.type;
+  let k = periods.indexOf(nowP); while (k + 1 < periods.length && periods[k + 1].type === nowP.type) k++;
+  m.typeEnds = periods[k].end == null ? FAR : periods[k].end;
+  m.nextType = k + 1 < periods.length ? periods[k + 1].type : null;
+  m.ext = pendingReq || m.acc;
+  m.requested = !!pendingReq;
+  m.daysLeft = diffDays(m.ends, today);
+  m.dayOf = diffDays(today, posted);
+  m.state = m.daysLeft < 0 ? 'ended' : (m.daysLeft <= ENDING_DAYS ? 'ending' : 'active');
+  /* the meter counts days of rights, never the gap between an end and a late yes */
+  const finite = periods.filter(q => q.end != null);
+  const len = (q) => Math.max(diffDays(q.end, q.start), 0);
+  m.total = finite.reduce((n, q) => n + len(q), 0);
+  m.dayNum = finite.reduce((n, q) => n + Math.min(Math.max(diffDays(today, q.start), 0), len(q)), 0);
+  let run = 0; m.marks = finite.slice(0, -1).map(q => (run += len(q)) / m.total * 100);
+  const own = S.downloads[p.id];
+  const dl = (own && D(own) <= today ? own : null) || (p.dl && D(p.dl) <= today ? p.dl : null);
+  m.downloaded = dl ? D(dl) : null;
+  /* the clock wins inside the last days: an extended video about to end says Ending soon */
+  m.chip = m.requested ? 'requested' : (m.extended && m.state === 'active') ? 'extended' : m.state;
+  m.tone = (m.extended && m.state === 'active') ? 'extended' : m.state;
+  return m;
+}
+const MODELS = () => PIECES.map(model);
+
+/* ---- copy (brand-facing; "Katie's team", no long dashes, first names) ---- */
+const first = (c) => c.name.split(' ')[0];
+const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+const inDays = (n) => n === 0 ? 'today' : n === 1 ? 'tomorrow' : `in ${n} days`;
+const agoDays = (n) => n === 1 ? 'yesterday' : `${n} days ago`;
+
+const typeWord = (m) => TYPES[m.type].word;
+const fileName = (m) => m.posted ? `${BRAND}_${first(m.c)}_${m.kind.replace(' ', '')}_${iso(m.posted)}.mp4` : '';
+const zipName = (n) => `${BRAND}_${CAMPAIGN.replace(/[^A-Za-z0-9]+/g, '-')}_${n}-videos.zip`;
+const EXTEND_CTA = 'Extend';
+/* what the brand holds on this video right now, in one sentence (Tony: the extend sheet was missing it) */
+function statusLine(m) {
+  const t = typeWord(m);
+  if (m.state === 'ended') return { cls:'is-ended', html:`Your <b>${t}</b> rights ended <b>${fmtEnd(m.ends)}</b>.` };
+  /* a later period of another type (for example organic after paid) is named, so the sentence never overstates */
+  const then = m.nextType ? ` After that, ${TYPES[m.nextType].word} rights ${m.perpetual ? 'with no end date' : `until ${fmtEnd(m.ends)}`}.` : '';
+  if (m.perpetual && !m.nextType) return { cls:'', html:`You have <b>${t}</b> rights with no end date.` };
+  const until = m.nextType ? m.typeEnds : m.ends;
+  const left = diffDays(until, m.today);
+  if (left === 0) return { cls:'is-ending', html:`Your <b>${t}</b> rights end <b>today</b>.${then}` };
+  return { cls: m.state === 'ending' ? 'is-ending' : '', html:`You have <b>${plural(left, 'more day')}</b> of <b>${t}</b> rights, until ${fmtEnd(until)}.${then}` };
+}
+/* "90 more days of organic rights at $75" */
+const askText = (ext) => `${ext.t.more} ${TYPES[ext.type].word} rights${ext.offer ? ` at $${ext.offer}` : ''}`;
+
+/* ---- icons ---- */
+const I = {
+  dl: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2.5v8M4.8 7.4 8 10.6l3.2-3.2M2.8 13.2h10.4"/></svg>',
+  ig: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#fff" stroke="none"/></svg>',
+  tt: '<svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M16.5 3c.4 2.4 1.9 4 4.5 4.3v3.4c-1.7 0-3.2-.5-4.5-1.4v6.4c0 3.4-2.7 6.3-6.2 6.3S4 19.1 4 15.7s2.8-6.3 6.3-6.3c.4 0 .7 0 1 .1v3.5c-.3-.1-.6-.2-1-.2-1.6 0-2.9 1.3-2.9 2.9s1.3 2.9 2.9 2.9 2.9-1.3 2.9-2.9V3h3.3z"/></svg>',
+  copy: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5v-2a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2"/></svg>',
+  eye: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 8s2.4-4.5 6.5-4.5S14.5 8 14.5 8s-2.4 4.5-6.5 4.5S1.5 8 1.5 8z"/><circle cx="8" cy="8" r="2"/></svg>',
+  chevL: '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 2.5 4 6l3.5 3.5"/></svg>',
+  chevR: '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 2.5 8 6l-3.5 3.5"/></svg>',
+  out: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h4v4M13 3 7.5 8.5M12 9.5V12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h2.5"/></svg>',
+  link: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.8 9.2a3 3 0 0 0 4.2 0l2-2a3 3 0 0 0-4.2-4.2l-.9.9"/><path d="M9.2 6.8a3 3 0 0 0-4.2 0l-2 2a3 3 0 0 0 4.2 4.2l.9-.9"/></svg>',
+  lock: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="7.2" width="9" height="6.3" rx="1.6"/><path d="M5.6 7.2V5.1a2.4 2.4 0 0 1 4.8 0v2.1"/></svg>',
+  dots: '<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><circle cx="8" cy="3.2" r="1.4"/><circle cx="8" cy="8" r="1.4"/><circle cx="8" cy="12.8" r="1.4"/></svg>',
+  clock: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="5.8"/><path d="M8 4.8V8l2.2 1.4"/></svg>',
+};
+
+/* ==================================================================
+   CHROME · captured production sidebar + header (Aug 18 capture; UGC Studio
+   lost its Soon tag per the Oct 1 capture), brand card patched to Simple.
+   ================================================================== */
+const SIDEBAR = `<aside id="brand-workspace-sidebar" class="sidebar svelte-187rxgr"><div class="sidebar-shell svelte-187rxgr"><div class="sidebar-header svelte-187rxgr"><a class="brand-lockup svelte-187rxgr" href="#" aria-label="Benable brand collabs home"><img src="https://benable.com/images/biz/logo.svg" alt="Benable" class="svelte-187rxgr"></a></div> <nav class="sidebar-primary-nav svelte-187rxgr" aria-label="Primary"><span class="sidebar-kicker svelte-187rxgr">Platform</span> <div class="nav-list svelte-187rxgr"><a class="nav-item active svelte-187rxgr" href="#"><span class="nav-icon svelte-187rxgr" aria-hidden="true"><div class="icon svelte-1aopmtt" aria-hidden="true" style="width: 16px; height: 16px; color: currentColor;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.25 17C8.25 17 15.25 18 18.25 21H19.25C19.8023 21 20.25 20.5523 20.25 20V13.937C21.1126 13.715 21.75 12.9319 21.75 12C21.75 11.0681 21.1126 10.285 20.25 10.063V4C20.25 3.44772 19.8023 3 19.25 3H18.25C15.25 6 8.25 7 8.25 7H4.25C3.14543 7 2.25 7.89543 2.25 9V15C2.25 16.1046 3.14543 17 4.25 17H5.25L6.25 22H8.25V17ZM10.25 8.6612C10.9333 8.5146 11.7775 8.31193 12.6893 8.04373C14.3675 7.55014 16.5 6.77262 18.25 5.57458V18.4254C16.5 17.2274 14.3675 16.4499 12.6893 15.9563C11.7775 15.6881 10.9333 15.4854 10.25 15.3388V8.6612ZM4.25 9H8.25V15H4.25V9Z" fill="currentColor"></path></svg></div></span> <span class="nav-label svelte-187rxgr">Campaigns</span> </a><a class="nav-item svelte-187rxgr" href="#"><span class="nav-icon svelte-187rxgr" aria-hidden="true"><div class="icon svelte-1aopmtt" aria-hidden="true" style="width: 16px; height: 16px; color: currentColor;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M10 8.5v7l5.5-3.5z" fill="currentColor"/></svg></div></span> <span class="nav-label svelte-187rxgr">UGC Studio</span> </a><a class="nav-item svelte-187rxgr" href="#"><span class="nav-icon svelte-187rxgr" aria-hidden="true"><div class="icon svelte-1aopmtt" aria-hidden="true" style="width: 16px; height: 16px; color: currentColor;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></div></span> <span class="nav-label svelte-187rxgr">Push Alerts</span> <span class="coming-soon-pill svelte-187rxgr">Soon</span> </a><a class="nav-item svelte-187rxgr" href="#"><span class="nav-icon svelte-187rxgr" aria-hidden="true"><div class="icon svelte-1aopmtt" aria-hidden="true" style="width: 16px; height: 16px; color: currentColor;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 17l.7 2.3L22 20l-2.3.7L19 23l-.7-2.3L16 20l2.3-.7z"/></svg></div></span> <span class="nav-label svelte-187rxgr">Brand Intelligence</span> <span class="coming-soon-pill svelte-187rxgr">Soon</span> </a></div></nav> <div class="sidebar-divider svelte-187rxgr"></div> <div class="sidebar-footer svelte-187rxgr"><nav class="nav-list nav-list--secondary svelte-187rxgr" aria-label="Secondary"><a class="nav-item svelte-187rxgr" href="#"><span class="nav-icon svelte-187rxgr" aria-hidden="true"><div class="icon svelte-1aopmtt" aria-hidden="true" style="width: 16px; height: 16px; color: currentColor;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 1L21.5 6.5V17.5L12 23L2.5 17.5V6.5L12 1ZM12 3.311L4.5 7.65311V16.3469L12 20.689L19.5 16.3469V7.65311L12 3.311ZM12 16C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12C16 14.2091 14.2091 16 12 16ZM12 14C13.1046 14 14 13.1046 14 12C14 10.8954 13.1046 10 12 10C10.8954 10 10 10.8954 10 12C10 13.1046 10.8954 14 12 14Z" fill="currentColor"></path></svg></div></span> <span class="nav-label svelte-187rxgr">Settings</span> </a></nav> <div class="sidebar-account svelte-187rxgr"> <button type="button" class="sidebar-brand-card svelte-187rxgr" aria-haspopup="menu" aria-expanded="false" aria-label="Open account menu for Simple"><div class="brand-avatar svelte-1pb8em1" title="Simple" style="display:grid;place-items:center;background:#0b6b4f;color:#fff;font-weight:700;font-size:13px;">S</div> <div class="sidebar-brand-copy svelte-187rxgr"><strong class="svelte-187rxgr">Simple</strong></div></button></div></div></div></aside>`;
+
+const HEADER = `<header class="workflow-header"><a class="workflow-header-backlink" href="#"><div class="icon svelte-1aopmtt" aria-hidden="true" style="width: 16px; height: 16px; color: #717171;"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div> <span>Campaigns</span></a> <div class="workflow-header-row"><div class="workflow-header-main"><h1>${CAMPAIGN}</h1> <span class="phase-pill phase-pill--active"><span class="phase-pill-dot" aria-hidden="true"></span> <span>Active</span></span></div> <div class="header-right"><button type="button" class="workflow-header-edit-btn"><div class="icon svelte-1aopmtt" aria-hidden="true" style="width: 16px; height: 16px; color: #1a1a1a;">${I.eye.replace('viewBox','width="16" height="16" viewBox')}</div> <span>Campaign Details</span></button></div></div></header>`;
+
+/* ==================================================================
+   RENDER (keeps scroll and keyboard focus across re-renders)
+   ================================================================== */
+const root = document.getElementById('nf');
+const FOCUS_ATTRS = ['data-prod-card','data-accept','data-filter','data-dl','data-openpost','data-copylink','data-tab','data-act','data-row','data-term','data-type','data-today','data-demo-toggle','data-rt-filter','data-rt-sort','data-sel','data-rt-extend','data-menu'];
+function focusKey(el) {
+  if (!el || el === document.body) return null;
+  if (el.id) return '#' + el.id;
+  const scope = el.closest('.rvm') ? '.rvm' : el.closest('#demo') ? '#demo' : '#nf';
+  const cls = (el.classList && el.classList[0]) ? '.' + CSS.escape(el.classList[0]) : '';
+  for (const a of FOCUS_ATTRS) if (el.hasAttribute && el.hasAttribute(a)) return `${scope} ${cls}[${a}="${CSS.escape(el.getAttribute(a))}"]`;
+  return null;
+}
+let last = { tab: null };
+function render() {
+  const ms = MODELS();
+  const scroller = root.querySelector('.workspace-grid');
+  const pageTop = scroller && last.tab === S.tab ? scroller.scrollTop : 0;
+  const fkey = focusKey(document.activeElement);
+  const endingCount = ms.filter(m => m.state === 'ending' && !m.requested).length;
+  const tab = S.tab;
+  const dot = endingCount ? `<span class="cs-tabdot" title="Rights ending soon on ${plural(endingCount, 'video')}"></span>` : '';
+  const tabBtn = (k, label, d) => `<button type="button" class="workflow-dashboard-tab${tab===k?' active':''}" data-tab="${k}" aria-pressed="${tab===k}">${label}${d && tab !== k ? dot : ''}</button>`;
+  const tabs = tabBtn('dashboard', 'Dashboard') + tabBtn('content', 'Content') + tabBtn('rights', 'Rights', true);
+  const body = tab === 'content' ? renderContent(ms) : tab === 'rights' ? renderRights(ms) : renderDashboard(ms);
+  const panelCls = tab === 'dashboard' ? ' cs-panel--dash' : tab === 'rights' ? ' cs-panel--rights' : '';
+
+  root.innerHTML = `<div class="brand-dashboard svelte-187rxgr"><div class="dashboard-body svelte-187rxgr">${SIDEBAR}
+    <main class="workspace-content svelte-187rxgr" aria-busy="false"><div class="workspace-content-shell svelte-187rxgr"><section class="workflow-page" aria-busy="false"><div class="workspace-grid"><div class="main-column">${HEADER}
+      <div><section class="workflow-stage-shell"><section class="stage-primary-surface">
+        <div class="workflow-dashboard-controls"><nav class="workflow-dashboard-tabs" aria-label="Campaign dashboard tabs">
+          ${tabs}
+        </nav></div>
+        <article class="stage-top-card content-dashboard-panel content-dashboard-panel--tabbed svelte-p6dn97 cs-panel${panelCls}">
+          ${body}
+        </article>
+      </section></section></div>
+    </div></div></section></div></main>
+  </div></div>`;
+  renderDemo();
+  const o = document.querySelector('.rvm'); if (o) o.remove();
+  if (S.sent || (S.sheetSolo && S.sheetIds.length)) renderSolo(ms);
+
+  const sc2 = root.querySelector('.workspace-grid');
+  if (sc2) {
+    /* a shorter list (a filter pill, a sort) must not yank the page back to the top: keep enough height to stay put */
+    if (pageTop > 0) {
+      const col = sc2.querySelector('.main-column') || sc2;
+      col.insertAdjacentHTML('beforeend', '<div aria-hidden="true" class="cs-keep" style="height:0"></div>');
+      const keep = col.lastElementChild;
+      for (let i = 0, h = 0; i < 4; i++) {            /* scrollHeight never reads below the visible height, so close in on it */
+        const short = pageTop + sc2.clientHeight - sc2.scrollHeight;
+        if (short <= 0) break;
+        h += Math.ceil(short) + (i ? 0 : sc2.clientHeight); keep.style.height = h + 'px';
+        const over = sc2.scrollHeight - (pageTop + sc2.clientHeight);
+        if (over > 0) { h = Math.max(0, h - over); keep.style.height = h + 'px'; }
+      }
+    }
+    sc2.scrollTop = pageTop;
+  }
+  /* a card menu opens upward; when its card sits at the top of the scroll area it opens downward instead */
+  const mn = root.querySelector('.cs-menu'); if (mn && sc2 && mn.getBoundingClientRect().top < sc2.getBoundingClientRect().top + 8) mn.classList.add('is-down');
+  /* focus: back where it was, or to whatever opened the sheet */
+  let target = fkey ? document.querySelector(fkey) : null;
+  if (target && target.disabled) target = null;
+  if (!S.sheetSolo && S.sheetOpener) { if (!target) target = document.querySelector(S.sheetOpener); S.sheetOpener = null; }
+  if (!target && fkey && !S.sheetSolo) target = root.querySelector('.cs-filter.is-on, [data-rt-filter].is-on');
+  if (target) target.focus({ preventScroll: true });
+  wireSheet();
+  last = { tab: S.tab };
+}
+
+/* ---- Content tab: exactly production (Oct 1 capture: six filter pills, 333px cards, a click opens the
+   post on the platform), plus ONE addition: a three-dot menu per card with Download and Extend rights
+   (Tony + Julia, Oct 2). Extend opens the same sheet on top of this page. ---- */
+function renderContent(ms) {
+  const live = ms.filter(m => m.state !== 'pending');
+  const cnt = (k) => live.filter(m => m.kind === k).length;
+  const kinds = [['all','All', live.length], ['TikTok','Tiktok', cnt('TikTok')], ['IG Post','Instagram Post', 0], ['IG Reel','Instagram Reels', cnt('IG Reel')], ['IG Story','Instagram Stories', cnt('IG Story')], ['recs','Benable Recs', 0]];
+  if (!kinds.some(([k]) => k === S.filter)) S.filter = 'all';
+  const shown = live.filter(m => S.filter === 'all' || m.kind === S.filter);
+  const pill = ([k,l,n]) => `<button class="cs-filter${S.filter===k?' is-on':''}" data-filter="${k}" aria-pressed="${S.filter===k}">${l}<span class="cs-count">${n}</span></button>`;
+  return `<div class="cs-wrap cs-wrap--prod"><div class="cs-main">
+    <div class="cs-toolbar"><div class="cs-filters">${kinds.map(pill).join('')}</div></div>
+    <div class="cs-grid cs-grid--prod">${shown.length ? shown.map(card).join('') : `<div class="cs-empty">No content to see yet.</div>`}</div>
+  </div></div>`;
+}
+function card(m) {
+  const p = m.p; const c = m.c; const n = first(c);
+  const open = S.menu === p.id;
+  const platPill = `<span class="cs-plat cs-plat--${m.plat}">${m.plat==='tt'?I.tt:I.ig}${KL[m.kind]}</span>`;
+  /* a toggle button that reveals two buttons (no ARIA menu roles: it does not behave like one on the keyboard) */
+  const kebab = `<button type="button" class="cs-kebab" data-menu="${p.id}" aria-expanded="${open}" aria-label="More for ${n}'s ${KL[m.kind]}" title="Download or extend rights">${I.dots}</button>`;
+  /* why an item is off is on screen, not only in a tooltip */
+  const dlWhy = usableFile(m) ? '' : m.requested ? `Comes back if ${n} says yes` : `Rights ended ${fmtEnd(m.ends)}`;
+  const extWhy = m.requested ? `Sent ${fmt(D(m.ext.requested))}, no answer yet` : '';
+  const menu = !open ? '' : `<div class="cs-menu" role="group" aria-label="${n}'s ${KL[m.kind]}">
+      <button type="button" data-dl="${p.id}" ${usableFile(m) ? '' : 'disabled'} title="${usableFile(m) ? `Download ${fileName(m)}` : m.requested ? `Rights ended ${fmtEnd(m.ends)}. Download comes back if ${n} says yes.` : `Rights ended ${fmtEnd(m.ends)}. Extend to download again.`}">${I.dl}<span class="cs-menu-txt">Download video${dlWhy ? `<em>${dlWhy}</em>` : ''}</span></button>
+      <button type="button" data-rt-extend="${p.id}" ${extendable(m) ? '' : 'disabled'}>${I.clock}<span class="cs-menu-txt">${m.requested ? 'Extension requested' : m.perpetual ? 'Rights never end' : 'Extend rights'}${extWhy ? `<em>${extWhy}</em>` : ''}</span></button>
+    </div>`;
+  return `<div class="cs-card${open ? ' is-menu' : ''}" role="link" tabindex="0" data-prod-card="${p.id}" aria-label="${c.name}, ${KL[m.kind]}: opens the post on ${PLATFORM(m.kind)}">
+      <div class="cs-media"><img src="${R}posters/${p.clip}.jpg" alt="">${platPill}</div>
+      <div class="cs-body"><div class="cs-who"><span class="cs-avatar"><img src="${c.av}" alt=""></span><div style="min-width:0"><div class="cs-name">${c.name}</div><div class="cs-meta">${c.handle} · ${agoText(m.posted, m.today)}</div></div>${kebab}</div>${menu}<div class="cs-cap cs-cap--3">${p.cap.join(' ')}</div></div></div>`;
+}
+
+function agoText(d, today) { const n = diffDays(today, d); if (n < 1) return 'today'; if (n < 7) return `${n}d ago`; if (n < 30) return `${Math.floor(n/7)}w ago`; return `${Math.max(1, Math.round(n/30))}mo ago`; }
+
+/* ---- Dashboard tab: the Campaign Pulse exactly as shipped (stat row, stage rail, creators card, rail); nothing about rights ---- */
+const STAGES = ['Sourcing', 'Invited', 'Accepted', 'Order shipped', 'Order delivered', 'Draft approved', 'Content published', 'Thanked'];
+const RAMP = ['#dbeee3', '#b9dfcb', '#8fceae', '#5fb98c', '#2e9e6b', '#1f8f5a', '#17864f', '#124a33'];
+const SAVED = [ { name: 'Tess Nakamura', handle: '@tess.n', av: R+'posters/jasper-1.jpg' }, { name: 'Rae Cole', handle: '@raecole', av: R+'posters/emery-2.jpg' } ];
+const relDay = (d, today) => { const n = diffDays(today, d); return n === 0 ? 'today' : n === 1 ? 'yesterday' : fmt(d); };
+
+function crewRows(ms) {
+  const today = D(FORKS.today);
+  const byC = {};
+  ms.forEach(m => (byC[m.p.c] ||= []).push(m));
+  return Object.entries(byC).map(([k, list]) => {
+    const c = CREATORS[k];
+    const live = list.filter(m => m.state !== 'pending').sort((a, b) => a.posted - b.posted);
+    if (live.length) {
+      const first_ = live[0];
+      const update = live.length > 1
+        ? `${plural(live.length, 'post')} live · ${KL[first_.kind]} since ${relDay(first_.posted, today)}`
+        : `${KL[first_.kind]} live since ${relDay(first_.posted, today)}`;
+      return { key: k, c, stage: 6, celebrate: true, update, live, pieces: list };
+    }
+    const soon = list[0];
+    const ok = !!soon.approved;
+    return { key: k, c, stage: ok ? 5 : 4, celebrate: false, update: ok ? `Draft approved ${fmt(soon.approved)}, posting soon` : 'Draft in review with Katie\'s team', live: [], pieces: list };
+  });
+}
+
+function stageHistory(row) {
+  const m = row.live[0];
+  const ap = row.pieces[0].approved;
+  const base = m ? m.posted : ap ? addDays(ap, 9) : addDays(D(FORKS.today), 9);
+  const d = (n) => fmt(addDays(base, n));
+  const steps = [
+    ['Invited', d(-45), 'Matched to your brief'],
+    ['Accepted', d(-43), 'Accepted the invite'],
+    ['Order shipped', d(-38), 'Repair+ bundle on its way'],
+    ['Order delivered', d(-33), 'Package arrived'],
+    ['Draft approved', d(-9), 'Katie\'s team checked the draft against your brief'],
+    ['Live!', m ? fmt(m.posted) : 'up next', m ? `Post went live on ${PLATFORM(m.kind)}` : 'Post goes live, we track how it does for you'],
+    ['Thanked', 'up next', 'Your thank-you, right after the post'],
+  ];
+  const nowIdx = m ? 5 : ap ? 4 : 3;
+  return `<div class="am-hist"><p class="am-hist-title">Stage history</p><div class="cp-crew-history am-hist-body">${steps.map(([label, when, detail], i) => {
+    const st = i < nowIdx ? 'done' : i === nowIdx ? 'now' : 'next';
+    return `<div class="cp-hist-step cp-hist-step--${st}"><span class="cp-hist-dot">${st === 'done' ? '✓' : ''}</span><div class="cp-hist-body"><div class="cp-hist-top"><span class="cp-hist-label">${label}</span><span class="cp-hist-when">${st === 'next' ? 'up next' : when}</span></div><div class="cp-hist-detail">${detail}</div></div></div>`;
+  }).join('')}</div></div>`;
+}
+
+function renderDashboard(ms) {
+  const rows = crewRows(ms);
+  const n = rows.length;
+  const pct = Math.round(rows.reduce((a, r) => a + r.stage, 0) / (n * 7) * 100);
+  const liveVideos = ms.filter(m => m.state !== 'pending').length;
+  const counts = STAGES.map((_, i) => rows.filter(r => r.stage === i).length);
+  const maxStage = Math.max(...rows.map(r => r.stage));
+
+  const rail = STAGES.map((label, i) => {
+    const count = counts[i];
+    const radius = i === 0 ? '74px 4px 4px 74px' : i === STAGES.length - 1 ? '4px 100px 100px 4px' : '4px';
+    let bar, hint;
+    if (count === 0 && i < maxStage) {
+      bar = `<button type="button" disabled class="am2-bar" style="background:#eff5f1;border-radius:${radius}"><span class="am2-count" style="color:#17864f"><span class="am2-check" role="img" aria-label="All ${n} moved ahead">✓</span></span></button>`;
+      hint = i === 0 ? 'All done for now' : `All ${n} moved ahead`;
+    } else if (count === 0) {
+      bar = `<button type="button" disabled class="am2-bar am-seg--sliver" style="border-radius:${radius}"><span class="am2-count" style="color:#a3a8a3">0</span></button>`;
+      hint = i === 7 ? 'After posts go live' : i === 6 ? 'Once quality checks pass' : 'Up next';
+    } else {
+      const dark = i >= 4;
+      bar = `<button type="button" tabindex="-1" aria-disabled="true" class="am2-bar" style="cursor:default;background:${RAMP[i]};border-radius:${radius}"><span class="am2-count" style="color:${dark ? '#fff' : '#06301f'}">${count}</span></button>`;
+      hint = i === 6 ? `${plural(liveVideos, 'post')} now live!` : i === 5 ? `${count} posting soon` : i === 4 ? `${plural(count, 'draft')} in review` : `${count} here now`;
+    }
+    return `<div class="am2-col">${bar}<div class="am2-leg"><p class="am2-label">${label}</p><p class="am2-hint">${hint}</p></div></div>`;
+  }).join('');
+
+  const chev = (open) => `<span class="am-chev"><img alt="" src="assets/labs/chevron.svg" style="rotate: ${open ? '-90deg' : '90deg'};"></span>`;
+  const verified = `<img alt="Verified" class="am-verified" src="${R}assets/icons/verified.svg">`;
+  const crew = rows.map(r => {
+    const open = S.rowsOpen.includes(r.key);
+    const fact = r.celebrate ? `<span class="cp-live-fact"><span class="cp-celebrate-emoji" aria-hidden="true">🎉</span> ${r.update}</span>` : `<span class="cp-live-fact cp-live-fact--gray">${r.update}</span>`;
+    return `<div class="am-item"><div role="button" tabindex="0" class="am-row tf-row" aria-expanded="${open}" data-row="${r.key}">
+      <span class="am-who"><span><span class="am-avatar"><img alt="" src="${r.c.av}"></span></span><span class="am-names"><span class="am-name">${r.c.name}${verified}</span><span class="am-handle">${r.c.handle}</span></span></span>
+      <span class="am-update"><span class="cp-live">${fact}</span></span>
+      <span class="tf-chipslot"><span class="tf-gdot"><i style="background:${RAMP[r.stage]}"></i>${STAGES[r.stage]}</span></span>${chev(open)}</div>
+      <div class="tf-drawer${open ? ' tf-drawer--open' : ''}" aria-hidden="${!open}" ${open ? '' : 'inert'}><div class="tf-drawer-in">${stageHistory(r)}</div></div></div>`;
+  }).join('');
+  const saved = SAVED.map(c => `<div class="am-item"><div class="am-row tf-row is-static"><span class="am-who"><span><span class="am-avatar"><img alt="" src="${c.av}"></span></span><span class="am-names"><span class="am-name">${c.name}${verified}</span><span class="am-handle">${c.handle}</span></span></span><span class="am-update"><span class="cp-live"><span class="cp-live-fact cp-live-fact--gray">Saved for your next campaign</span></span></span><span class="tf-chipslot"><span class="tf-gdot" style="color:#767676"><i style="background:#c2c5c4"></i>Invite expired<span class="tf-info-i" title="The invite ran out before an answer. The creator stays saved for your next campaign.">ⓘ</span></span></span><span class="am-chev"></span></div></div>`).join('');
+
+  const twice = rows.filter(r => r.live.length > 1).length;
+  const activity = [
+    `<div class="am-note"><span class="am-note-emoji" aria-hidden="true">🎉</span><p class="am-note-text"><strong>${plural(liveVideos, 'post')} ${liveVideos === 1 ? 'is' : 'are'} live!</strong><span> · Katie's team checked every draft against your brief before it went live${twice ? `; ${plural(twice, 'creator')} shared twice` : ''}.</span></p></div>`,
+  ];
+  const upnext = [
+    `<div class="am-note"><span class="am-note-emoji" aria-hidden="true">💌</span><p class="am-note-text"><strong>Send thank-yous to ${plural(rows.filter(r => r.live.length).length, 'creator')}</strong><span> · Thoughtful notes help strengthen your creator relationships after their posts went live.</span></p></div>`,
+  ];
+  const lastify = (arr) => arr.map((x, i) => i === arr.length - 1 ? x.replace('class="am-note"', 'class="am-note am-note--last"') : x).join('');
+
+  return `<div class="cp-root cp-root--c">
+    <div class="am-progress"><div class="am-stat"><div class="am-stat-left"><span class="am-stat-big">${pct}%</span><span class="am-stat-cap">through your campaign</span></div></div>
+      <div class="am2-rail" role="group" aria-label="Creator funnel: ${pct}% through">${rail}</div></div>
+    <div class="cp-crew2 tf-noicons tf-heads-grey"><div class="cp-crew-cols cp-crew-cols--left"><div class="cp-crew-left">
+      <section class="am-card am-table tf-table" aria-label="Creators"><div class="am-card-head tf-head"><div class="am-head-l"><div><p class="am-card-title">Creators</p><span class="am-card-sub">Review creator progress below.</span></div></div><div class="am-head-r"></div></div>${crew}${saved}</section>
+    </div>
+    <aside class="cp-tile-stack"><aside class="am-rail">
+      <section class="am-card"><div class="am-card-head"><div class="am-head-l"><div><p class="am-card-title">Recent activity</p></div></div></div><div class="am-card-body">${lastify(activity)}</div></section>
+      <section class="am-card"><div class="am-card-head"><div class="am-head-l"><div><p class="am-card-title">Up next</p></div></div></div><div class="am-card-body">${lastify(upnext)}</div></section>
+    </aside></aside></div></div></div>`;
+}
+
+/* ---- Rights tab: one row per video, sorted by the day its rights end. Tony, Oct 2: "I think that is
+   the right experience": posted, rights end, status, grab the link, download, Download all as one zip,
+   Extend. No calendar view ("overkill"), no expiry emails yet (a later version). The amber notice strip is
+   gone too (Claude's reading of Julia's "I don't like that popup", Oct 2), and so is the video popup a row
+   click used to open (Julia, Oct 5: "I don't actually think we need this at all"). The row is the whole surface.
+   Download stops when rights end (Julia, Oct 5). A 7-day email before each end is needed (Julia, Oct 5) and is
+   described on the study page; nothing on this screen promises it yet. ---- */
+const RT_LABEL = { active:'Active', ending:'Ending soon', ended:'Ended', requested:'Extension requested', extended:'Extended', pending:'Not posted yet' };
+const RT_FILTERS = [['all','All'], ['ending','Ending soon'], ['active','Active'], ['extended','Extended'], ['requested','Requested'], ['ended','Ended'], ['pending','Not posted']];
+const selectable = (m) => m.state !== 'pending';
+const extendable = (m) => m.state !== 'pending' && !m.requested && !m.perpetual;
+/* download stops when rights end (Julia, Oct 5); extending brings the file back */
+const usableFile = (m) => m.state !== 'pending' && m.state !== 'ended';
+function rtRows(ms) {
+  const k = S.rtSort.key, dir = S.rtSort.dir;
+  const RANK = { ending: 0, active: 1, requested: 2, extended: 3, ended: 4 };
+  const val = (m) => k === 'creator' ? m.c.name.toLowerCase() : k === 'posted' ? m.posted.getTime() : m.ends.getTime();
+  /* Status sorts too (a reading of Tony's "oh, they are clickable ... and then maybe this one too", Oct 2):
+     by urgency, then by end date */
+  const cmp = k === 'attention'
+    ? (a, b) => (RANK[a.chip] - RANK[b.chip]) || (a.chip === 'ended' ? b.ends - a.ends : a.ends - b.ends)
+    : k === 'status'
+    ? (a, b) => ((RANK[a.chip] - RANK[b.chip]) * dir) || (a.ends - b.ends)
+    : (a, b) => { const x = val(a), y = val(b); return (x < y ? -1 : x > y ? 1 : 0) * dir; };
+  const rows = ms.filter(m => S.rtFilter === 'all' || m.chip === S.rtFilter);
+  const live = rows.filter(selectable).sort(cmp);
+  return live.concat(rows.filter(m => !selectable(m)));   /* not-posted rows always sit last */
+}
+function endCell(m) {
+  if (m.state === 'pending') return `<span class="cs-rt-muted">Starts with the post</span>`;
+  const tw = `${typeWord(m)}${m.nextType ? ` until ${fmtEnd(m.typeEnds)}` : ''}`;
+  if (m.perpetual) return `<span class="cs-rt-end"><b>No end date</b><span>${tw}</span></span>`;
+  const sub = m.daysLeft < 0 ? agoDays(-m.daysLeft) : m.daysLeft === 0 ? 'today' : `in ${plural(m.daysLeft, 'day')}`;
+  return `<span class="cs-rt-end${m.state === 'ending' && !m.requested ? ' is-ending' : m.state === 'ended' ? ' is-ended' : ''}"><b>${fmtEnd(m.ends)}</b><span>${sub} · ${tw}</span></span>`;
+}
+function rowActions(m) {
+  if (m.state === 'pending') return '';
+  const n = first(m.c);
+  const dl = `<button type="button" class="cs-iconbtn" data-dl="${m.p.id}" ${usableFile(m) ? '' : 'disabled'} title="${usableFile(m) ? `Download ${fileName(m)}` : m.requested ? `Rights ended ${fmtEnd(m.ends)}. Download comes back if ${n} says yes.` : `Rights ended ${fmtEnd(m.ends)}. Extend to download again.`}" aria-label="Download ${n}'s ${KL[m.kind]}">${I.dl}</button>`;
+  const link = `<button type="button" class="cs-iconbtn" data-copylink="${m.p.id}" title="Copy the link to the live post" aria-label="Copy the link to ${n}'s ${KL[m.kind]}">${I.link}</button>`;
+  const post = `<a class="cs-iconbtn" href="https://${m.p.url}" target="_blank" rel="noopener" data-openpost="${m.p.id}" title="Open the live post on ${PLATFORM(m.kind)}" aria-label="Open the live post">${I.out}</a>`;
+  /* Extend is on every row that can take an offer, not only the ones ending: it is also how a brand adds paid rights */
+  const ext = extendable(m) ? `<button type="button" class="cs-extend${m.state === 'ending' ? ' is-amber' : ''}" data-rt-extend="${m.p.id}" aria-label="Extend the rights on ${n}'s ${KL[m.kind]}">${EXTEND_CTA}</button>` : '';
+  return ext + link + post + dl;
+}
+/* the row carries what the popup used to say: what was offered, or what the creator agreed to */
+function statusTitle(m) {
+  const n = first(m.c);
+  if (m.requested) return ` title="Offer sent ${fmt(D(m.ext.requested))}: ${askText(m.ext)}. No answer yet."`;
+  if (m.acc) return ` title="${n} agreed ${fmt(D(m.acc.accepted))}: ${m.acc.t.of} ${TYPES[m.acc.type].word} rights"`;
+  return '';
+}
+function renderRights(ms) {
+  const live = ms.filter(selectable);
+  const counts = {}; ms.forEach(m => counts[m.chip] = (counts[m.chip] || 0) + 1);
+  if (S.rtFilter !== 'all' && !counts[S.rtFilter]) S.rtFilter = 'all';
+  const pills = RT_FILTERS.filter(([k]) => k === 'all' || counts[k]).map(([k, l]) => `<button class="cs-filter${S.rtFilter===k?' is-on':''}" data-rt-filter="${k}" aria-pressed="${S.rtFilter===k}">${l}<span class="cs-count">${k === 'all' ? ms.length : counts[k]}</span></button>`).join('');
+  const rows = rtRows(ms);
+  const sel = S.sel.filter(id => rows.some(m => m.p.id === id));
+  const selMs = sel.map(id => ms.find(m => m.p.id === id));
+  const selDl = selMs.filter(usableFile), selExt = selMs.filter(extendable);
+  const usable = rows.filter(usableFile);   /* Download all acts on the rows on screen */
+
+  const line = sel.length
+    ? `<div class="cs-bulk"><b>${sel.length} selected</b><button class="cs-ghost" data-act="bulk-dl" ${selDl.length ? '' : 'disabled'} title="${selDl.length > 1 ? 'One .zip with the selected video files' : 'Download the video file'}">${I.dl}Download${selDl.length && selDl.length !== sel.length ? ` (${selDl.length})` : ''}</button><button class="cs-ghost" data-act="bulk-links" title="Copy the links to the selected posts, one per line">${I.link}Copy links</button><button class="cs-ghost is-dark" data-act="bulk-extend" ${selExt.length ? '' : 'disabled'}>${EXTEND_CTA}${selExt.length && selExt.length !== sel.length ? ` (${selExt.length})` : ''}</button><button class="cs-link" data-act="bulk-clear">Clear</button></div>`
+    : '';   /* no count line (Julia, Oct 5). A selection takes over the table's header row, so ticking a video never moves the table */
+
+  const arrow = (k) => S.rtSort.key === k ? `<span aria-hidden="true">${S.rtSort.dir === 1 ? '▲' : '▼'}</span>` : `<span aria-hidden="true" class="cs-rt-idle">↕</span>`;
+  const sortBtn = (k, label) => `<button type="button" class="cs-rt-sort${S.rtSort.key===k?' is-on':''}" data-rt-sort="${k}" title="Sort by ${label.toLowerCase()}" aria-label="Sort by ${label.toLowerCase()}">${label}${arrow(k)}</button>`;
+  const selRows = rows.filter(selectable);
+  const allState = !sel.length ? 'false' : sel.length === selRows.length ? 'true' : 'mixed';
+  const check = (m) => `<button type="button" class="cs-check" role="checkbox" aria-checked="${S.sel.includes(m.p.id)}" data-sel="${m.p.id}" ${selectable(m) ? '' : 'disabled'} aria-label="Select ${first(m.c)}'s ${KL[m.kind]}">${S.sel.includes(m.p.id) ? '✓' : ''}</button>`;
+
+  return `<div class="cs-toolbar"><div class="cs-filters">${pills}</div>
+      <button class="cs-ghost" data-act="dl-all" data-ids="${usable.map(m => m.p.id).join(',')}" ${usable.length?'':'disabled'} title="${usable.length > 1 ? `One .zip with the ${usable.length} videos whose rights are live` : usable.length ? 'Downloads the one video whose rights are live' : S.rtFilter === 'pending' ? 'No files yet: these videos are not posted' : 'No files to download here: rights are not live on these videos'}">${I.dl}Download all${usable.length ? ` (${usable.length})` : ''}</button></div>
+    <div class="cs-rt-card">
+    <div class="cs-rt-cols${sel.length ? ' is-bulk' : ''}"><button type="button" class="cs-check" role="checkbox" aria-checked="${allState}" data-sel="all" aria-label="Select all" ${selRows.length ? '' : 'disabled'}>${allState === 'true' ? '✓' : allState === 'mixed' ? '-' : ''}</button>${sel.length ? line : `${sortBtn('creator', 'Video')}${sortBtn('posted', 'Posted')}${sortBtn('ends', 'Rights end')}${sortBtn('status', 'Status')}<span></span>`}</div>
+    ${rows.length ? rows.map(m => `<div class="cs-rt-row${S.sel.includes(m.p.id) ? ' is-sel' : ''}${m.state === 'pending' ? ' is-pending' : ''}" data-vid="${m.p.id}">
+      ${check(m)}
+      <span class="cs-rt-video"><span class="cs-rt-thumb"><img src="${R}posters/${m.p.clip}.jpg" alt=""></span><span class="cs-rt-names"><span class="cs-name">${m.c.name}</span><span class="cs-meta">${m.c.handle} · ${KL[m.kind]}</span></span></span>
+      <span class="cs-rt-date">${m.posted ? fmt(m.posted) : '<span class="cs-rt-muted">Soon</span>'}</span>
+      ${endCell(m)}
+      <span class="cs-rt-status is-${m.chip}"${statusTitle(m)}><i></i><span class="cs-rt-st"><span>${RT_LABEL[m.chip]}</span>${m.requested ? `<em>Offer sent ${fmt(D(m.ext.requested))}${m.ext.offer ? ` · $${m.ext.offer}` : ''}</em>` : ''}</span></span>
+      <span class="cs-rt-actions">${rowActions(m)}</span>
+    </div>`).join('') : `<div class="cs-empty">No videos match this filter.</div>`}
+  </div>`;
+}
+
+
+/* ==================================================================
+   EXTEND SHEET (Tony, Oct 2: "such a good and simple UI")
+   What you hold now · type of rights · how long · your offer · a private note.
+   The same sheet opens from a Rights row, from a selection and from a Content
+   card's three-dot menu. There is no video popup any more (Julia, Oct 5): a row
+   already has download, copy link, open the post and extend.
+   ================================================================== */
+const sheetList = () => (S.sheetSolo ? S.sheetIds : []).map(id => model(pieceOf(id)));
+const sheetTerm = () => termOf(S.sheetTerm);
+const suggested = () => PRICE[S.sheetType][S.sheetTerm];
+function sheetHint(list) {
+  const t = sheetTerm();
+  const one = list.length === 1 ? list[0] : null;
+  /* PROPOSED (Claude, Oct 5): adding paid starts the day the creator says yes; more time on the same type follows on */
+  const addsPaid = (m) => S.sheetType === 'paid' && m.type !== 'paid' && m.state !== 'ended';
+  if (one) {
+    const n = first(one.c);
+    if (one.state === 'ended') return t.days == null ? `If ${n} says yes, the rights would start that day, with no end date.` : `If ${n} says yes, the rights would run ${t.label} from that day.`;
+    if (addsPaid(one)) return t.days == null ? `If ${n} says yes, paid use would start that day, with no end date.` : `If ${n} says yes, paid use would start that day and run ${t.label}.`;
+    if (t.days == null) return `If ${n} says yes, the rights would have no end date.`;
+    return `If ${n} says yes by ${fmtEnd(one.ends)}, rights run to ${fmtY(addTerm(one.ends, t))}.`;
+  }
+  if (list.some(addsPaid)) return t.days == null ? 'If a creator says yes, paid use would start that day, with no end date.' : `If a creator says yes, paid use would start that day and run ${t.label}.`;
+  if (t.days == null) return 'If a creator says yes, the rights on that video would have no end date.';
+  return list.every(m => m.state === 'ended') ? `If a creator says yes, the rights on that video would run ${t.label} from that day.`
+    : `If a creator says yes before a video's end date, the new period follows on from that date. Otherwise it starts the day they say yes.`;
+}
+/* Tony, Oct 2: a line under the offer tied to the length ("for 90 days, the average is somewhere around").
+   No average has been measured, so it says "we suggest". */
+function offerHint(list) {
+  const who = list.length === 1 ? first(list[0].c) : 'Each creator';
+  const tail = `${who} can say no or ask for more.`;
+  return `For ${sheetTerm().of} ${TYPES[S.sheetType].word} rights, we suggest $${suggested()}${list.length > 1 ? ' per video' : ''}. ${tail}`;
+}
+function sheetHtml(list, solo) {
+  const one = list.length === 1 ? list[0] : null;
+  const n = one ? first(one.c) : null;
+  const title = one ? `Extend rights on ${n}'s ${KL[one.kind]}` : `Extend rights on ${list.length} videos`;
+  const sub = one
+    ? `Katie's team sends it to ${n}. The answer shows on the Rights tab.`
+    : `Katie's team sends it to each creator. Each answer shows on the Rights tab.`;
+  const st = one ? statusLine(one) : null;
+  /* "Current" marks what the brand holds right now (Tony: "you have this right now"), so never on ended rights */
+  const current = list.every(m => m.state !== 'ended' && m.type === list[0].type) ? list[0].type : null;
+  const mixed = new Set(list.map(m => m.type)).size > 1;
+  const holds = (m) => m.state === 'ended' ? `${typeWord(m)} rights ended ${fmtEnd(m.ends)}` : m.perpetual && !m.nextType ? `${typeWord(m)}, no end date` : `${typeWord(m)} until ${fmtEnd(m.nextType ? m.typeEnds : m.ends)}`;
+  const names = list.length <= 4
+    ? `<ul class="cs-sheet-list">${list.map(m => `<li><b>${first(m.c)} · ${KL[m.kind]}</b><span>${holds(m)}</span></li>`).join('')}</ul>`
+    : `<p class="cs-sheet-names">${list.map(m => `${first(m.c)} · ${KL[m.kind]}`).join(', ')}</p>`;
+  const skipped = S.sheetSkipped ? `<p class="cs-sheet-names">${plural(S.sheetSkipped, 'selected video')} ${S.sheetSkipped > 1 ? 'are' : 'is'} left out (a request is already in, or the rights never end).</p>` : '';
+  const types = Object.entries(TYPES).map(([k, t]) => `<button type="button" role="radio" class="cs-type${S.sheetType===k?' is-on':''}" data-type="${k}" aria-checked="${S.sheetType===k}"><span class="cs-type-top"><span>${t.label}</span>${current === k ? '<span class="cs-type-cur">Current</span>' : ''}</span><span class="cs-type-sub">${t.sub}</span></button>`).join('');
+  const chips = TERMS.map(t => `<button type="button" class="cs-chip${S.sheetTerm===t.key?' is-on':''}" data-term="${t.key}" aria-pressed="${S.sheetTerm===t.key}">${t.label}</button>`).join('');
+  return `<div class="cs-solo-scrim" data-act="sheet-close"><div class="rvm-changes-card cs-sheet" role="dialog" aria-modal="true" aria-label="${title}">
+    <button type="button" class="rvm-changes-close" data-act="sheet-close" title="Close" aria-label="Close"><img src="${R}assets/icons/close-16.svg" alt=""></button>
+    <div class="rvm-changes-body"><p class="rvm-changes-title">${title}</p>
+      ${st ? `<p class="cs-sheet-status ${st.cls}"><i></i><span>${st.html}</span></p>` : names + skipped}
+      <div class="cs-sheet-field"><span class="cs-sheet-label" id="lblType">Type of rights</span>${mixed ? `<span class="cs-sheet-hint">These videos do not all have the same rights today. The offer asks for the same rights on each.</span>` : ''}<div class="cs-types" role="radiogroup" aria-labelledby="lblType">${types}</div></div>
+      <div class="cs-sheet-field"><span class="cs-sheet-label" id="lblDays">How long</span><span class="cs-sheet-hint" id="sheetHint">${sheetHint(list)}</span><div class="cs-chips" role="group" aria-labelledby="lblDays">${chips}</div></div>
+      <div class="cs-sheet-field"><label class="cs-sheet-label" for="offer">${one ? `Your offer to ${n}` : 'Your offer per video'}</label><span class="cs-sheet-hint" id="offerHint">${offerHint(list)}</span><div class="cs-money"><span aria-hidden="true">$</span><input id="offer" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" maxlength="6" value="${S.sheetOffer}" aria-describedby="offerHint"></div></div>
+      <div class="cs-sheet-field"><label class="cs-sheet-label" for="sheetText">${I.lock}Private note to the Benable team <span class="cs-opt">· optional</span></label><span class="cs-sheet-hint" id="noteHint">Only the Benable team reads this. ${one ? `${n} never sees it.` : 'The creators never see it.'}</span><textarea class="rvm-changes-textarea" id="sheetText" aria-describedby="noteHint" placeholder="Anything the Benable team should know, for example where you plan to run it">${esc(S.sheetText)}</textarea></div>
+    </div>
+    <div class="rvm-changes-footer"><button type="button" class="rvm-changes-send" data-act="sheet-send" data-id="${one ? one.p.id : ''}" ${!(S.sheetOffer > 0) ? 'disabled' : ''}>${one ? 'Send offer' : `Send ${list.length} offers`}</button><p class="cs-sheet-next">${sub}</p></div>
+  </div></div>`;
+}
+/* type or length changed: the offer prefills with the usual price, in place (no re-render, the note keeps its caret) */
+function syncSheet() {
+  S.sheetOffer = suggested();
+  document.querySelectorAll('.cs-chip[data-term]').forEach(c => { const on = c.dataset.term === S.sheetTerm; c.classList.toggle('is-on', on); c.setAttribute('aria-pressed', String(on)); });
+  document.querySelectorAll('.cs-type[data-type]').forEach(c => { const on = c.dataset.type === S.sheetType; c.classList.toggle('is-on', on); c.setAttribute('aria-checked', String(on)); });
+  const list = sheetList();
+  const of = document.getElementById('offer'); if (of) of.value = S.sheetOffer;
+  const hint = document.getElementById('sheetHint'); if (hint) hint.textContent = sheetHint(list);
+  const oh = document.getElementById('offerHint'); if (oh) oh.textContent = offerHint(list);
+  const b = document.querySelector('.rvm-changes-send'); if (b) b.disabled = !(S.sheetOffer > 0);
+  wireSheet();
+}
+function sentHtml() {
+  const d = S.sent; const many = d.names.length > 1;
+  return `<div class="cs-solo-scrim" data-act="sent-close"><div class="rvm-changes-card cs-sheet cs-sent" role="dialog" aria-modal="true" aria-label="Offer sent">
+    <button type="button" class="rvm-changes-close" data-act="sent-close" title="Close" aria-label="Close"><img src="${R}assets/icons/close-16.svg" alt=""></button>
+    <div class="rvm-changes-body cs-sent-body"><span class="cs-sent-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9.5"/></svg></span>
+      <p class="cs-sent-title">${many ? `${d.names.length} offers sent` : 'Offer sent'}</p>
+      <p class="cs-sent-sub">${d.what}${d.offer ? ` at $${d.offer}${many ? ' per video' : ''}` : ''}.</p>
+      <p class="cs-sent-sub">Katie's team takes it to ${many ? 'each creator' : d.names[0]}. The answer shows on the Rights tab.</p>
+    </div>
+    <div class="rvm-changes-footer"><button type="button" class="rvm-changes-send" data-act="sent-close">Done</button></div>
+  </div></div>`;
+}
+function renderSolo(ms) {
+  if (S.sent) { document.body.insertAdjacentHTML('beforeend', `<div class="rvm cs-solo">${sentHtml()}</div>`); return; }
+  const list = S.sheetIds.map(id => ms.find(m => m.p.id === id)).filter(Boolean).filter(extendable);
+  if (!list.length) { S.sheetSolo = false; return; }
+  document.body.insertAdjacentHTML('beforeend', `<div class="rvm cs-solo">${sheetHtml(list, true)}</div>`);
+}
+
+function wireSheet() {
+  const card = document.querySelector('.cs-sheet'); if (!card) return;
+  const body = card.querySelector('.rvm-changes-body');
+  const cue = () => card.classList.toggle('is-more', body.scrollHeight - body.scrollTop - body.clientHeight > 4);
+  body.onscroll = cue; cue();
+}
+
+/* ---- demo bar: only the day; tucks into a chip under the popup so it never covers the footer ---- */
+function renderDemo() {
+  const el = document.getElementById('demo');
+  /* the bar tucks into its chip under a popup, and on the Content tab, where at laptop heights it sat on the
+     first row's three dots; the chip opens it */
+  const popup = S.sheetSolo || S.sent || S.menu || S.tab === 'content';
+  const waiting = MODELS().filter(m => m.requested);
+  if (popup && !S.demoPinned) { el.className = 'cs-demo is-min'; el.innerHTML = `<button class="cs-demo-chip" data-demo-toggle="1" title="Show the prototype controls">Demo controls ▴</button>`; return; }
+  el.className = 'cs-demo';
+  el.innerHTML = `<span class="cs-demo-group"><span class="cs-demo-k">TODAY</span>${TODAYS.map(t => `<button data-today="${t.key}" class="${FORKS.today === t.key ? 'is-on' : ''}" title="${t.hint}">${t.label}</button>`).join('')}</span><span class="cs-demo-sep"></span>
+    ${waiting.length ? `<span class="cs-demo-group"><span class="cs-demo-k">DEMO</span><button data-accept="1" title="Pretend ${waiting.length > 1 ? 'the creators say' : first(waiting[0].c) + ' says'} yes today to the ${plural(waiting.length, 'offer')} waiting for an answer">${waiting.length > 1 ? `${waiting.length} creators say yes` : `${first(waiting[0].c)} says yes`}</button></span><span class="cs-demo-sep"></span>` : ''}
+    <a href="#" data-reset title="Back to Feb 24, and forget prototype downloads and requests">↺</a>${popup ? `<button data-demo-toggle="1" title="Hide the prototype controls">▾</button>` : ''}`;
+  document.documentElement.style.setProperty('--demo-h', (document.body.classList.contains('embed') ? 0 : Math.round(el.getBoundingClientRect().height)) + 'px');
+}
+
+/* ==================================================================
+   EVENTS (one delegated handler)
+   ================================================================== */
+function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('is-on'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('is-on'), 1800); }
+function markDownloaded(id) { S.downloads[id] = FORKS.today; save('downloads', S.downloads); }
+function downloadPiece(m) { const a = document.createElement('a'); a.href = `${R}videos/${m.p.clip}.mp4`; a.download = fileName(m); document.body.appendChild(a); a.click(); a.remove(); markDownloaded(m.p.id); }
+/* several files = one .zip (Tony + Julia, Oct 2). The prototype has no real zip: it marks the files
+   downloaded and names the archive; production builds it on the server. */
+function downloadZip(list) { list.forEach(m => markDownloaded(m.p.id)); toast(`Preparing ${zipName(list.length)}`); setTimeout(render, 50); }
+function primeSheet(key, ms) {
+  /* a draft survives closing and reopening the same video; a new one starts from what the video has now */
+  if (S.sheetFor === key) return;
+  S.sheetType = ms.length && ms.every(m => m.type === 'organic') ? 'organic' : 'paid';   /* starts on what the videos hold; a mixed selection starts on the wider rights */
+  S.sheetTerm = '90'; S.sheetOffer = suggested(); S.sheetText = '';
+}
+const openerKey = () => { const a = document.activeElement; return a && a.closest && a.closest('.cs-menu') && S.menu ? `#nf .cs-kebab[data-menu="${S.menu}"]` : focusKey(a); };
+let guardUntil = 0;   /* the second click of a double-click must not fall through to what the first one uncovered */
+function openSolo(ids) {
+  S.sheetOpener = openerKey(); guardUntil = performance.now() + 500;
+  const key = ids.join(',');
+  primeSheet(key, ids.map(i => model(pieceOf(i))));
+  S.sheetIds = ids; S.sheetSolo = true; S.sheetFor = key; S.menu = null; render();
+  setTimeout(() => { const f = document.getElementById('offer'); if (f) { f.focus(); f.setSelectionRange(f.value.length, f.value.length); } }, 30);
+}
+function closeSheet() { const ta = document.getElementById('sheetText'); if (ta) S.sheetText = ta.value; const of = document.getElementById('offer'); if (of) S.sheetOffer = Number(of.value) || 0; S.sheetSolo = false; render(); }
+const pieceOf = (id) => PIECES.find(p => p.id === id);
+
+const copyText = (text, ok, bad) => (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(() => toast(ok), () => toast(bad));
+document.addEventListener('click', (e) => {
+  const t = e.target;
+  const el = (sel) => t.closest(sel);
+  let x;
+  if (e.detail > 1 && performance.now() < guardUntil) return;
+  if ((x = el('[data-demo-toggle]'))) { S.demoPinned = !S.demoPinned; renderDemo(); return; }
+  /* an open card menu closes on any click outside it, and that click does nothing else */
+  if (S.menu && !el('.cs-menu') && !el('[data-menu]')) { S.menu = null; render(); return; }
+  if ((x = el('[data-menu]'))) { e.stopPropagation(); S.menu = S.menu === x.dataset.menu ? null : x.dataset.menu; render(); return; }
+  if ((x = el('[data-rt-filter]'))) { S.rtFilter = x.dataset.rtFilter; S.sel = []; render(); return; }
+  if ((x = el('[data-rt-sort]'))) { const k = x.dataset.rtSort; S.rtSort = S.rtSort.key === k ? { key: k, dir: -S.rtSort.dir } : { key: k, dir: 1 }; render(); return; }
+  if ((x = el('[data-sel]'))) {
+    e.stopPropagation();
+    const id = x.dataset.sel;
+    if (id === 'all') { const ids = rtRows(MODELS()).filter(selectable).map(m => m.p.id); const on = ids.filter(i => S.sel.includes(i)); S.sel = on.length === ids.length ? [] : ids; }
+    else S.sel = S.sel.includes(id) ? S.sel.filter(i => i !== id) : S.sel.concat(id);
+    render(); return;
+  }
+  if ((x = el('[data-rt-extend]'))) { e.stopPropagation(); if (x.disabled) return; S.sheetSkipped = 0; openSolo(x.dataset.rtExtend.split(',')); return; }
+  if ((x = el('[data-today]'))) { setFork('today', x.dataset.today); S.sel = []; S.menu = null; S.sheetSolo = false; S.sheetIds = []; S.sheetFor = null; render(); return; }
+  if ((x = el('[data-accept]'))) {
+    const ids = MODELS().filter(m => m.requested).map(m => m.p.id);
+    ids.forEach(id => { const cur = S.ext[id] || pieceOf(id).ext; S.ext[id] = { ...cur, state: 'extended', accepted: FORKS.today }; });
+    save('ext', S.ext); toast(ids.length > 1 ? `${ids.length} offers accepted` : `${first(CREATORS[pieceOf(ids[0]).c])} said yes`); render(); return;
+  }
+  if ((x = el('[data-reset]'))) { e.preventDefault(); S.downloads = {}; S.ext = {}; save('downloads', {}); save('ext', {}); setFork('today', '2027-02-24'); S.sel = []; S.menu = null; S.sheetSolo = false; S.sheetIds = []; S.sheetFor = null; toast('Prototype state reset'); render(); return; }
+  if ((x = el('[data-tab]'))) { S.tab = x.dataset.tab; S.menu = null; render(); return; }
+  if ((x = el('[data-filter]'))) { S.filter = x.dataset.filter; render(); return; }
+  if ((x = el('[data-copylink]'))) { e.stopPropagation(); copyText('https://' + pieceOf(x.dataset.copylink).url, 'Link copied', 'Could not copy the link'); return; }
+  if ((x = el('[data-openpost]'))) { e.preventDefault(); e.stopPropagation(); toast(`Opens the post on ${PLATFORM(pieceOf(x.dataset.openpost).kind)} in a new tab`); return; }
+  if ((x = el('[data-dl]'))) {
+    /* a real download of the demo file; a row's or a menu's Download must not open anything else */
+    e.stopPropagation();
+    if (x.disabled) return;
+    const id = x.dataset.dl;
+    if (x.closest('.cs-menu')) S.sheetOpener = `#nf .cs-kebab[data-menu="${id}"]`;   /* focus goes back to the three dots */
+    if (x.tagName === 'A') markDownloaded(id); else downloadPiece(model(pieceOf(id)));
+    S.menu = null;
+    toast(`Downloading ${fileName(model(pieceOf(id)))}`); setTimeout(render, 50); return;
+  }
+  if (el('.cs-menu')) return;
+  if ((x = el('[data-prod-card]'))) { toast(`Opens the post on ${PLATFORM(pieceOf(x.dataset.prodCard).kind)} in a new tab`); return; }
+  if ((x = el('[data-row]'))) {
+    const k = x.dataset.row; const open = !S.rowsOpen.includes(k);
+    S.rowsOpen = open ? S.rowsOpen.concat(k) : S.rowsOpen.filter(i => i !== k);
+    x.setAttribute('aria-expanded', String(open));
+    const drawer = x.nextElementSibling; drawer.classList.toggle('tf-drawer--open', open); drawer.setAttribute('aria-hidden', String(!open)); drawer.toggleAttribute('inert', !open);
+    const img = x.querySelector('.am-chev img'); if (img) img.style.rotate = open ? '-90deg' : '90deg';
+    return;
+  }
+  if ((x = el('[data-term]'))) { if (x.dataset.term === S.sheetTerm) return; S.sheetTerm = x.dataset.term; syncSheet(); return; }   /* a click on the chosen option changes nothing, so a typed offer stays */
+  if ((x = el('[data-type]'))) { if (x.dataset.type === S.sheetType) return; S.sheetType = x.dataset.type; syncSheet(); return; }
+  if ((x = el('[data-act]'))) {
+    const act = x.dataset.act; const id = x.dataset.id;
+    if (act === 'bulk-clear') { S.sel = []; render(); }
+    else if (act === 'bulk-extend') { const ids = S.sel.filter(i => extendable(model(pieceOf(i)))); S.sheetSkipped = S.sel.length - ids.length; if (ids.length) openSolo(ids); }
+    else if (act === 'bulk-dl') {
+      const list = S.sel.map(i => model(pieceOf(i))).filter(usableFile);
+      if (list.length === 1) { downloadPiece(list[0]); toast(`Downloading ${fileName(list[0])}`); setTimeout(render, 50); } else if (list.length) downloadZip(list);
+    }
+    else if (act === 'bulk-links') { const urls = S.sel.map(i => pieceOf(i)).filter(q => q && q.url).map(q => 'https://' + q.url); copyText(urls.join('\n'), `${plural(urls.length, 'link')} copied`, 'Could not copy the links'); }
+    else if (act === 'dl-all') {
+      const only = x.dataset.ids ? x.dataset.ids.split(',') : [];
+      const list = MODELS().filter(m => usableFile(m) && only.includes(m.p.id));
+      if (list.length === 1) { downloadPiece(list[0]); toast(`Downloading ${fileName(list[0])}`); setTimeout(render, 50); } else if (list.length) downloadZip(list);
+    }
+    else if (act === 'sent-close' && (t === x || el('.rvm-changes-close') || el('.rvm-changes-send'))) { S.sent = null; render(); }
+    else if (act === 'sheet-close' && ((t === x && downT === x) || el('.rvm-changes-close'))) { closeSheet(); }   /* a drag that ends on the dimmed area does not close it */
+    else if (act === 'sheet-send') {
+      const of = document.getElementById('offer');
+      const offer = Number(of && of.value) || 0;
+      if (!(offer > 0)) { toast('Add an offer above $0'); if (of) of.focus(); return; }
+      const ta = document.getElementById('sheetText');
+      const ids = S.sheetIds.slice();
+      ids.forEach(i => {
+        /* what the brand already holds stays: an accepted extension is kept under `prev`, the new offer sits on top */
+        const head = S.ext[i] || pieceOf(i).ext || null;
+        const held = head && head.state === 'extended' && head.accepted && D(head.accepted) <= D(FORKS.today) ? head : undefined;
+        S.ext[i] = { state:'requested', requested: FORKS.today, term: S.sheetTerm, type: S.sheetType, offer, note: ta ? ta.value : '', prev: held };
+      });
+      /* keyboard focus lands on the video the offer was for, not on the filter pills */
+      S.sheetOpener = S.tab === 'content' ? `#nf .cs-kebab[data-menu="${ids[0]}"]` : `#nf .cs-check[data-sel="${ids[0]}"]`;
+      guardUntil = performance.now() + 500;
+      S.sent = { names: ids.map(i => first(CREATORS[pieceOf(i).c])), what: `${termOf(S.sheetTerm).of.replace(/^./, c => c.toUpperCase())} ${TYPES[S.sheetType].word} rights`, offer };
+      save('ext', S.ext); S.sheetSolo = false; S.sheetIds = []; S.sheetFor = null; S.sheetText = ''; S.sel = [];
+      render();   /* the green check page says it; no toast on top of it */
+    }
+    return;
+  }
+});
+let downT = null;   /* where the press started */
+document.addEventListener('pointerdown', (e) => { downT = e.target; document.body.classList.add('is-pointer'); }, true);
+document.addEventListener('keydown', (e) => { if (e.key === 'Tab' || e.key.startsWith('Arrow')) document.body.classList.remove('is-pointer'); }, true);
+document.addEventListener('input', (e) => {
+  if (e.target.id === 'offer') { const digits = e.target.value.replace(/[^0-9]/g, ''); if (digits !== e.target.value) e.target.value = digits; S.sheetOffer = Number(digits) || 0; const b = document.querySelector('.rvm-changes-send'); if (b) b.disabled = !(S.sheetOffer > 0); }
+  if (e.target.id === 'sheetText') S.sheetText = e.target.value;
+});
+document.addEventListener('keydown', (e) => {
+  /* Enter or Space on our own role=button / role=link elements acts like a click */
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[role="button"], [role="link"]') && !e.target.matches('button, a[href], input, textarea')) { e.preventDefault(); e.target.click(); return; }
+  if (e.key === 'Escape') { if (S.menu) { S.sheetOpener = `#nf .cs-kebab[data-menu="${S.menu}"]`; S.menu = null; render(); } else if (S.sent) { S.sent = null; render(); } else if (S.sheetSolo) closeSheet(); return; }
+  /* Tab out of an open card menu closes it */
+  if (S.menu && e.key === 'Tab') setTimeout(() => { const a = document.activeElement; if (S.menu && !(a && a.closest && a.closest('.cs-menu, [data-menu]'))) { S.menu = null; render(); } }, 0);
+  if (S.sheetSolo && e.key === 'Tab') {
+    /* keep Tab inside the sheet */
+    const scope = document.querySelector('.rvm-changes-card'); if (!scope) return;
+    const items = [...scope.querySelectorAll('a[href], button:not([disabled]), input, textarea, [tabindex="0"]')].filter(n => n.offsetParent !== null);
+    if (!items.length) return;
+    const i = items.indexOf(document.activeElement);
+    if (e.shiftKey && (i <= 0)) { e.preventDefault(); items[items.length - 1].focus(); }
+    else if (!e.shiftKey && (i === -1 || i === items.length - 1)) { e.preventDefault(); items[0].focus(); }
+    return;
+  }
+});
+render();
+</script>
+</body>
+</html>
