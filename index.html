@@ -33,6 +33,7 @@
   .links { display:flex; gap: 12px; flex-wrap: wrap; margin: 12px 0 0; font-size: 14px; }
   .links a { color: var(--accent); text-decoration: none; font-weight: 500; }
   .links a:hover { text-decoration: underline; }
+  .tablewrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; background:#fff; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
   th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--mid); }
   th { font-weight: 600; color: var(--ink); background:#f4f4f5; font-size: 13px; }
@@ -64,13 +65,13 @@
 <div class="wrap">
 
 <header class="top">
-  <div class="kicker">Brand portal · content handoff · Sep 30, 2026 · reviewed by Tony Oct 2 · updated Oct 5</div>
+  <div class="kicker">Brand portal · content handoff · Sep 30, 2026 · reviewed by Tony Oct 2 · updated Oct 6 afternoon</div>
   <h1>Ninety Days, One Surface</h1>
   <p class="lede">Where a brand downloads each creator's video, sees when its usage rights end, and offers the creator more time. The demo is Simple: 90 days of full usage, paid ads included, by contract. Most brands start from 30 days of organic rights, so the starting rights are a field per brand.</p>
   <div class="meta"><span>Prepared by Julia, with Claude</span><span>Status: Tony reviewed it Oct 2 and picked the Rights tab. Julia's Oct 5 notes are in. What is still open is listed below</span><span>Prototype: <a href="surface.html?tab=rights&today=2027-02-24" style="color:var(--accent)">surface.html</a> on port 4299</span></div>
 </header>
 
-<h2>What came out of the Oct 2 call, and Julia's Oct 5 notes</h2>
+<h2>What came out of the Oct 2 call, and Julia's notes since</h2>
 <p class="sub">Julia and Tony, Oct 2, with the prototype on Tony's screen; then Julia's notes on Oct 5. Agreed means the owner clearly said yes. Proposed means someone floated it and nobody settled it, or Claude built it on a reading. Open names who has to answer. Tony's words are in the working notes, not in this public copy.</p>
 <h3>Agreed</h3>
 <ul class="list">
@@ -89,42 +90,51 @@
   <li><span class="tag agreed">Agreed</span><b>The free-text box is a private note to the Benable team.</b> Tony, Oct 2. The creator never sees it.</li>
   <li><span class="tag agreed">Agreed</span><b>On the Content tab, a three-dot menu per card with Download and Extend rights. Extend opens the sheet on top of the page.</b> Julia's idea, Tony built on it, Oct 2: "I would probably open it."</li>
   <li><span class="tag agreed">Agreed</span><b>We send an email 7 days before rights expire.</b> Julia, Oct 5: "we need to send an email 7 days before when a piece of content expires." First agreed with Katherine at Simple on Sep 25. Settled the same day by Julia: one email per creator, only to brands with paid rights, and at Simple it goes to Katherine. See "The 7-day email" below.</li>
+  <li><span class="tag agreed">Agreed</span><b>When paid use ends before the organic rights do, the row turns "Ending soon" in the last 7 days of paid use, and the 7-day email goes out then too.</b> Julia, Oct 6: "yes". So ads do not run past the end of paid use without a warning.</li>
+  <li><span class="tag agreed">Agreed</span><b>"Extension requested" is now "Offer sent".</b> Julia, Oct 6: "yes". The brand sees "Offer sent" and "Counter-offer".</li>
+  <li><span class="tag agreed">Agreed</span><b>A row with an offer out or a counter waiting stays calm in its last 7 days.</b> Julia, Oct 6: "that's ok as is". Its status shows the offer, not the clock.</li>
+  <li><span class="tag agreed">Agreed</span><b>Offers go per creator: Extend opens all of a creator's videos, ticked, and the creator answers once for the set.</b> Julia, Oct 6: "i think the offers should be for all their content", then "yes build it but give me a toggle back and forth". The OFFERS switch in the demo bar flips between Per creator and Per video.</li>
+  <li><span class="tag agreed">Agreed</span><b>A per creator offer has one price for the creator's whole set: the ladder price ($75, $150, $200). Each video left out takes $10 off. The sheet shows the videos as mini pictures to tick in or out.</b> Julia, Oct 6: "the pre-filled number we had before should be for both videos, selecing only one should just reduce that price by $10" and "show the mini pictures".</li>
+  <li><span class="tag proposed">Proposed</span><b>How a per creator offer works.</b> Claude, Oct 6. The suggested price follows the ticks until the brand types its own amount, and never goes below $10. Each video keeps its own end date and more time follows on from it. A counter-offer, a yes or a no covers the whole set, and each row of the set shows it ("Priya asks $100 for 2 videos · you offered $75"). Ticking rows across creators gives one price box per creator.</li>
+  <li><span class="tag agreed">Agreed</span><b>A creator's videos sit next to each other in the table.</b> Julia, Oct 6: "when possible put the content from the same person next to each other". In the default order each creator takes the place of their most urgent video; a column the brand sorts by keeps its own order (Claude's reading of "when possible").</li>
+  <li><span class="tag agreed">Agreed</span><b>Every tab sits on production's grey pane.</b> Julia, Oct 6: the Rights tab like the Dashboard, and "Content is grey".</li>
+  <li><span class="tag agreed">Agreed</span><b>The 7-day email is in the first ship.</b> Julia, Oct 6: "i don't need to pass it by tony". On Oct 2 Tony had called it V2, before the Sep 25 promise to Katherine came up.</li>
   <li><span class="tag agreed">Agreed</span><b>Download stops when rights end.</b> Julia, Oct 5: "sure." Extending brings the file back.</li>
   <li><span class="tag agreed">Agreed</span><b>Simple's $100 fee cap does not clash with extension offers.</b> Julia, Oct 5: Simple already pays for 90 days of organic + paid rights, and an extension buys additional days. The contract's cap sits in the clause about securing those first 90 days.</li>
   <li><span class="tag agreed">Agreed</span><b>For Simple, everything is computed from its 90 days. The starting rights are a field per brand, flagged for engineering.</b> Julia, Oct 5. See "For engineering" below.</li>
   <li><span class="tag agreed">Agreed</span><b>The count line above the table is gone. The extend sheet is wider, has more white space, and each section's small line sits under its title, above the control.</b> Julia, Oct 5. The sheet's top is the title with what the brand holds right under it; the line about Katie's team sending the offer sits by the Send button (Claude's answer to "this top is a tad clunky").</li>
-  <li><span class="tag agreed">Agreed</span><b>The public site shows this version.</b> Julia, Oct 6: "update the public site". Published as content-handoff-study-2; the Oct 1 copy stays at content-handoff-study-1.</li>
-  <li><span class="tag agreed">Agreed</span><b>Julia's polish notes, Oct 5.</b> Download all sits on the pills line; ticking videos turns the table's header row into the selection bar, so nothing moves; filtering no longer jumps the page; the caret sits after the amount; a lock marks the private note; every hint starts from the creator's yes; after Send offer a green check page confirms what was offered.</li>
+  <li><span class="tag agreed">Agreed</span><b>Extend is the one door for more time or for paid, on every live row.</b> Tony floated it on Oct 2 ("Extend just becomes for anything"); Julia, Oct 6: "yes".</li>
+  <li><span class="tag agreed">Agreed</span><b>Ending soon is the last 7 days.</b> Julia, Oct 6: "yes 7 days". The same number Katherine was promised on Sep 25.</li>
+  <li><span class="tag agreed">Agreed</span><b>Rights are gone from the Dashboard tab.</b> Julia, Oct 6: "yes". The Dashboard stays as production.</li>
+  <li><span class="tag agreed">Agreed</span><b>More time follows on from the current end date. Adding paid starts the day the creator says yes.</b> Julia, Oct 6: "yes". Proposed (Claude, Oct 5 and 6) on top: time already bought stays, and when paid use is already running at the yes, more paid follows on from where it ends.</li>
+  <li><span class="tag agreed">Agreed</span><b>When a creator's videos end on different days, one email goes out 7 days before the first end, listing each video.</b> Julia, Oct 6: "yes".</li>
+  <li><span class="tag agreed">Agreed</span><b>Every header sorts, Status included, and there is Copy link on each row and Copy links for a selection.</b> Julia, Oct 6: "yes".</li>
+  <li><span class="tag agreed">Agreed</span><b>Creators can counter-offer. The brand sees when a creator accepts or counters, and can accept or decline a counter.</b> Julia, Oct 6: "we should show if the creator have accepted, and we should show if they've made a counter offer and let the brands accept or deny."</li>
+  <li><span class="tag agreed">Agreed</span><b>Two labels are fine: "Extend" on table rows, "Extend rights" in the Content menu and the sheet.</b> Julia, Oct 6: "that's ok".</li>
+  <li><span class="tag agreed">Agreed</span><b>Downloading files is free on the basic plan.</b> Julia, Oct 6, confirmed once the term was explained. The basic plan is the default for brands without a contract like Simple's: 30 days of organic rights per video (Tony, Oct 2: "for most people it's 30 days organic").</li>
+  <li><span class="tag agreed">Agreed</span><b>The public site shows this version.</b> Julia, Oct 6: "update the public site", then "push" after the counter-offer and per creator work. Published as content-handoff-study-2; the Oct 1 copy stays at content-handoff-study-1.</li>
+  <li><span class="tag agreed">Agreed</span><b>Julia's polish notes, Oct 5.</b> Download all sits on the pills line; ticking videos turns the table's header row into the selection bar, so nothing moves; filtering no longer jumps the page; the caret sits after the amount; a lock marks the private note; every hint starts from the creator's yes; after Send offer a green check page confirms what was offered. Oct 6: the Rights tab sits on the same grey pane as the Dashboard tab, and the green check page sits in the middle of the window.</li>
 </ul>
 <h3>Proposed, built in the prototype</h3>
 <ul class="list">
   <li><span class="tag proposed">Proposed</span><b>No video popup. Every action is on the table row.</b> Julia, Oct 5: "I don't actually think we need this at all." Claude agrees and removed it: download, copy link, open the post and extend were already on the row. What the popup alone had: playing the video in place, the caption, a meter of the days, and the date a creator said yes (now a tooltip on the status). The amber "Rights ended" strip, removed on Oct 2 after Julia's "I don't like that popup", stays out too.</li>
+  <li><span class="tag proposed">Proposed</span><b>How a counter-offer looks.</b> Claude, Oct 6. Answers show on the Rights tab, including a no. The row turns "Counter-offer" with "Priya asks $100 · you offered $75" under it and a Review button. Review opens "Counter-offer on Priya's Reel": what you offered, what the creator asks, what accepting buys, what declining leaves, then Decline or Accept. Accepting shows a green check page. After a decline the row goes back to its status with "You declined $100" under it, and Extend is open again. A Counter-offer pill and the Rights tab's dot flag it. In the demo a counter is $25 more than the offer.</li>
+  <li><span class="tag proposed">Proposed</span><b>The line under each status shows the latest answer.</b> Claude, Oct 6: "Quinn said yes Feb 15 · $75", "You accepted $100 · Feb 24" after a counter, "Emery said no Feb 24", "Offer sent Feb 24 · $75".</li>
   <li><span class="tag proposed">Proposed</span><b>Labels "Organic only" and "Organic + paid", and a "Current" tag on what the brand holds.</b> Tony's sketch, Oct 2, "or something". Built as two cards; Julia said pills, Tony said checkboxes.</li>
-  <li><span class="tag proposed">Proposed</span><b>Copy link on each row, and Copy links for a selection.</b> Tony asked "This also could grab the link, right?", Oct 2. Nobody answered.</li>
-  <li><span class="tag proposed">Proposed</span><b>The Status header sorts, like the other three.</b> Claude's reading of Tony's "oh, they are clickable ... and then maybe this one too", Oct 2.</li>
-  <li><span class="tag proposed">Proposed</span><b>Extend is the one door for more time or for paid, on every live row.</b> Tony floated "Extend just becomes for anything ... Extend rights or something", Oct 2. Showing it on every row is Claude's reading.</li>
   <li><span class="tag proposed">Proposed</span><b>Offers come to the Benable team, who text the creator for now.</b> Julia, Oct 2. The creator app comes later.</li>
-  <li><span class="tag proposed">Proposed</span><b>Ending soon is the last 7 days.</b> Claude, Oct 2 rebuild, keeping the number agreed with Katherine on Sep 25. Julia said 5 on Sep 30.</li>
-  <li><span class="tag proposed">Proposed</span><b>Rights are gone from the Dashboard tab.</b> Claude, Oct 2. Tony did not open that tab on the call.</li>
-  <li><span class="tag proposed">Proposed</span><b>More time follows on from the current end date. For a brand that starts organic, adding paid starts the day the creator says yes, and time already bought stays.</b> Claude, Oct 5. Not discussed on the call.</li>
   <li><span class="tag proposed">Proposed</span><b>A new offer never erases what the brand already holds.</b> Claude, Oct 5. An accepted extension stays in force while a second offer is out.</li>
   <li><span class="tag proposed">Proposed</span><b>1 year ends on the same date the next year.</b> Claude, Oct 5.</li>
   <li><span class="tag proposed">Proposed</span><b>Extend on several selected videos at once, and one zip for a ticked selection.</b> Claude, carried over from Sep 30. Tony did not review them.</li>
   <li><span class="tag proposed">Proposed</span><b>Small additions for Julia to accept or reverse.</b> Claude, Oct 2 and Oct 5: the type of rights under each end date, a "No end date" cell after a perpetual yes, greyed menu rows that say why, "Offer sent Feb 24 · $75" under a requested status, the one-line descriptions "Use it on your own channels." and "Also run it as a paid ad."</li>
-  <li><span class="tag proposed">Proposed</span><b>How "one per creator" works when a creator's videos end on different days.</b> Claude, Oct 5: one email, 7 days before that creator's first end date, listing each of their videos with its own end date. A basic-plan brand that later buys paid rights on a video gets the email for that video.</li>
   <li><span class="tag proposed">Proposed</span><b>Later: instant approval when a creator has already named a price, and pricing by creator size.</b> Tony, Oct 2.</li>
 </ul>
 <h3>Open, with an owner</h3>
 <ul class="list">
-  <li><span class="tag open">Open</span><b>The 7-day email: first ship or later.</b> Julia to settle with Tony, since Oct 5. Julia's notes make the email part of this study; Tony called the built version V2 on Oct 2, before the Sep 25 promise to Katherine came up.</li>
-  <li><span class="tag open">Open</span><b>What must a brand on the basic 30 days stop doing when they end?</b> Julia and Tony, since Oct 5. Nobody has decided. Earlier lines point both ways: Tony on Aug 3 spoke of organic use on social for 30 days, and a Sep 3 draft of the sales email says re-sharing on socials has no end date. The prototype no longer tells brands to take anything down.</li>
-  <li><span class="tag open">Open</span><b>Can the creator ask for more?</b> Julia, since Oct 5. The sheet says the creator "can say no or ask for more", carried over from the version Tony saw. The Aug 7 offer was take it or leave it.</li>
-  <li><span class="tag open">Open</span><b>How does the brand hear the answer, and how fast?</b> Julia and Katie's team, since Sep 30. The prototype says "The answer shows on the Rights tab" and promises no email.</li>
-  <li><span class="tag open">Open</span><b>One label for the button.</b> Julia, since Oct 2. Rows say "Extend" (Julia, Oct 1); the Content menu and the sheet say "Extend rights" (Tony, Oct 2).</li>
+  <li><span class="tag open">Open</span><b>What must a brand on the basic plan stop doing when its 30 days end?</b> Julia and Tony, since Oct 5. The basic plan is the default for brands without a contract like Simple's: 30 days of organic rights per video. Nobody has decided whether reposts on the brand's socials must come down. Earlier lines point both ways (Tony, Aug 3; a Sep 3 sales email draft). The prototype tells brands nothing.</li>
   <li><span class="tag open">Open</span><b>Paid on top of perpetual organic, for a brand that starts organic.</b> Julia and Tony, since Oct 5. The prototype offers no door for it.</li>
-  <li><span class="tag open">Open</span><b>Is file download free on the basic plan?</b> Tony, since Aug 3, when raw files sat on the paid side.</li>
   <li><span class="tag open">Open</span><b>What a single download is called and in what format.</b> Nisarg, per Julia on Oct 2.</li>
-  <li><span class="tag open">Open</span><b>Carried over from Sep 30, still open.</b> Per campaign or a library across campaigns (Julia and Tony). Whether extensions carry a Benable fee (Tony). Whether gifted-only brands see the button as an upsell (Tony). Whether <code>posted_at</code> is reliable as the clock start (Nisarg).</li>
+  <li><span class="tag open">Open</span><b>How fast Katie's team relays an offer and the creator's answer.</b> Katie's team, since Sep 30.</li>
+  <li><span class="tag open">Open</span><b>Carried over from Sep 30, still open.</b> Per campaign or a library across campaigns (Julia and Tony). Whether extensions carry a Benable fee (Tony). Whether <code>posted_at</code> is reliable as the clock start (Nisarg).</li>
 </ul>
 
 <h2>For engineering: one field per brand</h2>
@@ -136,8 +146,8 @@
     <tr><td><b>Basic plan, most brands</b></td><td>30</td><td>Organic only</td><td>Tony, Oct 2</td></tr>
   </table>
   <p>Everything on the Rights tab derives from it: each end date, Ending soon, the "Current" tag in the extend sheet, and what an extension adds to. In the prototype it is one line, <code>const BASE = { days: 90, type: 'paid' }</code>, and changing it shows another brand.</p>
-  <p style="margin-top:10px">Also new since the Sep 30 sketch further down: rights carry a type and can have no end; an extension is a chain of offers per video (sent, accepted), where an accepted one stays in force while a new one is out; Download all needs a zip; download is off once rights end.</p>
-  <p style="margin-top:10px"><b style="color:var(--ink)">The 7-day email (Julia, Oct 5).</b> A daily job, only for brands with paid rights. When a creator's rights are 7 days from expiring, the brand gets one email for that creator, listing the creator's videos and their end dates. The end date comes from the same field per brand plus any accepted extension, so an extended video is reminded 7 days before its new end. The recipient is a contact per brand: for Simple, Katherine. It would be the first brand-directed automation in the system. Whether it is in the first ship is open with Tony.</p>
+  <p style="margin-top:10px">Also new since the Sep 30 sketch further down: rights carry a type and can have no end; an extension is a chain of offers per video (sent, countered, accepted, declined by the creator, declined by the brand), where an accepted one stays in force while a new one is out; Download all needs a zip; download is off once rights end.</p>
+  <p style="margin-top:10px"><b style="color:var(--ink)">The 7-day email (Julia, Oct 5 and 6).</b> A daily job, only for brands with paid rights. When a creator's rights, or the paid use on them, are 7 days from ending, the brand gets one email for that creator, listing the creator's videos and their end dates. The end date comes from the same field per brand plus any accepted extension, so an extended video is reminded 7 days before its new end. The recipient is a contact per brand: for Simple, Katherine. It would be the first brand-directed automation in the system. It is in the first ship (Julia, Oct 6).</p>
 </div>
 
 <h2>The surface</h2>
@@ -148,6 +158,7 @@
   <a href="surface.html?tab=content&today=2027-02-24" target="_blank">Content tab, with the three-dot menu ↗</a>
   <a href="surface.html?tab=rights&today=2027-02-24&filter=ending" target="_blank">Ending soon ↗</a>
   <a href="surface.html?tab=rights&today=2027-02-24&filter=ended" target="_blank">Ended ↗</a>
+  <a href="surface.html?tab=rights&today=2027-02-24&filter=countered" target="_blank">Counter-offer ↗</a>
   <a href="surface.html?tab=rights&today=2027-02-24&filter=requested" target="_blank">Offer sent, no answer yet ↗</a>
   <a href="surface.html?tab=rights&today=2027-02-24&filter=extended" target="_blank">Extended ↗</a>
   <a href="surface.html?tab=rights&today=2026-12-10" target="_blank">Dec 10, first posts live ↗</a>
@@ -159,25 +170,27 @@
 <h3>What is on it now</h3>
 <ul class="list">
   <li><span class="tag agreed">Agreed</span><b>Dashboard and Content are production.</b> Tony, Oct 2. The Content tab has one addition: three dots on each card with Download video and Extend rights (Julia's idea). A click on the card still opens the post on the platform.</li>
-  <li><span class="tag agreed">Agreed</span><b>Rights is one table.</b> Tony, Oct 2. One row per video: posted, rights end, status, then Extend, copy link, open the post, download. Every header sorts. Filter pills by status. Tick rows to download, copy links or extend several at once. Copy link, the sorting Status header and several at once are Proposed, see above.</li>
+  <li><span class="tag agreed">Agreed</span><b>Rights is one table.</b> Tony, Oct 2. One row per video: posted, rights end, status, then Extend, copy link, open the post, download. Every header sorts. Filter pills by status. Tick rows to download, copy links or extend several at once (copy links Agreed, Julia, Oct 6; downloading or extending several at once Proposed, Claude). A counter-offer opens from the row with Review (Proposed, Claude, Oct 6).</li>
   <li><span class="tag agreed">Agreed</span><b>Download all is one zip</b> of the videos on screen whose rights are live. Julia, then Tony, Oct 2. The prototype names the zip and marks the files downloaded; it does not build a real archive. A single download is the real demo file.</li>
   <li><span class="tag agreed">Agreed</span><b>The extend sheet</b> opens from a row, a selection or a Content card. Tony, Oct 2. What the brand holds now, type of rights, how long, the offer, a private note.</li>
   <li><span class="tag proposed">Proposed</span><b>No popup.</b> Julia, Oct 5. A click on a row does nothing; the row is the whole surface.</li>
 </ul>
-<table>
+<div class="tablewrap"><table>
   <tr><th>Status</th><th>When, for Simple</th><th>What the row says</th></tr>
   <tr><td class="state">Not posted yet</td><td>Draft approved, no live post</td><td>"Starts with the post". No file yet.</td></tr>
   <tr><td class="state">Active</td><td>Day 1 to day 82 of 90</td><td>The end date, the days left and the type of rights. Extend and Download.</td></tr>
-  <tr><td class="state ending">Ending soon</td><td>The last 7 days, also on an extended video</td><td>The days-left line, the status and the Extend button turn amber.</td></tr>
+  <tr><td class="state ending">Ending soon</td><td>The last 7 days of the rights, or of paid use when organic rights run on after it</td><td>The days-left line, the status and the Extend button turn amber.</td></tr>
   <tr><td class="state ended">Ended</td><td>After the end date</td><td>"8 days ago". Download is off until the rights are extended (Julia, Oct 5); Extend stays.</td></tr>
-  <tr><td class="state req">Extension requested</td><td>After the brand sends an offer</td><td>"Offer sent Feb 24 · $75" under the status. What the brand already holds stays in force.</td></tr>
-  <tr><td class="state ext">Extended</td><td>The creator said yes</td><td>The new end date and the type of rights. Extend stays available.</td></tr>
-</table>
+  <tr><td class="state req">Offer sent</td><td>After the brand sends an offer</td><td>"Feb 24 · $75 · no answer yet" under the status. What the brand already holds stays in force.</td></tr>
+  <tr><td class="state req">Counter-offer</td><td>The creator asks for a different price</td><td>"Priya asks $100 · you offered $75" and a Review button: Decline or Accept.</td></tr>
+  <tr><td class="state ext">Extended</td><td>The creator said yes, or the brand accepted a counter</td><td>The new end date and the type of rights, with "Quinn said yes Feb 15 · $75" or "You accepted $100 · Feb 24" under the status. Extend stays available.</td></tr>
+  <tr><td class="state">After a no</td><td>The creator said no, or the brand declined a counter</td><td>Back to its status, with "Emery said no Feb 24" or "You declined $100 · Feb 24" under it. Extend is open again.</td></tr>
+</table></div>
 
 <h2>The 7-day email</h2>
-<p class="sub">Needed (Julia, Oct 5; first agreed with Katherine at Simple on Sep 25). Sent 7 days before rights expire. One email per creator. Only brands with paid rights. At Simple it goes to Katherine. It does not exist in production: no brand-directed automation exists today. The wording is Proposed (Claude, Sep 30, updated Oct 5).</p>
+<p class="sub">Needed (Julia, Oct 5; first agreed with Katherine at Simple on Sep 25). Sent 7 days before rights expire, or 7 days before paid use ends when organic rights run on after it (Julia, Oct 6). One email per creator. Only brands with paid rights. At Simple it goes to Katherine. It does not exist in production: no brand-directed automation exists today. The wording is Proposed (Claude, Sep 30, updated Oct 5).</p>
 <div class="email">
-  <div class="hd">From Benable · to Katherine at Simple <b>Quinn's videos: usage rights end in 7 days</b></div>
+  <div class="hd">From Benable · to Katherine at Simple <b>Quinn's videos: usage rights start ending Feb 16</b></div>
   <div class="bd">
     <p>Hi Katherine,</p>
     <p style="margin-top:10px">Your usage rights on Quinn Hale's videos for Repair+ Holiday Hydration are about to end:</p>
@@ -213,7 +226,7 @@
 
 <h3>The states, as built on Sep 30 (90-day clock)</h3>
 <p class="sub">Derived from two dates per video: the day the post went live, and today. Nothing is stored beyond that except extension requests.</p>
-<table>
+<div class="tablewrap"><table>
   <tr><th>State</th><th>When</th><th>Card line</th><th>Popup heading and footer</th></tr>
   <tr><td class="state">Not posted yet</td><td>Draft approved, no live post</td><td>Rights start when the post goes live</td><td>"Waiting for the post". No file yet.</td></tr>
   <tr><td class="state">Ready</td><td>Day 0 to day 82</td><td>Rights until Mar 5 · 9 days left</td><td>"Ready to use". Extend · <b>Download video</b></td></tr>
@@ -221,7 +234,7 @@
   <tr><td class="state ended">Ended</td><td>Day 91 on</td><td>Rights ended Feb 16</td><td>"Rights ended Feb 16", asks the brand to pause ads still running it. Download is gone; the one button is <b>Extend</b>. In V0 it asks Katie's team for a price; in V1 the brand picks a duration and an offer.</td></tr>
   <tr><td class="state req">Extension requested</td><td>After the brand sends</td><td>extension requested</td><td>"Extension requested". Katie's team is asking the creator, we email when there's an answer. The rail shows the request date.</td></tr>
   <tr><td class="state ext">Extended</td><td>Creator accepted</td><td><span style="color:var(--green)">Extended</span> · rights until May 20</td><td>"Extended". The rights list gains "Extended by 90 days, Quinn agreed Feb 15". Download is back. Extend again stays available.</td></tr>
-</table>
+</table></div>
 
 <h3>What was agreed, proposed, or open on Sep 30</h3>
 <ul class="list">
@@ -231,12 +244,12 @@
   <li><span class="tag agreed">Agreed</span><b>The raw file is the review upload, "just the video".</b> Tony, Sep 8. The file already reaches the portal; only the download step is missing.</li>
   <li><span class="tag asked">Open ask</span><b>Download raw files in the portal, copy codes easily.</b> Chiara at MD via Katie, Sep 18. Codes are not in this round: no field collects them yet.</li>
   <li><span class="tag agreed">Agreed</span><b>Download disappears when rights end.</b> Proposed by Claude on Sep 30; Julia, Oct 5: "sure."</li>
-  <li><span class="tag proposed">Proposed</span><b>Extend is offered before the end too, not only after.</b> Claude, so the new period follows on without a gap. After the end, the new period starts at acceptance.</li>
+  <li><span class="tag agreed">Agreed</span><b>Extend is offered before the end too, not only after.</b> Julia, Oct 6 (Extend on every live row). Sep 30 text: Claude, so the new period follows on without a gap. After the end, the new period starts at acceptance.</li>
   <li><span class="tag open">Dropped</span><b>The calendar filters, it does not navigate.</b> Dropped by Tony, Oct 2 ("overkill"). Sep 30: Claude. A click on a day narrows the grid to that day's videos; no separate calendar page.</li>
   <li><span class="tag open">Replaced</span><b>Brand-facing price line "usually $50 to $100 per video".</b> Replaced Oct 2 by the prefilled offer and the line under it. Sep 30: Claude, from the Aug 7 manual offer ($75 flat) and the contract cap ($100, pass-through, no markup). Tony prices extensions; this line is a placeholder until he does.</li>
   <li><span class="tag agreed">Agreed</span><b>V0 or V1: the offer version (V1).</b> Tony, Oct 2. Sep 30: V0 is one route and one Slack ping to Katie's team. V1 needs a request object, a creator-side accept screen and a payout, but it turns the gate into the upsell Tony framed on Aug 3.</li>
   <li><span class="tag open">Open</span><b>Per campaign or a library.</b> Julia and Tony. The prototype now sits in its own Rights tab on the campaign (Tony, Oct 2). Chiara's benchmark (Social Cat) is one Content section across campaigns that survives cancellation.</li>
-  <li><span class="tag open">Open</span><b>Who may download.</b> Tony, since Aug 3: raw files on the paid side. Simple, Just Juice and PCA hold rights by contract. For gifted-only brands the same button could read "Get this file with 90 day ad rights" (concept G, Sep 21).</li>
+  <li><span class="tag agreed">Answered</span><b>Who may download.</b> Oct 6, Julia: download is free on the basic plan. Sep 30 text: Tony, since Aug 3: raw files on the paid side. Simple, Just Juice and PCA hold rights by contract. For gifted-only brands the same button could read "Get this file with 90 day ad rights" (concept G, Sep 21).</li>
 </ul>
 
 <h3>What the field does</h3>
@@ -252,13 +265,13 @@
 <ul class="list">
   <li><b>Rule 1.</b> The download sits next to the video, one icon or button, everywhere. Nobody hides it behind a menu except Billo's crop menu.</li>
   <li><b>Rule 2.</b> Clocks are shown as a status word plus a date or a day count, never a calendar. On Sep 30 a calendar looked like open lane; it was dropped on Oct 2.</li>
-  <li><b>Rule 3.</b> Expiry reminders exist as workflows (Aspire) or "automatic notifications" (Insense) but no one documents the lead time. On Sep 30 the plan was to say "7 days before" on the surface itself; the email is now a later version.</li>
+  <li><b>Rule 3.</b> Expiry reminders exist as workflows (Aspire) or "automatic notifications" (Insense) but no one documents the lead time. On Sep 30 the plan was to say "7 days before" on the surface itself; the email is now in the first ship (Julia, Oct 6).</li>
   <li><b>Rule 4.</b> Extension is a re-request (Billo "Extend permissions", Insense "create a new campaign"). None of them price it in the UI. V1 would be first.</li>
 </ul>
 
 
 <h3>For engineering, as sketched on Sep 30</h3>
-<p class="sub">PROPOSED, Claude. Grounded in the Sep 21 backend map (HEAD 35eb286b3). Not sized with Nisarg. Since Oct 2: the first ship is the offer version (the right-hand card), Download all needs a zip, rights need a type (organic, or organic plus paid) and a no-end option, and the reminder job is needed (Julia, Oct 5) though Tony placed its build later.</p>
+<p class="sub">PROPOSED, Claude. Grounded in the Sep 21 backend map (HEAD 35eb286b3). Not sized with Nisarg. Since Oct 2: the first ship is the offer version (the right-hand card), Download all needs a zip, rights need a type (organic, or organic plus paid) and a no-end option, and the reminder job is in the first ship (Julia, Oct 6).</p>
 <div class="two">
   <div class="card">
     <h3 style="margin-top:0">V0 (download, clock, ask Katie's team)</h3>
@@ -287,9 +300,9 @@
 <p class="sub">The current list is "Open, with an owner" near the top. Four of these have closed: the offer version (Tony, Oct 2), the surface, which is the Rights tab (Tony, Oct 2), the email lead time (7 days, Julia, Oct 5), and download after the end date (it stops, Julia, Oct 5).</p>
 <ul class="list">
   <li><b>Julia:</b> Per campaign or a library across campaigns. Closed since: V0 or V1 (the offer version, Tony, Oct 2), the email lead time (7 days, Julia, Oct 5), and download after the end date (it stops, Julia, Oct 5).</li>
-  <li><b>Tony:</b> the extension price posture (creator-set, $75 flat, or a range; since Oct 2 the offer prefills $75 / $150 / $200) and whether extensions carry a Benable fee. Whether gifted-only brands see the button locked as an upsell.</li>
-  <li><b>Katie:</b> how a request reaches her (Slack ping, admin queue) and the SLA for an answer. Who pauses ads on the brand side when rights end.</li>
-  <li><b>Nisarg:</b> effort on the download route, rights fields, the reminder job (needed, Julia, Oct 5; Tony placed the build in a later version on Oct 2). Whether <code>posted_at</code> from the creator's submission is reliable enough as the clock start.</li>
+  <li><b>Tony:</b> the extension price posture (creator-set, $75 flat, or a range; since Oct 2 the offer prefills $75 / $150 / $200) and whether extensions carry a Benable fee. Whether gifted-only brands see the button locked as an upsell (answered Oct 6, Julia: download is free on the basic plan).</li>
+  <li><b>Katie's team:</b> how a request reaches them (Slack ping, admin queue) and the time to an answer. Who pauses ads on the brand side when rights end.</li>
+  <li><b>Nisarg:</b> effort on the download route, rights fields, the reminder job (in the first ship, Julia, Oct 6). Whether <code>posted_at</code> from the creator's submission is reliable enough as the clock start.</li>
   <li><b>Katherine (Simple):</b> whether the 7-day email should go to her, her ads team, or both. Closed: Katherine (Julia, Oct 5).</li>
 </ul>
 

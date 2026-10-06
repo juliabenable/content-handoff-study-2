@@ -305,6 +305,42 @@ body.is-pointer .nf .cs-panel :focus-visible, body.is-pointer .rvm :focus-visibl
 .rvm-changes-card.cs-sheet .rvm-changes-title { margin: 0; padding-right: 40px; text-align: left; font-size: 18px; line-height: 24px; letter-spacing: -0.2px; }
 /* footer rhythm: 20 above the button, the caption 10 under it, 20 below (the base rule's 16px gap is switched off) */
 .rvm-changes-card.cs-sheet .rvm-changes-footer { flex: none; margin-top: 0; gap: 0; background: #fff; padding: 20px 28px 20px; border-top: 1px solid #e3e3e3; }
+.cs-counter { margin-top: 20px; border: 1px solid #e3e3e3; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 2px; text-align: left; }
+.cs-counter-k { font-size: 13px; font-weight: 600; color: #52525b; }
+.cs-counter-v { font-size: 28px; line-height: 34px; font-weight: 700; color: #1c1c1c; letter-spacing: -0.4px; font-variant-numeric: tabular-nums; }
+.cs-counter-s { font-size: 13px; color: #717171; }
+.cs-counter-hint { display: block; margin-top: 12px; }
+.cs-counter-acts { display: grid; grid-template-columns: 1fr 1.6fr; gap: 10px; width: 100%; }
+.cs-counter-acts .cs-ghost { display: inline-flex; align-items: center; justify-content: center; height: 44px; border: 1px solid #d4d4d8; border-radius: 12px; background: #fff; color: #1c1c1c; font: 500 16px/1 Inter, sans-serif; cursor: pointer; }
+.cs-counter-acts .cs-ghost:hover { background: #f7f7f8; }
+.cs-sheet-status.is-offer i { background: #896bd9; }
+/* the green check page and the counter-offer sheet do not change height, so they sit in the middle of the window (Julia, Oct 6) */
+.rvm.cs-solo .cs-solo-scrim.is-center { align-items: center; padding: 24px; }
+.cs-picks { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+.cs-pickt { width: 84px; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 0; border: 0; background: none; text-align: left; cursor: pointer; font: inherit; color: inherit; }
+.cs-pickt-img { position: relative; width: 84px; height: 105px; border-radius: 10px; overflow: hidden; background: #eee; margin-bottom: 4px; box-shadow: 0 0 0 1px #e3e3e3; }
+.cs-pickt.is-on .cs-pickt-img { box-shadow: 0 0 0 2px #7a5cfa; }
+.cs-pickt-img img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; display: block; transition: opacity .15s ease, filter .15s ease; }
+.cs-pickt-img, .cs-pickt-box { transition: box-shadow .15s ease, background-color .15s ease, border-color .15s ease; }
+.cs-pickt:not(.is-on) .cs-pickt-img img { opacity: .4; filter: grayscale(.6); }
+.cs-pickt-box { position: absolute; top: 6px; right: 6px; width: 20px; height: 20px; border-radius: 6px; background: rgba(255,255,255,.95); border: 1.5px solid #c6c6c6; display: grid; place-items: center; color: #fff; font-size: 11px; line-height: 1; }
+.cs-pickt.is-on .cs-pickt-box { background: #7a5cfa; border-color: #7a5cfa; }
+.cs-pickt-k { font-size: 12px; font-weight: 600; line-height: 16px; color: #1c1c1c; }
+.cs-pickt-s { font-size: 11px; line-height: 14px; color: #717171; }
+.cs-offers { display: flex; flex-direction: column; gap: 8px; }
+.cs-offer-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cs-offer-who { font-size: 13px; color: #52525b; }
+.cs-offer-who b { color: #1c1c1c; font-weight: 600; }
+.cs-offer-row .cs-money { width: 140px; height: 40px; flex: none; }
+.cs-sheet-list.is-pick li { align-items: center; justify-content: flex-start; }
+.cs-sheet-list.is-pick li span { margin-left: auto; }
+.cs-pick { width: 18px; height: 18px; flex: none; border-radius: 5px; border: 1.5px solid #c6c6c6; background: #fff; color: #fff; display: grid; place-items: center; font-size: 11px; line-height: 1; cursor: pointer; padding: 0; }
+.cs-pick[aria-checked="true"] { background: #7a5cfa; border-color: #7a5cfa; }
+.cs-sheet-hint.cs-total { color: #3f3f46; font-weight: 600; }
+.cs-sheet-hint.cs-total:empty { display: none; }
+.cs-counter-out { margin-top: 12px; background: none; padding: 0; gap: 4px; }
+.cs-counter-out li { justify-content: flex-start; gap: 8px; }
+.cs-counter-out li span { text-align: left; color: #52525b; }
 .cs-sent-body { align-items: center !important; text-align: center; padding: 44px 32px 28px !important; }
 .cs-sent-check { width: 56px; height: 56px; border-radius: 999px; background: #17a34a; display: grid; place-items: center; }
 .cs-sent-check svg { width: 28px; height: 28px; }
@@ -320,6 +356,8 @@ body.is-pointer .nf .cs-panel :focus-visible, body.is-pointer .rvm :focus-visibl
 .cs-money:focus-within { border-color: #1c1c1c; }
 .cs-money input { width: 100%; border: 0; outline: 0; font: 500 16px/1 Inter, sans-serif; color: #1c1c1c; background: transparent; font-variant-numeric: tabular-nums; }
 .cs-sheet-hint { font-size: 12px; color: #717171; line-height: 16px; }
+/* the line under How long always takes two lines, so the length chips never move when it changes (Julia, Oct 6) */
+#sheetHint { min-height: 32px; }
 .cs-sheet-label + .cs-sheet-hint { margin-top: -4px; }   /* the small line belongs to its title */
 .rvm-changes-card.cs-sheet .rvm-changes-textarea { margin: 0; box-sizing: border-box; min-height: 66px; height: 66px; max-height: 180px; resize: vertical; padding: 12px 14px; border: 1px solid #e3e3e3; border-radius: 10px; font-size: 14px; line-height: 20px; width: 100%; }
 .rvm-changes-card.cs-sheet .rvm-changes-textarea:focus { border-color: #1c1c1c; }
@@ -347,7 +385,11 @@ body.embed .cs-demo { display: none; }
 
 
 /* ---- Rights tab: every video and its end date in one table (Creators-card anatomy) ---- */
-.nf .stage-top-card.cs-panel--rights { padding: 24px 0; }
+/* every tab sits on production's grey pane (Julia, Oct 6: Rights like the Dashboard, and "Content is grey") */
+.nf .stage-primary-surface:has(> .cs-panel--rights), .nf .stage-primary-surface:has(> .cs-panel--content) { gap: 0; }
+.nf .cs-panel--content > .cs-wrap.cs-wrap--prod { padding: 0; }   /* the pane carries the spacing, as on Rights */
+.nf .stage-top-card.cs-panel--content { background: #f9fafb; border: 0; border-radius: 0; box-shadow: none; margin: 0 -20px -140px; padding: 24px 20px 148px; min-height: calc(100vh - 187px); }
+.nf .stage-top-card.cs-panel--rights { background: #f9fafb; border: 0; border-radius: 0; box-shadow: none; margin: 0 -20px -140px; padding: 24px 20px 148px; min-height: calc(100vh - 187px); }
 .nf .cs-rt-tools { display: flex; align-items: center; gap: 8px; flex: none; }
 /* the bar keeps one height whether it shows the summary or the selection, so the table never jumps under the pointer */
 .nf .cs-rt-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 0; flex-wrap: nowrap; min-height: 40px; }
@@ -397,6 +439,10 @@ body.embed .cs-demo { display: none; }
 .nf .cs-rt-status.is-requested { color: #5b3fd6; }
 .nf .cs-rt-status.is-requested i { background: #fff; box-shadow: inset 0 0 0 2px #896bd9; }
 .nf .cs-rt-status.is-extended { color: #15803d; }
+.nf .cs-rt-status.is-countered { color: #5b3fd6; }
+.nf .cs-rt-status.is-countered i { background: #896bd9; }
+.nf .cs-extend.is-review { background: #5b3fd6; border-color: #5b3fd6; color: #fff; }
+.nf .cs-extend.is-review:hover { background: #4a31b8; border-color: #4a31b8; }
 .nf .cs-rt-status.is-pending { color: #767676; }
 .nf .cs-rt-status.is-pending i { background: #e3e3e3; }
 .nf .cs-rt-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
@@ -545,10 +591,17 @@ body.embed .cs-demo { display: none; }
   .nf .cs-rt-cols > :nth-child(3), .nf .cs-rt-row > :nth-child(3) { display: none; }   /* Posted folds away first */
   .nf .cs-bigday { min-height: 84px; padding: 4px 4px 6px; }
 }
-/* on a 1280 window the seven pills and Download all still share one line */
-@media (max-width: 1340px) {
+/* the pills and Download all share one line on laptop widths (a Counter-offer pill makes eight) */
+@media (max-width: 1600px) {
   .nf .cs-panel--rights .cs-filters { gap: 6px; }
   .nf .cs-panel--rights .cs-filter { padding: 0 10px 0 12px; gap: 6px; }
+}
+@media (max-width: 1420px) {
+  .nf .cs-panel--rights > .cs-toolbar { gap: 10px; }
+  .nf .cs-panel--rights .cs-filters { gap: 5px; }
+  .nf .cs-panel--rights .cs-filter { font-size: 13px; padding: 0 7px 0 10px; gap: 5px; height: 34px; }
+  .nf .cs-panel--rights .cs-filter .cs-count { min-width: 20px; height: 20px; font-size: 11px; padding: 0 5px; }
+  .nf .cs-panel--rights > .cs-toolbar > .cs-ghost { height: 34px; padding: 0 12px; font-size: 13px; gap: 6px; }
 }
 @media (max-width: 900px) {
   .nf .cs-wrap { grid-template-columns: minmax(0, 1fr); }
@@ -701,7 +754,7 @@ const PIECES = [
     url:'tiktok.com/@priya.skin/video/7470…' },
   { id:'p2', c:'priya',  kind:'IG Reel',  clip:'emery-2',  posted:'2026-12-09', size:'39 MB',
     cap:['the hydration check, day 14 💧','#simplepartner'],
-    url:'instagram.com/reel/DAc…' },
+    url:'instagram.com/reel/DAc…', ext:{ state:'countered', requested:'2027-02-20', countered:'2027-02-22', term:'90', type:'paid', offer:75, counter:100 } },
   { id:'l1', c:'lena',   kind:'TikTok',   clip:'jasper-1', posted:'2026-12-14', approved:'2026-12-05', size:'61 MB',
     cap:['winter skin, meet Repair+ ❄️ a gentle glow up','#simplepartner'],
     url:'tiktok.com/@lenaortiz/video/7478…' },
@@ -722,18 +775,49 @@ const TODAYS = [
   { key:'2027-04-02', label:'Apr 2',  hint:'most ended' },
 ];
 const qs = new URLSearchParams(location.search);
-function load(k, d) { try { const v = JSON.parse(localStorage.getItem('chs-v4') || '{}')[k]; return v === undefined ? d : v; } catch { return d; } }
-function save(k, v) { try { const o = JSON.parse(localStorage.getItem('chs-v4') || '{}'); o[k] = v; localStorage.setItem('chs-v4', JSON.stringify(o)); } catch {} }
+function load(k, d) { try { const v = JSON.parse(localStorage.getItem('chs-v6') || '{}')[k]; return v === undefined ? d : v; } catch { return d; } }
+function save(k, v) { try { const o = JSON.parse(localStorage.getItem('chs-v6') || '{}'); o[k] = v; localStorage.setItem('chs-v6', JSON.stringify(o)); } catch {} }
 const qDay = qs.get('today');
 const FORKS = { today: (qDay && !isNaN(D(qDay))) ? qDay : load('today', '2027-02-24') };
+/* OFFERS: per creator (Julia, Oct 6: "the offers should be for all their content") or per video, toggled in the demo bar */
+FORKS.offer = ['video','creator'].includes(qs.get('offer')) ? qs.get('offer') : load('offer', 'creator');
+const perCreator = () => FORKS.offer === 'creator';
+/* the demo's waiting counter-offer: on Priya's Reel alone per video, on both of Priya's videos per creator */
+const SEED_P1 = PIECES.find(q => q.id === 'p1'), SEED_P2 = PIECES.find(q => q.id === 'p2');
+function applySeed() {
+  if (perCreator()) { SEED_P1.ext = { state:'countered', requested:'2027-02-20', countered:'2027-02-22', term:'90', type:'paid', offer:75, counter:100, group:'seed-priya' }; SEED_P2.ext = { ...SEED_P2.ext, offer:75, counter:100, group:'seed-priya' }; }
+  else { delete SEED_P1.ext; const { group, ...rest } = SEED_P2.ext; SEED_P2.ext = { ...rest, offer:75, counter:100 }; }
+}
+applySeed();
 if (qs.has('embed')) document.body.classList.add('embed');
 /* a day changed from the demo bar wins over the URL on the next reload */
 function setFork(k, v) { FORKS[k] = v; save(k, v); try { const u = new URL(location.href); if (u.searchParams.has(k)) { u.searchParams.delete(k); history.replaceState(null, '', u); } } catch {} }
 
 /* session state: downloads + extension requests made in this prototype */
-const S = { downloads: load('downloads', {}), ext: load('ext', {}), filter:'all', tab: ['dashboard','content','rights'].includes(qs.get('tab')) ? qs.get('tab') : 'rights', sheetFor:null, sheetType:'organic', sheetTerm:'90', sheetOffer:75, sheetText:'', demoPinned:false, rtFilter: ['ending','active','extended','requested','ended','pending'].includes(qs.get('filter')) ? qs.get('filter') : 'all', rtSort:{ key:'attention', dir:1 }, sel:[], sheetIds:[], sheetSolo:false, sheetSkipped:0, rowsOpen:[], sheetOpener:null, menu:null };
+const S = { counterFor: null, sent: null, sheetOff: [], sheetOffers: {}, offerTouched: false, downloads: load('downloads', {}), ext: load('ext', {}), filter:'all', tab: ['dashboard','content','rights'].includes(qs.get('tab')) ? qs.get('tab') : 'rights', sheetFor:null, sheetType:'organic', sheetTerm:'90', sheetOffer:75, sheetText:'', demoPinned:false, rtFilter: ['countered','ending','active','extended','requested','ended','pending'].includes(qs.get('filter')) ? qs.get('filter') : 'all', rtSort:{ key:'attention', dir:1 }, sel:[], sheetIds:[], sheetSolo:false, sheetSkipped:0, rowsOpen:[], sheetOpener:null, menu:null };
 
 /* the requests on one video, oldest first; an accepted one stays reachable under `prev` when a new offer goes out */
+function heldOf(id) { let e = S.ext[id] || pieceOf(id).ext || null; while (e && !(e.state === 'extended' && e.accepted && D(e.accepted) <= D(FORKS.today))) e = e.prev || null; return e || undefined; }
+/* what the rights would be if the creator said yes today: the sheet's promise is computed by the same model */
+function preview(m, type, termKey) {
+  const id = m.p.id, had = Object.prototype.hasOwnProperty.call(S.ext, id), keep = S.ext[id];
+  S.ext[id] = { state: 'extended', requested: FORKS.today, accepted: FORKS.today, term: termKey, type, offer: 0, prev: heldOf(id) };
+  try { return model(pieceOf(id)); } finally { if (had) S.ext[id] = keep; else delete S.ext[id]; }
+}
+/* what the rights look like after a yes, in words: paid and organic ends said apart when they differ */
+function outcome(r, type) {
+  const paid = r.periods.filter(q => q.type === 'paid'), org = r.periods.filter(q => q.type === 'organic');
+  const paidEnd = paid.length ? paid[paid.length - 1].end : undefined;
+  if (r.perpetual && (type === 'organic' || !org.length)) return paidEnd !== undefined && paidEnd != null && type === 'organic' ? `organic rights have no end date. Paid use still ends ${fmtY(paidEnd)}.` : 'the rights have no end date.';
+  if (type === 'paid') return paidEnd == null ? 'paid use has no end date.' : `paid use runs to ${fmtY(paidEnd)}.${r.ends > paidEnd ? ` Organic rights then run to ${fmtY(r.ends)}.` : ''}`;
+  return paidEnd && paidEnd < r.ends ? `organic rights run to ${fmtY(r.ends)}. Paid use still ends ${fmtY(paidEnd)}.` : `rights run to ${fmtY(r.ends)}.`;
+}
+/* the videos one offer covered, when it was sent to a creator for several videos at once */
+function mates(m) { return m.group ? MODELS().filter(x => x.group === m.group) : [m]; }
+const sumOf = (list, f) => list.reduce((t, x) => t + (Number(f(x)) || 0), 0);
+const andList = (a) => a.length < 2 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a[a.length - 1]}`;
+/* in per creator mode, Extend on one video opens the creator's whole set, that video first */
+function creatorSet(id) { const c = PIECES.find(q => q.id === id).c; return [id, ...PIECES.filter(q => q.c === c && q.id !== id).map(q => q.id).filter(i => extendable(model(pieceOf(i))))]; }
 function extChain(p) { const chain = []; for (let e = S.ext[p.id] || p.ext || null; e; e = e.prev) chain.unshift(e); return chain; }
 /* ---- derived model for one piece at "today" ---- */
 function model(p) {
@@ -748,27 +832,37 @@ function model(p) {
      A new offer never erases what is already held: sheet-send keeps the accepted one under `prev`. */
   const periods = [{ start: posted, end: m.ends0, type: BASE.type }];
   const accepted = [];
-  let pendingReq = null;
+  let pendingReq = null, lastAnswer = null;
+  /* an offer moves through: sent (requested) > the creator answers (countered, extended, declined)
+     > on a counter the brand answers (extended at the counter price, or refused). Julia, Oct 6. */
+  const on = (d) => d && D(d) <= today;
   extChain(p).forEach(raw => {
     if (raw.requested && D(raw.requested) > today) return;                       /* not yet happened at this "today" */
     const t = termOf(raw.term);
     const e = { ...raw, type: raw.type || BASE.type, days: t.days, t };
-    if (!(e.state === 'extended' && e.accepted && D(e.accepted) <= today)) { pendingReq = { ...e, state: 'requested' }; return; }
-    const acc = D(e.accepted), prev = periods[periods.length - 1];
-    if (prev.end == null) return;                                                 /* nothing follows rights with no end date */
-    /* PROPOSED (Claude, Oct 5; OPEN with Julia and Tony): adding paid starts the day the creator says yes.
-       More time on the same type follows on from the current end, or starts at the yes when that end has passed. */
-    const liveAtYes = acc <= prev.end;
-    const addsPaid = e.type === 'paid' && prev.type !== 'paid';
-    if (addsPaid && liveAtYes) {
-      /* paid takes over from the day of the yes. Whatever was already bought beyond the paid term stays: it runs on afterwards. */
-      const heldEnd = prev.end, heldType = prev.type;
-      periods.forEach(q => { if (q.end > acc) q.end = q.start > acc ? q.start : acc; });
-      const paidEnd = addTerm(acc, t);
-      periods.push({ start: acc, end: paidEnd, type: 'paid' });
-      if (paidEnd != null && heldEnd > paidEnd) periods.push({ start: paidEnd, end: heldEnd, type: heldType });
+    const yes = e.state === 'extended' && on(e.accepted);
+    if (!yes) {
+      if (e.state === 'refused' && on(e.refused)) { pendingReq = null; lastAnswer = { kind: 'refused', date: D(e.refused), amount: e.counter, group: e.group }; return; }
+      if (e.state === 'declined' && on(e.declined)) { pendingReq = null; lastAnswer = { kind: 'declined', date: D(e.declined), group: e.group }; return; }
+      pendingReq = { ...e, state: on(e.countered) ? 'countered' : 'requested' }; lastAnswer = null; return;
+    }
+    pendingReq = null; lastAnswer = { kind: 'yes', date: D(e.accepted), amount: e.offer, countered: !!e.counter, group: e.group };
+    const acc = D(e.accepted), last = periods[periods.length - 1];
+    if (last.end == null) return;                                                 /* nothing follows rights with no end date */
+    /* AGREED (Julia, Oct 6): more time follows on from the current end; adding paid starts the day the creator
+       says yes. When paid use is already running at the yes, more paid follows on from where it ends. */
+    const liveAtYes = acc <= last.end;
+    if (e.type === 'paid' && liveAtYes) {
+      let from = acc;
+      let j = periods.findIndex(q => q.type === 'paid' && q.start <= acc && q.end > acc);
+      if (j >= 0) { from = periods[j].end; while (j + 1 < periods.length && periods[j + 1].type === 'paid' && +periods[j + 1].start === +periods[j].end) { j++; from = periods[j].end; } }
+      const heldEnd = last.end, heldType = last.type;
+      periods.forEach(q => { if (q.end > from) q.end = q.start > from ? q.start : from; });   /* time already bought stays: */
+      const paidEnd = addTerm(from, t);
+      periods.push({ start: from, end: paidEnd, type: 'paid' });
+      if (paidEnd != null && heldEnd > paidEnd) periods.push({ start: paidEnd, end: heldEnd, type: heldType });   /* it runs on after the paid term */
     } else {
-      const start = liveAtYes ? prev.end : acc;
+      const start = liveAtYes ? last.end : acc;
       periods.push({ start, end: addTerm(start, t), type: e.type, late: !liveAtYes });
     }
     for (let i = periods.length - 1; i > 0; i--) if (periods[i].end != null && periods[i].end <= periods[i].start) periods.splice(i, 1);   /* drop anything the cut left empty */
@@ -788,10 +882,17 @@ function model(p) {
   m.typeEnds = periods[k].end == null ? FAR : periods[k].end;
   m.nextType = k + 1 < periods.length ? periods[k + 1].type : null;
   m.ext = pendingReq || m.acc;
-  m.requested = !!pendingReq;
+  m.requested = !!pendingReq && pendingReq.state === 'requested';
+  m.countered = !!pendingReq && pendingReq.state === 'countered';
+  m.answer = lastAnswer;
+  m.group = pendingReq ? pendingReq.group || null : lastAnswer ? lastAnswer.group || null : null;
   m.daysLeft = diffDays(m.ends, today);
   m.dayOf = diffDays(today, posted);
-  m.state = m.daysLeft < 0 ? 'ended' : (m.daysLeft <= ENDING_DAYS ? 'ending' : 'active');
+  /* AGREED (Julia, Oct 6): when paid use ends before the organic rights do, the row turns Ending soon
+     in the last 7 days of paid use, and the 7-day email goes out, so ads do not run past the end of paid use */
+  m.paidLeft = m.type === 'paid' && m.nextType && m.nextType !== 'paid' && m.typeEnds !== FAR ? diffDays(m.typeEnds, today) : null;
+  m.paidEnding = m.paidLeft != null && m.paidLeft >= 0 && m.paidLeft <= ENDING_DAYS;
+  m.state = m.daysLeft < 0 ? 'ended' : (m.daysLeft <= ENDING_DAYS || m.paidEnding ? 'ending' : 'active');
   /* the meter counts days of rights, never the gap between an end and a late yes */
   const finite = periods.filter(q => q.end != null);
   const len = (q) => Math.max(diffDays(q.end, q.start), 0);
@@ -802,7 +903,7 @@ function model(p) {
   const dl = (own && D(own) <= today ? own : null) || (p.dl && D(p.dl) <= today ? p.dl : null);
   m.downloaded = dl ? D(dl) : null;
   /* the clock wins inside the last days: an extended video about to end says Ending soon */
-  m.chip = m.requested ? 'requested' : (m.extended && m.state === 'active') ? 'extended' : m.state;
+  m.chip = m.countered ? 'countered' : m.requested ? 'requested' : (m.extended && m.state === 'active') ? 'extended' : m.state;
   m.tone = (m.extended && m.state === 'active') ? 'extended' : m.state;
   return m;
 }
@@ -861,7 +962,7 @@ const HEADER = `<header class="workflow-header"><a class="workflow-header-backli
    RENDER (keeps scroll and keyboard focus across re-renders)
    ================================================================== */
 const root = document.getElementById('nf');
-const FOCUS_ATTRS = ['data-prod-card','data-accept','data-filter','data-dl','data-openpost','data-copylink','data-tab','data-act','data-row','data-term','data-type','data-today','data-demo-toggle','data-rt-filter','data-rt-sort','data-sel','data-rt-extend','data-menu'];
+const FOCUS_ATTRS = ['data-pick','data-offermode','data-prod-card','data-answer','data-counter','data-filter','data-dl','data-openpost','data-copylink','data-tab','data-act','data-row','data-term','data-type','data-today','data-demo-toggle','data-rt-filter','data-rt-sort','data-sel','data-rt-extend','data-menu'];
 function focusKey(el) {
   if (!el || el === document.body) return null;
   if (el.id) return '#' + el.id;
@@ -876,13 +977,13 @@ function render() {
   const scroller = root.querySelector('.workspace-grid');
   const pageTop = scroller && last.tab === S.tab ? scroller.scrollTop : 0;
   const fkey = focusKey(document.activeElement);
-  const endingCount = ms.filter(m => m.state === 'ending' && !m.requested).length;
+  const endingCount = ms.filter(m => m.state === 'ending' && !m.requested && !m.countered).length, counterCount = ms.filter(m => m.countered).length;
   const tab = S.tab;
-  const dot = endingCount ? `<span class="cs-tabdot" title="Rights ending soon on ${plural(endingCount, 'video')}"></span>` : '';
+  const dot = (endingCount || counterCount) ? `<span class="cs-tabdot" title="${[endingCount ? `Rights ending soon on ${plural(endingCount, 'video')}` : '', counterCount ? `${plural(counterCount, 'counter-offer')} to answer` : ''].filter(Boolean).join(', ')}"></span>` : '';
   const tabBtn = (k, label, d) => `<button type="button" class="workflow-dashboard-tab${tab===k?' active':''}" data-tab="${k}" aria-pressed="${tab===k}">${label}${d && tab !== k ? dot : ''}</button>`;
   const tabs = tabBtn('dashboard', 'Dashboard') + tabBtn('content', 'Content') + tabBtn('rights', 'Rights', true);
   const body = tab === 'content' ? renderContent(ms) : tab === 'rights' ? renderRights(ms) : renderDashboard(ms);
-  const panelCls = tab === 'dashboard' ? ' cs-panel--dash' : tab === 'rights' ? ' cs-panel--rights' : '';
+  const panelCls = tab === 'dashboard' ? ' cs-panel--dash' : tab === 'rights' ? ' cs-panel--rights' : ' cs-panel--content';
 
   root.innerHTML = `<div class="brand-dashboard svelte-187rxgr"><div class="dashboard-body svelte-187rxgr">${SIDEBAR}
     <main class="workspace-content svelte-187rxgr" aria-busy="false"><div class="workspace-content-shell svelte-187rxgr"><section class="workflow-page" aria-busy="false"><div class="workspace-grid"><div class="main-column">${HEADER}
@@ -898,7 +999,7 @@ function render() {
   </div></div>`;
   renderDemo();
   const o = document.querySelector('.rvm'); if (o) o.remove();
-  if (S.sent || (S.sheetSolo && S.sheetIds.length)) renderSolo(ms);
+  if (S.sent || S.counterFor || (S.sheetSolo && S.sheetIds.length)) renderSolo(ms);
 
   const sc2 = root.querySelector('.workspace-grid');
   if (sc2) {
@@ -951,11 +1052,11 @@ function card(m) {
   /* a toggle button that reveals two buttons (no ARIA menu roles: it does not behave like one on the keyboard) */
   const kebab = `<button type="button" class="cs-kebab" data-menu="${p.id}" aria-expanded="${open}" aria-label="More for ${n}'s ${KL[m.kind]}" title="Download or extend rights">${I.dots}</button>`;
   /* why an item is off is on screen, not only in a tooltip */
-  const dlWhy = usableFile(m) ? '' : m.requested ? `Comes back if ${n} says yes` : `Rights ended ${fmtEnd(m.ends)}`;
+  const dlWhy = usableFile(m) ? '' : m.requested ? `Comes back if ${n} says yes` : m.countered ? `Comes back if you accept ${n}'s counter-offer` : `Rights ended ${fmtEnd(m.ends)}`;
   const extWhy = m.requested ? `Sent ${fmt(D(m.ext.requested))}, no answer yet` : '';
   const menu = !open ? '' : `<div class="cs-menu" role="group" aria-label="${n}'s ${KL[m.kind]}">
-      <button type="button" data-dl="${p.id}" ${usableFile(m) ? '' : 'disabled'} title="${usableFile(m) ? `Download ${fileName(m)}` : m.requested ? `Rights ended ${fmtEnd(m.ends)}. Download comes back if ${n} says yes.` : `Rights ended ${fmtEnd(m.ends)}. Extend to download again.`}">${I.dl}<span class="cs-menu-txt">Download video${dlWhy ? `<em>${dlWhy}</em>` : ''}</span></button>
-      <button type="button" data-rt-extend="${p.id}" ${extendable(m) ? '' : 'disabled'}>${I.clock}<span class="cs-menu-txt">${m.requested ? 'Extension requested' : m.perpetual ? 'Rights never end' : 'Extend rights'}${extWhy ? `<em>${extWhy}</em>` : ''}</span></button>
+      <button type="button" data-dl="${p.id}" ${usableFile(m) ? '' : 'disabled'} title="${usableFile(m) ? `Download ${fileName(m)}` : m.requested ? `Rights ended ${fmtEnd(m.ends)}. Download comes back if ${n} says yes.` : m.countered ? `Rights ended ${fmtEnd(m.ends)}. Download comes back if you accept ${n}'s counter-offer.` : `Rights ended ${fmtEnd(m.ends)}. Extend to download again.`}">${I.dl}<span class="cs-menu-txt">Download video${dlWhy ? `<em>${dlWhy}</em>` : ''}</span></button>
+      ${m.countered ? `<button type="button" data-counter="${p.id}">${I.clock}<span class="cs-menu-txt">Review counter-offer<em>${n} asks $${m.ext.counter}</em></span></button>` : `<button type="button" data-rt-extend="${p.id}" ${extendable(m) ? '' : 'disabled'}>${I.clock}<span class="cs-menu-txt">${m.requested ? 'Offer sent' : m.perpetual ? 'Rights never end' : 'Extend rights'}${extWhy ? `<em>${extWhy}</em>` : ''}</span></button>`}
     </div>`;
   return `<div class="cs-card${open ? ' is-menu' : ''}" role="link" tabindex="0" data-prod-card="${p.id}" aria-label="${c.name}, ${KL[m.kind]}: opens the post on ${PLATFORM(m.kind)}">
       <div class="cs-media"><img src="${R}posters/${p.clip}.jpg" alt="">${platPill}</div>
@@ -1078,15 +1179,15 @@ function renderDashboard(ms) {
    click used to open (Julia, Oct 5: "I don't actually think we need this at all"). The row is the whole surface.
    Download stops when rights end (Julia, Oct 5). A 7-day email before each end is needed (Julia, Oct 5) and is
    described on the study page; nothing on this screen promises it yet. ---- */
-const RT_LABEL = { active:'Active', ending:'Ending soon', ended:'Ended', requested:'Extension requested', extended:'Extended', pending:'Not posted yet' };
-const RT_FILTERS = [['all','All'], ['ending','Ending soon'], ['active','Active'], ['extended','Extended'], ['requested','Requested'], ['ended','Ended'], ['pending','Not posted']];
+const RT_LABEL = { active:'Active', ending:'Ending soon', ended:'Ended', countered:'Counter-offer', requested:'Offer sent', extended:'Extended', pending:'Not posted yet' };
+const RT_FILTERS = [['all','All'], ['countered','Counter-offer'], ['ending','Ending soon'], ['active','Active'], ['extended','Extended'], ['requested','Offer sent'], ['ended','Ended'], ['pending','Not posted']];
 const selectable = (m) => m.state !== 'pending';
-const extendable = (m) => m.state !== 'pending' && !m.requested && !m.perpetual;
+const extendable = (m) => m.state !== 'pending' && !m.requested && !m.countered && !m.perpetual;
 /* download stops when rights end (Julia, Oct 5); extending brings the file back */
 const usableFile = (m) => m.state !== 'pending' && m.state !== 'ended';
 function rtRows(ms) {
   const k = S.rtSort.key, dir = S.rtSort.dir;
-  const RANK = { ending: 0, active: 1, requested: 2, extended: 3, ended: 4 };
+  const RANK = { countered: -1, ending: 0, active: 1, requested: 2, extended: 3, ended: 4 };
   const val = (m) => k === 'creator' ? m.c.name.toLowerCase() : k === 'posted' ? m.posted.getTime() : m.ends.getTime();
   /* Status sorts too (a reading of Tony's "oh, they are clickable ... and then maybe this one too", Oct 2):
      by urgency, then by end date */
@@ -1096,31 +1197,56 @@ function rtRows(ms) {
     ? (a, b) => ((RANK[a.chip] - RANK[b.chip]) * dir) || (a.ends - b.ends)
     : (a, b) => { const x = val(a), y = val(b); return (x < y ? -1 : x > y ? 1 : 0) * dir; };
   const rows = ms.filter(m => S.rtFilter === 'all' || m.chip === S.rtFilter);
-  const live = rows.filter(selectable).sort(cmp);
+  let live = rows.filter(selectable).sort(cmp);
+  /* in the default order a creator's videos sit next to each other (Julia, Oct 6): each creator takes the place
+     of their most urgent video. A column sort the brand picks keeps the column's order. */
+  if (k === 'attention') {
+    const at = new Map(); live.forEach((m, i) => { if (!at.has(m.p.c)) at.set(m.p.c, i); });
+    live = live.map((m, i) => [m, i]).sort((x, y) => (at.get(x[0].p.c) - at.get(y[0].p.c)) || (x[1] - y[1])).map(x => x[0]);
+  }
   return live.concat(rows.filter(m => !selectable(m)));   /* not-posted rows always sit last */
 }
 function endCell(m) {
   if (m.state === 'pending') return `<span class="cs-rt-muted">Starts with the post</span>`;
   const tw = `${typeWord(m)}${m.nextType ? ` until ${fmtEnd(m.typeEnds)}` : ''}`;
+  const quiet = m.requested || m.countered;   /* an offer out or a counter waiting keeps the row calm (Julia, Oct 6: "that's ok as is") */
+  if (m.paidEnding && m.daysLeft > ENDING_DAYS) return `<span class="cs-rt-end${quiet ? '' : ' is-ending'}"><b>${fmtEnd(m.typeEnds)}</b><span>paid use ends ${inDays(m.paidLeft)} · then organic ${m.perpetual ? 'with no end date' : `to ${fmtEnd(m.ends)}`}</span></span>`;
   if (m.perpetual) return `<span class="cs-rt-end"><b>No end date</b><span>${tw}</span></span>`;
   const sub = m.daysLeft < 0 ? agoDays(-m.daysLeft) : m.daysLeft === 0 ? 'today' : `in ${plural(m.daysLeft, 'day')}`;
-  return `<span class="cs-rt-end${m.state === 'ending' && !m.requested ? ' is-ending' : m.state === 'ended' ? ' is-ended' : ''}"><b>${fmtEnd(m.ends)}</b><span>${sub} · ${tw}</span></span>`;
+  return `<span class="cs-rt-end${m.state === 'ending' && !m.requested && !m.countered ? ' is-ending' : m.state === 'ended' ? ' is-ended' : ''}"><b>${fmtEnd(m.ends)}</b><span>${sub} · ${tw}</span></span>`;
 }
 function rowActions(m) {
   if (m.state === 'pending') return '';
   const n = first(m.c);
-  const dl = `<button type="button" class="cs-iconbtn" data-dl="${m.p.id}" ${usableFile(m) ? '' : 'disabled'} title="${usableFile(m) ? `Download ${fileName(m)}` : m.requested ? `Rights ended ${fmtEnd(m.ends)}. Download comes back if ${n} says yes.` : `Rights ended ${fmtEnd(m.ends)}. Extend to download again.`}" aria-label="Download ${n}'s ${KL[m.kind]}">${I.dl}</button>`;
+  const dl = `<button type="button" class="cs-iconbtn" data-dl="${m.p.id}" ${usableFile(m) ? '' : 'disabled'} title="${usableFile(m) ? `Download ${fileName(m)}` : m.requested ? `Rights ended ${fmtEnd(m.ends)}. Download comes back if ${n} says yes.` : m.countered ? `Rights ended ${fmtEnd(m.ends)}. Download comes back if you accept ${n}'s counter-offer.` : `Rights ended ${fmtEnd(m.ends)}. Extend to download again.`}" aria-label="Download ${n}'s ${KL[m.kind]}">${I.dl}</button>`;
   const link = `<button type="button" class="cs-iconbtn" data-copylink="${m.p.id}" title="Copy the link to the live post" aria-label="Copy the link to ${n}'s ${KL[m.kind]}">${I.link}</button>`;
   const post = `<a class="cs-iconbtn" href="https://${m.p.url}" target="_blank" rel="noopener" data-openpost="${m.p.id}" title="Open the live post on ${PLATFORM(m.kind)}" aria-label="Open the live post">${I.out}</a>`;
   /* Extend is on every row that can take an offer, not only the ones ending: it is also how a brand adds paid rights */
   const ext = extendable(m) ? `<button type="button" class="cs-extend${m.state === 'ending' ? ' is-amber' : ''}" data-rt-extend="${m.p.id}" aria-label="Extend the rights on ${n}'s ${KL[m.kind]}">${EXTEND_CTA}</button>` : '';
-  return ext + link + post + dl;
+  /* a counter-offer waits on the brand: one button opens it, where Accept and Decline live (Julia, Oct 6) */
+  const review = m.countered ? `<button type="button" class="cs-extend is-review" data-counter="${m.p.id}" aria-label="Review ${n}'s counter-offer">Review</button>` : '';
+  return review + ext + link + post + dl;
 }
 /* the row carries what the popup used to say: what was offered, or what the creator agreed to */
 function statusTitle(m) {
   const n = first(m.c);
+  if (m.countered) return ` title="You offered $${m.ext.offer} for ${m.ext.t.of} ${TYPES[m.ext.type].word} rights. ${n} asks $${m.ext.counter}."`;
   if (m.requested) return ` title="Offer sent ${fmt(D(m.ext.requested))}: ${askText(m.ext)}. No answer yet."`;
-  if (m.acc) return ` title="${n} agreed ${fmt(D(m.acc.accepted))}: ${m.acc.t.of} ${TYPES[m.acc.type].word} rights"`;
+  if (m.acc) return m.acc.counter ? ` title="You accepted ${n}'s counter-offer ${fmt(D(m.acc.accepted))}: ${m.acc.t.more} ${TYPES[m.acc.type].word} rights at $${m.acc.offer}."` : ` title="${n} said yes ${fmt(D(m.acc.accepted))}: ${m.acc.t.more} ${TYPES[m.acc.type].word} rights at $${m.acc.offer}."`;
+  return '';
+}
+/* the line under the status: the latest answer, so the brand sees what happened to its offer (Julia, Oct 6) */
+function statusNote(m) {
+  const n = first(m.c), g = mates(m), k = g.length;
+  const vids = k > 1 ? ` for ${k} videos` : '';
+  if (m.countered) return `${n} asks $${m.ext.counter}${vids} · you offered $${m.ext.offer}`;
+  if (m.requested) return `${fmt(D(m.ext.requested))}${k > 1 ? ` · ${k} videos` : ''}${m.ext.offer ? ` · $${m.ext.offer}` : ''} · no answer yet`;
+  const a = m.answer;
+  if (!a) return '';
+  const amt = a.amount;
+  if (a.kind === 'yes') return a.countered ? `You accepted $${amt}${vids} · ${fmt(a.date)}` : `${n} said yes ${fmt(a.date)} · $${amt}${vids}`;
+  if (a.kind === 'declined') return `${n} said no ${fmt(a.date)}`;
+  if (a.kind === 'refused') return `You declined $${amt}${vids} · ${fmt(a.date)}`;
   return '';
 }
 function renderRights(ms) {
@@ -1153,7 +1279,7 @@ function renderRights(ms) {
       <span class="cs-rt-video"><span class="cs-rt-thumb"><img src="${R}posters/${m.p.clip}.jpg" alt=""></span><span class="cs-rt-names"><span class="cs-name">${m.c.name}</span><span class="cs-meta">${m.c.handle} · ${KL[m.kind]}</span></span></span>
       <span class="cs-rt-date">${m.posted ? fmt(m.posted) : '<span class="cs-rt-muted">Soon</span>'}</span>
       ${endCell(m)}
-      <span class="cs-rt-status is-${m.chip}"${statusTitle(m)}><i></i><span class="cs-rt-st"><span>${RT_LABEL[m.chip]}</span>${m.requested ? `<em>Offer sent ${fmt(D(m.ext.requested))}${m.ext.offer ? ` · $${m.ext.offer}` : ''}</em>` : ''}</span></span>
+      <span class="cs-rt-status is-${m.chip}"${statusTitle(m)}><i></i><span class="cs-rt-st"><span>${RT_LABEL[m.chip]}</span>${statusNote(m) ? `<em>${statusNote(m)}</em>` : ''}</span></span>
       <span class="cs-rt-actions">${rowActions(m)}</span>
     </div>`).join('') : `<div class="cs-empty">No videos match this filter.</div>`}
   </div>`;
@@ -1167,46 +1293,103 @@ function renderRights(ms) {
    card's three-dot menu. There is no video popup any more (Julia, Oct 5): a row
    already has download, copy link, open the post and extend.
    ================================================================== */
-const sheetList = () => (S.sheetSolo ? S.sheetIds : []).map(id => model(pieceOf(id)));
+const sheetList = () => (S.sheetSolo ? S.sheetIds.filter(id => !S.sheetOff.includes(id)) : []).map(id => model(pieceOf(id)));
 const sheetTerm = () => termOf(S.sheetTerm);
 const suggested = () => PRICE[S.sheetType][S.sheetTerm];
 function sheetHint(list) {
   const t = sheetTerm();
   const one = list.length === 1 ? list[0] : null;
-  /* PROPOSED (Claude, Oct 5): adding paid starts the day the creator says yes; more time on the same type follows on */
+  /* AGREED (Julia, Oct 6): adding paid starts the day the creator says yes; more time follows on from the current end */
   const addsPaid = (m) => S.sheetType === 'paid' && m.type !== 'paid' && m.state !== 'ended';
   if (one) {
     const n = first(one.c);
-    if (one.state === 'ended') return t.days == null ? `If ${n} says yes, the rights would start that day, with no end date.` : `If ${n} says yes, the rights would run ${t.label} from that day.`;
-    if (addsPaid(one)) return t.days == null ? `If ${n} says yes, paid use would start that day, with no end date.` : `If ${n} says yes, paid use would start that day and run ${t.label}.`;
-    if (t.days == null) return `If ${n} says yes, the rights would have no end date.`;
-    return `If ${n} says yes by ${fmtEnd(one.ends)}, rights run to ${fmtY(addTerm(one.ends, t))}.`;
+    if (one.state === 'ended') return t.days == null ? `If ${n} says yes, the rights start that day, with no end date.` : `If ${n} says yes, the rights run ${t.label} from that day.`;
+    const r = preview(one, S.sheetType, S.sheetTerm), what = outcome(r, S.sheetType);
+    if (addsPaid(one)) return `If ${n} says yes, paid use starts that day and ${what.replace(/^paid use /, '')}`;
+    const by = S.sheetType === 'paid' ? one.typeEnds : one.ends;
+    return t.days == null ? `If ${n} says yes, ${what}` : `If ${n} says yes by ${fmtEnd(by)}, ${what}`;
   }
-  if (list.some(addsPaid)) return t.days == null ? 'If a creator says yes, paid use would start that day, with no end date.' : `If a creator says yes, paid use would start that day and run ${t.label}.`;
-  if (t.days == null) return 'If a creator says yes, the rights on that video would have no end date.';
-  return list.every(m => m.state === 'ended') ? `If a creator says yes, the rights on that video would run ${t.label} from that day.`
-    : `If a creator says yes before a video's end date, the new period follows on from that date. Otherwise it starts the day they say yes.`;
+  /* several videos: name the creator when they are all one creator's (per creator offers) */
+  const who = new Set(list.map(m => m.p.c)).size === 1 && list.length ? first(list[0].c) : null;
+  const ifYes = who ? `If ${who} says yes` : 'If a creator says yes', they = who || 'they';
+  if (list.some(addsPaid)) return t.days == null ? `${ifYes}, paid use starts that day, with no end date.` : `${ifYes}, paid use starts that day and runs ${t.label}.`;
+  if (t.days == null) return `${ifYes}, the rights on ${who ? 'each video' : 'that video'} have no end date.`;
+  return list.every(m => m.state === 'ended') ? `${ifYes}, the rights on ${who ? 'each video' : 'that video'} run ${t.label} from that day.`
+    : `${ifYes} before a video's end date, its new period follows on from that date. Otherwise it starts the day ${they} ${who ? 'says' : 'say'} yes.`;
 }
 /* Tony, Oct 2: a line under the offer tied to the length ("for 90 days, the average is somewhere around").
    No average has been measured, so it says "we suggest". */
-function offerHint(list) {
-  const who = list.length === 1 ? first(list[0].c) : 'Each creator';
-  const tail = `${who} can say no or ask for more.`;
-  return `For ${sheetTerm().of} ${TYPES[S.sheetType].word} rights, we suggest $${suggested()}${list.length > 1 ? ' per video' : ''}. ${tail}`;
+/* per creator, the ladder price is for the creator's whole set; each video left out takes $10 off
+   (Julia, Oct 6: "the pre-filled number we had before should be for both videos, selecting only one should just reduce that price by $10") */
+const LEAVE_OUT = 10;
+const byCreator = (list) => { const g = {}; list.forEach(m => (g[m.p.c] ||= []).push(m)); return g; };
+/* the suggested total for one creator's set, from what is ticked */
+function setPrice(c, ids = S.sheetIds) {
+  const set = ids.map(id => model(pieceOf(id))).filter(m => extendable(m) && m.p.c === c);
+  const out = set.filter(m => S.sheetOff.includes(m.p.id)).length;
+  return { size: set.length, kept: set.length - out, price: Math.max(suggested() - LEAVE_OUT * out, LEAVE_OUT) };
 }
-function sheetHtml(list, solo) {
-  const one = list.length === 1 ? list[0] : null;
+function prefill(ids = S.sheetIds) {
+  S.offerTouched = false;
+  if (!perCreator()) { S.sheetOffer = suggested(); return; }
+  const g = byCreator(ids.map(id => model(pieceOf(id))).filter(extendable));
+  S.sheetOffers = {};
+  Object.keys(g).forEach(c => { S.sheetOffers[c] = setPrice(c, ids).price; });
+  const live = Object.keys(g).filter(c => g[c].some(m => !S.sheetOff.includes(m.p.id)));
+  S.sheetOffer = live.length === 1 ? S.sheetOffers[live[0]] : 0;
+}
+function offersOk(list) {
+  if (!list.length) return false;
+  if (perCreator() && Object.keys(byCreator(list)).length > 1) return Object.keys(byCreator(list)).every(c => S.sheetOffers[c] > 0);
+  return S.sheetOffer > 0;
+}
+const offerCount = (list) => perCreator() ? new Set(list.map(m => m.p.c)).size : list.length;
+const totalLine = (list) => !perCreator() && list.length > 1 && S.sheetOffer > 0 ? `${list.length} offers × $${S.sheetOffer} = $${list.length * S.sheetOffer}` : '';
+function offerHint(list) {
+  const who = new Set(list.map(m => m.p.c)).size === 1 && list.length ? first(list[0].c) : 'Each creator';
+  const tail = `${who} can say no or ask for more.`, what = `${sheetTerm().of} ${TYPES[S.sheetType].word} rights`;
+  if (perCreator()) {
+    if (who === 'Each creator') return `For ${what} on a creator's videos, we suggest $${suggested()}, less $${LEAVE_OUT} for each video you leave out. ${tail}`;
+    const sp = setPrice(list[0].p.c);
+    if (sp.size > 1) return sp.kept === sp.size ? `For ${what} on ${sp.size === 2 ? 'both' : `all ${sp.size}`} of ${who}'s videos, we suggest $${sp.price}. ${tail}` : `For ${what} on ${sp.kept} of ${who}'s ${sp.size} videos, we suggest $${sp.price}: $${suggested()} for ${sp.size === 2 ? 'both' : 'all of them'}, less $${LEAVE_OUT} for each one left out. ${tail}`;
+  }
+  return `For ${what}, we suggest $${suggested()}${list.length > 1 ? ' per video' : ''}. ${tail}`;
+}
+function offerField(list, one, n, oneCreator, cn) {
+  const money = (attrs, v) => `<div class="cs-money"><span aria-hidden="true">$</span><input ${attrs} type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" maxlength="6" value="${v}" aria-describedby="offerHint"></div>`;
+  const hint = `<span class="cs-sheet-hint" id="offerHint">${offerHint(list)}</span>`;
+  if (perCreator() && Object.keys(byCreator(list)).length > 1) {
+    const g = byCreator(list);
+    return `<span class="cs-sheet-label">Your offer to each creator</span>${hint}<div class="cs-offers">${Object.keys(g).map(c => `<div class="cs-offer-row"><span class="cs-offer-who"><b>${first(CREATORS[c])}</b> · ${plural(g[c].length, 'video')}</span>${money(`data-offerfor="${c}" aria-label="Your offer to ${first(CREATORS[c])}"`, S.sheetOffers[c] || 0)}</div>`).join('')}</div>`;
+  }
+  if (!list.length) return `<span class="cs-sheet-label">Your offer</span><span class="cs-sheet-hint" id="offerHint">Tick at least one video to make an offer.</span>`;
+  const ln = first(list[0].c), lone = new Set(list.map(m => m.p.c)).size === 1;   /* named after who is still ticked */
+  const lbl = one ? `Your offer to ${n}` : perCreator() && lone ? (list.length > 1 ? `Your offer to ${ln} for ${plural(list.length, 'video')}` : `Your offer to ${ln}`) : 'Your offer per video';
+  return `<label class="cs-sheet-label" for="offer">${lbl}</label>${hint}${money('id="offer"', S.sheetOffer)}<span class="cs-sheet-hint cs-total" id="offerTotal">${totalLine(list)}</span>`;
+}
+function sheetHtml(list, solo, all = list) {
+  const one = all.length === 1 ? all[0] : null;
   const n = one ? first(one.c) : null;
-  const title = one ? `Extend rights on ${n}'s ${KL[one.kind]}` : `Extend rights on ${list.length} videos`;
-  const sub = one
-    ? `Katie's team sends it to ${n}. The answer shows on the Rights tab.`
+  const oneCreator = new Set(all.map(m => m.p.c)).size === 1, cn = first(all[0].c);
+  const picking = perCreator() && all.length > 1;
+  const title = one ? `Extend rights on ${n}'s ${KL[one.kind]}` : picking && oneCreator ? `Extend rights on ${cn}'s videos` : `Extend rights on ${all.length} videos`;
+  const offers = offerCount(list);
+  const lone = list.length && new Set(list.map(m => m.p.c)).size === 1, ln = list.length ? first(list[0].c) : cn;
+  const sub = one ? `Katie's team sends it to ${n}. The answer shows on the Rights tab.`
+    : perCreator() && lone ? `Katie's team sends ${ln} one offer for ${plural(list.length, 'video')}. The answer shows on the Rights tab.`
+    : perCreator() && !list.length ? `Tick the videos this offer covers.`
+    : perCreator() ? `Katie's team sends each creator one offer for their videos. Each answer shows on the Rights tab.`
     : `Katie's team sends it to each creator. Each answer shows on the Rights tab.`;
   const st = one ? statusLine(one) : null;
   /* "Current" marks what the brand holds right now (Tony: "you have this right now"), so never on ended rights */
-  const current = list.every(m => m.state !== 'ended' && m.type === list[0].type) ? list[0].type : null;
+  const current = list.length && list.every(m => m.state !== 'ended' && m.type === list[0].type) ? list[0].type : null;
   const mixed = new Set(list.map(m => m.type)).size > 1;
   const holds = (m) => m.state === 'ended' ? `${typeWord(m)} rights ended ${fmtEnd(m.ends)}` : m.perpetual && !m.nextType ? `${typeWord(m)}, no end date` : `${typeWord(m)} until ${fmtEnd(m.nextType ? m.typeEnds : m.ends)}`;
-  const names = list.length <= 4
+  const short = (m) => m.state === 'ended' ? `ended ${fmtEnd(m.ends)}` : m.perpetual && !m.nextType ? 'no end date' : `until ${fmtEnd(m.nextType ? m.typeEnds : m.ends)}`;
+  /* the creator's videos as mini pictures, each ticked in or out (Julia, Oct 6: "show the mini pictures") */
+  const names = picking
+    ? `<div class="cs-picks" role="group" aria-label="Videos in this offer">${all.map(m => { const on = !S.sheetOff.includes(m.p.id); return `<button type="button" class="cs-pickt${on ? ' is-on' : ''}" role="checkbox" aria-checked="${on}" data-pick="${m.p.id}" aria-label="Include ${first(m.c)}'s ${KL[m.kind]}"><span class="cs-pickt-img"><img src="${R}posters/${m.p.clip}.jpg" alt=""><span class="cs-pickt-box" aria-hidden="true">${on ? '✓' : ''}</span></span><span class="cs-pickt-k">${oneCreator ? KL[m.kind] : first(m.c)}</span><span class="cs-pickt-s">${oneCreator ? short(m) : `${KL[m.kind]} · ${short(m)}`}</span></button>`; }).join('')}</div>`
+    : list.length <= 4
     ? `<ul class="cs-sheet-list">${list.map(m => `<li><b>${first(m.c)} · ${KL[m.kind]}</b><span>${holds(m)}</span></li>`).join('')}</ul>`
     : `<p class="cs-sheet-names">${list.map(m => `${first(m.c)} · ${KL[m.kind]}`).join(', ')}</p>`;
   const skipped = S.sheetSkipped ? `<p class="cs-sheet-names">${plural(S.sheetSkipped, 'selected video')} ${S.sheetSkipped > 1 ? 'are' : 'is'} left out (a request is already in, or the rights never end).</p>` : '';
@@ -1216,45 +1399,93 @@ function sheetHtml(list, solo) {
     <button type="button" class="rvm-changes-close" data-act="sheet-close" title="Close" aria-label="Close"><img src="${R}assets/icons/close-16.svg" alt=""></button>
     <div class="rvm-changes-body"><p class="rvm-changes-title">${title}</p>
       ${st ? `<p class="cs-sheet-status ${st.cls}"><i></i><span>${st.html}</span></p>` : names + skipped}
-      <div class="cs-sheet-field"><span class="cs-sheet-label" id="lblType">Type of rights</span>${mixed ? `<span class="cs-sheet-hint">These videos do not all have the same rights today. The offer asks for the same rights on each.</span>` : ''}<div class="cs-types" role="radiogroup" aria-labelledby="lblType">${types}</div></div>
+      <div class="cs-sheet-field" id="fieldType"><span class="cs-sheet-label" id="lblType">Type of rights</span>${mixed ? `<span class="cs-sheet-hint">These videos do not all have the same rights today. The offer asks for the same rights on each.</span>` : ''}<div class="cs-types" role="radiogroup" aria-labelledby="lblType">${types}</div></div>
       <div class="cs-sheet-field"><span class="cs-sheet-label" id="lblDays">How long</span><span class="cs-sheet-hint" id="sheetHint">${sheetHint(list)}</span><div class="cs-chips" role="group" aria-labelledby="lblDays">${chips}</div></div>
-      <div class="cs-sheet-field"><label class="cs-sheet-label" for="offer">${one ? `Your offer to ${n}` : 'Your offer per video'}</label><span class="cs-sheet-hint" id="offerHint">${offerHint(list)}</span><div class="cs-money"><span aria-hidden="true">$</span><input id="offer" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" maxlength="6" value="${S.sheetOffer}" aria-describedby="offerHint"></div></div>
-      <div class="cs-sheet-field"><label class="cs-sheet-label" for="sheetText">${I.lock}Private note to the Benable team <span class="cs-opt">· optional</span></label><span class="cs-sheet-hint" id="noteHint">Only the Benable team reads this. ${one ? `${n} never sees it.` : 'The creators never see it.'}</span><textarea class="rvm-changes-textarea" id="sheetText" aria-describedby="noteHint" placeholder="Anything the Benable team should know, for example where you plan to run it">${esc(S.sheetText)}</textarea></div>
+      <div class="cs-sheet-field" id="fieldOffer">${offerField(list, one, n, oneCreator, cn)}</div>
+      <div class="cs-sheet-field"><label class="cs-sheet-label" for="sheetText">${I.lock}Private note to the Benable team <span class="cs-opt">· optional</span></label><span class="cs-sheet-hint" id="noteHint">Only the Benable team reads this. ${lone ? `${ln} never sees it.` : 'The creators never see it.'}</span><textarea class="rvm-changes-textarea" id="sheetText" aria-describedby="noteHint" placeholder="Anything the Benable team should know, for example where you plan to run it">${esc(S.sheetText)}</textarea></div>
     </div>
-    <div class="rvm-changes-footer"><button type="button" class="rvm-changes-send" data-act="sheet-send" data-id="${one ? one.p.id : ''}" ${!(S.sheetOffer > 0) ? 'disabled' : ''}>${one ? 'Send offer' : `Send ${list.length} offers`}</button><p class="cs-sheet-next">${sub}</p></div>
+    <div class="rvm-changes-footer"><button type="button" class="rvm-changes-send" data-act="sheet-send" data-id="${one ? one.p.id : ''}" ${offersOk(list) ? '' : 'disabled'}>${offers <= 1 ? 'Send offer' : `Send ${offers} offers`}</button><p class="cs-sheet-next">${sub}</p></div>
   </div></div>`;
 }
 /* type or length changed: the offer prefills with the usual price, in place (no re-render, the note keeps its caret) */
 function syncSheet() {
-  S.sheetOffer = suggested();
+  prefill();
   document.querySelectorAll('.cs-chip[data-term]').forEach(c => { const on = c.dataset.term === S.sheetTerm; c.classList.toggle('is-on', on); c.setAttribute('aria-pressed', String(on)); });
   document.querySelectorAll('.cs-type[data-type]').forEach(c => { const on = c.dataset.type === S.sheetType; c.classList.toggle('is-on', on); c.setAttribute('aria-checked', String(on)); });
   const list = sheetList();
   const of = document.getElementById('offer'); if (of) of.value = S.sheetOffer;
+  document.querySelectorAll('[data-offerfor]').forEach(i => { i.value = S.sheetOffers[i.dataset.offerfor] || 0; });
   const hint = document.getElementById('sheetHint'); if (hint) hint.textContent = sheetHint(list);
   const oh = document.getElementById('offerHint'); if (oh) oh.textContent = offerHint(list);
-  const b = document.querySelector('.rvm-changes-send'); if (b) b.disabled = !(S.sheetOffer > 0);
+  const tl = document.getElementById('offerTotal'); if (tl) tl.textContent = totalLine(list);
+  const b = document.querySelector('.rvm-changes-send'); if (b) b.disabled = !offersOk(list);
   wireSheet();
 }
 function sentHtml() {
-  const d = S.sent; const many = d.names.length > 1;
-  return `<div class="cs-solo-scrim" data-act="sent-close"><div class="rvm-changes-card cs-sheet cs-sent" role="dialog" aria-modal="true" aria-label="Offer sent">
+  const d = S.sent, offers = d.offers || d.names.length, many = offers > 1, vids = d.videos || 1;
+  const title = d.kind === 'accepted' ? `You accepted ${d.names[0]}'s counter-offer` : many ? `${offers} offers sent` : 'Offer sent';
+  const line1 = d.kind === 'accepted' ? `${d.what}${vids > 1 ? ` on ${vids} videos` : ''} for $${d.total || d.offer}.`
+    : d.mode === 'creator' ? (vids > 1 ? (many ? `${d.what} on ${vids} videos, $${d.total} in total.` : `${d.what} on ${vids} videos for $${d.total}.`) : `${d.what} for $${d.total}.`)
+    : vids > 1 ? `${d.what} on ${vids} videos, $${d.offer} per video.` : `${d.what} at $${d.offer}.`;
+  const line2 = d.kind === 'accepted' ? `${d.until} Katie's team tells ${d.names[0]}.`
+    : many ? `Katie's team sends them to each creator. Each answer shows on the Rights tab.` : `Katie's team sends it to ${d.names[0]}. The answer shows on the Rights tab.`;
+  return `<div class="cs-solo-scrim is-center" data-act="sent-close"><div class="rvm-changes-card cs-sheet cs-sent" role="dialog" aria-modal="true" aria-label="${d.kind === 'accepted' ? 'Counter-offer accepted' : 'Offer sent'}">
     <button type="button" class="rvm-changes-close" data-act="sent-close" title="Close" aria-label="Close"><img src="${R}assets/icons/close-16.svg" alt=""></button>
     <div class="rvm-changes-body cs-sent-body"><span class="cs-sent-check" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12.5 10 17l8.5-9.5"/></svg></span>
-      <p class="cs-sent-title">${many ? `${d.names.length} offers sent` : 'Offer sent'}</p>
-      <p class="cs-sent-sub">${d.what}${d.offer ? ` at $${d.offer}${many ? ' per video' : ''}` : ''}.</p>
-      <p class="cs-sent-sub">Katie's team takes it to ${many ? 'each creator' : d.names[0]}. The answer shows on the Rights tab.</p>
+      <p class="cs-sent-title">${title}</p>
+      <p class="cs-sent-sub">${line1}</p>
+      <p class="cs-sent-sub">${line2}</p>
     </div>
     <div class="rvm-changes-footer"><button type="button" class="rvm-changes-send" data-act="sent-close">Done</button></div>
   </div></div>`;
 }
+function counterHtml(m) {
+  const set = mates(m).filter(x => x.countered);
+  if (set.length > 1) return counterSetHtml(m, set);
+  const n = first(m.c), e = m.ext, vid = `${n}'s ${KL[m.kind]}`;
+  const r = preview(m, e.type, e.term);
+  const now = m.state === 'ended' ? `If you decline, the rights stay ended (they ended ${fmtEnd(m.ends)}).` : `If you decline, the rights still end ${fmtEnd(m.ends)}.`;
+  return `<div class="cs-solo-scrim is-center" data-act="counter-close"><div class="rvm-changes-card cs-sheet" role="dialog" aria-modal="true" aria-label="Counter-offer on ${vid}">
+    <button type="button" class="rvm-changes-close" data-act="counter-close" title="Close" aria-label="Close"><img src="${R}assets/icons/close-16.svg" alt=""></button>
+    <div class="rvm-changes-body"><p class="rvm-changes-title">Counter-offer on ${vid}</p>
+      <p class="cs-sheet-status is-offer"><i></i><span>On ${fmt(D(e.requested))} you offered <b>$${e.offer}</b> for ${e.t.more} ${TYPES[e.type].word} rights.</span></p>
+      <div class="cs-counter"><span class="cs-counter-k">${n} asks</span><span class="cs-counter-v">$${e.counter}</span><span class="cs-counter-s">For ${e.t.more} ${TYPES[e.type].word} rights · ${fmt(D(e.countered))}</span></div>
+      <p class="cs-sheet-hint cs-counter-hint">If you accept, ${outcome(r, e.type)} ${now}</p>
+    </div>
+    <div class="rvm-changes-footer"><div class="cs-counter-acts"><button type="button" class="cs-ghost" data-act="counter-decline" data-id="${m.p.id}">Decline</button><button type="button" class="rvm-changes-send" data-act="counter-accept" data-id="${m.p.id}">Accept $${e.counter}</button></div><p class="cs-sheet-next">Katie's team tells ${n} your answer.</p></div>
+  </div></div>`;
+}
+function counterSetHtml(m, set) {
+  const n = first(m.c), e = m.ext, k = set.length;
+  const offered = e.offer, asks = e.counter;   /* one total for the set */
+  const lines = set.map(x => `<li><b>${KL[x.kind]}</b><span>If you accept, ${outcome(preview(x, x.ext.type, x.ext.term), x.ext.type)}</span></li>`).join('');
+  return `<div class="cs-solo-scrim is-center" data-act="counter-close"><div class="rvm-changes-card cs-sheet" role="dialog" aria-modal="true" aria-label="Counter-offer on ${n}'s videos">
+    <button type="button" class="rvm-changes-close" data-act="counter-close" title="Close" aria-label="Close"><img src="${R}assets/icons/close-16.svg" alt=""></button>
+    <div class="rvm-changes-body"><p class="rvm-changes-title">Counter-offer on ${n}'s videos</p>
+      <p class="cs-sheet-status is-offer"><i></i><span>On ${fmt(D(e.requested))} you offered <b>$${offered}</b> for ${e.t.more} ${TYPES[e.type].word} rights on ${k} videos.</span></p>
+      <div class="cs-counter"><span class="cs-counter-k">${n} asks</span><span class="cs-counter-v">$${asks}</span><span class="cs-counter-s">For ${e.t.more} ${TYPES[e.type].word} rights on ${andList(set.map(x => `the ${KL[x.kind]}`))} · ${fmt(D(e.countered))}</span></div>
+      <ul class="cs-sheet-list cs-counter-out">${lines}</ul>
+      <p class="cs-sheet-hint cs-counter-hint">If you decline, each video's rights stay as they are.</p>
+    </div>
+    <div class="rvm-changes-footer"><div class="cs-counter-acts"><button type="button" class="cs-ghost" data-act="counter-decline" data-id="${m.p.id}">Decline</button><button type="button" class="rvm-changes-send" data-act="counter-accept" data-id="${m.p.id}">Accept $${asks}</button></div><p class="cs-sheet-next">Katie's team tells ${n} your answer.</p></div>
+  </div></div>`;
+}
 function renderSolo(ms) {
+  if (S.counterFor && !S.sent) { const m = ms.find(x => x.p.id === S.counterFor); if (m && m.countered) { document.body.insertAdjacentHTML('beforeend', `<div class="rvm cs-solo">${counterHtml(m)}</div>`); return; } S.counterFor = null; }
   if (S.sent) { document.body.insertAdjacentHTML('beforeend', `<div class="rvm cs-solo">${sentHtml()}</div>`); return; }
-  const list = S.sheetIds.map(id => ms.find(m => m.p.id === id)).filter(Boolean).filter(extendable);
-  if (!list.length) { S.sheetSolo = false; return; }
-  document.body.insertAdjacentHTML('beforeend', `<div class="rvm cs-solo">${sheetHtml(list, true)}</div>`);
+  const all = S.sheetIds.map(id => ms.find(m => m.p.id === id)).filter(Boolean).filter(extendable);
+  if (!all.length) { S.sheetSolo = false; return; }
+  const list = all.filter(m => !S.sheetOff.includes(m.p.id));
+  document.body.insertAdjacentHTML('beforeend', `<div class="rvm cs-solo">${sheetHtml(list, true, all)}</div>`);
 }
 
+function syncPicks() {
+  const all = S.sheetIds.map(id => model(pieceOf(id))).filter(extendable), list = all.filter(m => !S.sheetOff.includes(m.p.id));
+  document.querySelectorAll('.cs-pickt[data-pick]').forEach(b => { const on = !S.sheetOff.includes(b.dataset.pick); b.classList.toggle('is-on', on); b.setAttribute('aria-checked', String(on)); const box = b.querySelector('.cs-pickt-box'); if (box) box.textContent = on ? '✓' : ''; });
+  const tmp = document.createElement('div'); tmp.innerHTML = sheetHtml(list, true, all);
+  ['#fieldType', '#sheetHint', '#fieldOffer', '.rvm-changes-footer'].forEach(sel => { const a = document.querySelector('.cs-sheet ' + sel), b = tmp.querySelector(sel); if (a && b) a.replaceWith(b); });
+  wireSheet();
+}
 function wireSheet() {
   const card = document.querySelector('.cs-sheet'); if (!card) return;
   const body = card.querySelector('.rvm-changes-body');
@@ -1267,12 +1498,13 @@ function renderDemo() {
   const el = document.getElementById('demo');
   /* the bar tucks into its chip under a popup, and on the Content tab, where at laptop heights it sat on the
      first row's three dots; the chip opens it */
-  const popup = S.sheetSolo || S.sent || S.menu || S.tab === 'content';
+  const popup = S.sheetSolo || S.sent || S.counterFor || S.menu || S.tab === 'content';
   const waiting = MODELS().filter(m => m.requested);
   if (popup && !S.demoPinned) { el.className = 'cs-demo is-min'; el.innerHTML = `<button class="cs-demo-chip" data-demo-toggle="1" title="Show the prototype controls">Demo controls ▴</button>`; return; }
   el.className = 'cs-demo';
   el.innerHTML = `<span class="cs-demo-group"><span class="cs-demo-k">TODAY</span>${TODAYS.map(t => `<button data-today="${t.key}" class="${FORKS.today === t.key ? 'is-on' : ''}" title="${t.hint}">${t.label}</button>`).join('')}</span><span class="cs-demo-sep"></span>
-    ${waiting.length ? `<span class="cs-demo-group"><span class="cs-demo-k">DEMO</span><button data-accept="1" title="Pretend ${waiting.length > 1 ? 'the creators say' : first(waiting[0].c) + ' says'} yes today to the ${plural(waiting.length, 'offer')} waiting for an answer">${waiting.length > 1 ? `${waiting.length} creators say yes` : `${first(waiting[0].c)} says yes`}</button></span><span class="cs-demo-sep"></span>` : ''}
+    <span class="cs-demo-group"><span class="cs-demo-k">OFFERS</span><button data-offermode="creator" class="${perCreator() ? 'is-on' : ''}" title="Extend opens all of a creator's videos; one offer per creator">Per creator</button><button data-offermode="video" class="${perCreator() ? '' : 'is-on'}" title="One offer per video">Per video</button></span><span class="cs-demo-sep"></span>
+    ${waiting.length ? `<span class="cs-demo-group"><span class="cs-demo-k">${new Set(waiting.map(m => m.p.c)).size > 1 ? `${new Set(waiting.map(m => m.p.c)).size} CREATORS ANSWER` : `${first(waiting[0].c).toUpperCase()} ANSWERS`}</span><button data-answer="yes" title="Pretend the creator says yes today">Yes</button><button data-answer="counter" title="Pretend the creator asks $25 more today">Counter</button><button data-answer="no" title="Pretend the creator says no today">No</button></span><span class="cs-demo-sep"></span>` : ''}
     <a href="#" data-reset title="Back to Feb 24, and forget prototype downloads and requests">↺</a>${popup ? `<button data-demo-toggle="1" title="Hide the prototype controls">▾</button>` : ''}`;
   document.documentElement.style.setProperty('--demo-h', (document.body.classList.contains('embed') ? 0 : Math.round(el.getBoundingClientRect().height)) + 'px');
 }
@@ -1290,7 +1522,7 @@ function primeSheet(key, ms) {
   /* a draft survives closing and reopening the same video; a new one starts from what the video has now */
   if (S.sheetFor === key) return;
   S.sheetType = ms.length && ms.every(m => m.type === 'organic') ? 'organic' : 'paid';   /* starts on what the videos hold; a mixed selection starts on the wider rights */
-  S.sheetTerm = '90'; S.sheetOffer = suggested(); S.sheetText = '';
+  S.sheetTerm = '90'; S.sheetText = ''; S.sheetOff = []; prefill(ms.map(m => m.p.id));
 }
 const openerKey = () => { const a = document.activeElement; return a && a.closest && a.closest('.cs-menu') && S.menu ? `#nf .cs-kebab[data-menu="${S.menu}"]` : focusKey(a); };
 let guardUntil = 0;   /* the second click of a double-click must not fall through to what the first one uncovered */
@@ -1299,7 +1531,7 @@ function openSolo(ids) {
   const key = ids.join(',');
   primeSheet(key, ids.map(i => model(pieceOf(i))));
   S.sheetIds = ids; S.sheetSolo = true; S.sheetFor = key; S.menu = null; render();
-  setTimeout(() => { const f = document.getElementById('offer'); if (f) { f.focus(); f.setSelectionRange(f.value.length, f.value.length); } }, 30);
+  setTimeout(() => { const f = document.getElementById('offer') || document.querySelector('[data-offerfor]'); if (f) { f.focus(); f.setSelectionRange(f.value.length, f.value.length); } }, 30);
 }
 function closeSheet() { const ta = document.getElementById('sheetText'); if (ta) S.sheetText = ta.value; const of = document.getElementById('offer'); if (of) S.sheetOffer = Number(of.value) || 0; S.sheetSolo = false; render(); }
 const pieceOf = (id) => PIECES.find(p => p.id === id);
@@ -1323,14 +1555,22 @@ document.addEventListener('click', (e) => {
     else S.sel = S.sel.includes(id) ? S.sel.filter(i => i !== id) : S.sel.concat(id);
     render(); return;
   }
-  if ((x = el('[data-rt-extend]'))) { e.stopPropagation(); if (x.disabled) return; S.sheetSkipped = 0; openSolo(x.dataset.rtExtend.split(',')); return; }
-  if ((x = el('[data-today]'))) { setFork('today', x.dataset.today); S.sel = []; S.menu = null; S.sheetSolo = false; S.sheetIds = []; S.sheetFor = null; render(); return; }
-  if ((x = el('[data-accept]'))) {
+  if ((x = el('[data-rt-extend]'))) { e.stopPropagation(); if (x.disabled) return; S.sheetSkipped = 0; const ids = x.dataset.rtExtend.split(','); openSolo(perCreator() && ids.length === 1 ? creatorSet(ids[0]) : ids); return; }
+  if ((x = el('[data-pick]'))) { const ta = document.getElementById('sheetText'); if (ta) S.sheetText = ta.value; const id = x.dataset.pick; S.sheetOff = S.sheetOff.includes(id) ? S.sheetOff.filter(i => i !== id) : S.sheetOff.concat(id); if (!S.offerTouched) prefill(); syncPicks(); return; }
+  if ((x = el('[data-offermode]'))) { setFork('offer', x.dataset.offermode); applySeed(); S.sheetSolo = false; S.sheetIds = []; S.sheetFor = null; S.counterFor = null; S.sent = null; S.sel = []; render(); return; }
+  if ((x = el('[data-today]'))) { setFork('today', x.dataset.today); S.sel = []; S.menu = null; S.sheetSolo = false; S.sheetIds = []; S.sheetFor = null; S.counterFor = null; S.sent = null; render(); return; }
+  if ((x = el('[data-answer]'))) {
+    /* the creator's answer, for the demo: yes, a counter at $25 more, or no */
+    const how = x.dataset.answer, today = FORKS.today;
     const ids = MODELS().filter(m => m.requested).map(m => m.p.id);
-    ids.forEach(id => { const cur = S.ext[id] || pieceOf(id).ext; S.ext[id] = { ...cur, state: 'extended', accepted: FORKS.today }; });
-    save('ext', S.ext); toast(ids.length > 1 ? `${ids.length} offers accepted` : `${first(CREATORS[pieceOf(ids[0]).c])} said yes`); render(); return;
+    ids.forEach(id => { const cur = S.ext[id] || pieceOf(id).ext;
+      S.ext[id] = how === 'yes' ? { ...cur, state: 'extended', accepted: today } : how === 'counter' ? { ...cur, state: 'countered', countered: today, counter: (Number(cur.offer) || 0) + 25 } : { ...cur, state: 'declined', declined: today }; });
+    save('ext', S.ext);
+    const cs = [...new Set(ids.map(i => pieceOf(i).c))], who = cs.length > 1 ? `${cs.length} creators` : first(CREATORS[cs[0]]);
+    toast(how === 'yes' ? `${who} said yes` : how === 'counter' ? `${who} sent a counter-offer` : `${who} said no`); render(); return;
   }
-  if ((x = el('[data-reset]'))) { e.preventDefault(); S.downloads = {}; S.ext = {}; save('downloads', {}); save('ext', {}); setFork('today', '2027-02-24'); S.sel = []; S.menu = null; S.sheetSolo = false; S.sheetIds = []; S.sheetFor = null; toast('Prototype state reset'); render(); return; }
+  if ((x = el('[data-counter]'))) { e.stopPropagation(); S.sheetOpener = openerKey(); S.counterFor = x.dataset.counter; S.menu = null; guardUntil = performance.now() + 500; render(); return; }
+  if ((x = el('[data-reset]'))) { e.preventDefault(); S.downloads = {}; S.ext = {}; save('downloads', {}); save('ext', {}); setFork('today', '2027-02-24'); S.sel = []; S.menu = null; S.sheetSolo = false; S.sheetIds = []; S.sheetFor = null; S.counterFor = null; S.sent = null; toast('Prototype state reset'); render(); return; }
   if ((x = el('[data-tab]'))) { S.tab = x.dataset.tab; S.menu = null; render(); return; }
   if ((x = el('[data-filter]'))) { S.filter = x.dataset.filter; render(); return; }
   if ((x = el('[data-copylink]'))) { e.stopPropagation(); copyText('https://' + pieceOf(x.dataset.copylink).url, 'Link copied', 'Could not copy the link'); return; }
@@ -1371,25 +1611,44 @@ document.addEventListener('click', (e) => {
       const list = MODELS().filter(m => usableFile(m) && only.includes(m.p.id));
       if (list.length === 1) { downloadPiece(list[0]); toast(`Downloading ${fileName(list[0])}`); setTimeout(render, 50); } else if (list.length) downloadZip(list);
     }
-    else if (act === 'sent-close' && (t === x || el('.rvm-changes-close') || el('.rvm-changes-send'))) { S.sent = null; render(); }
+    else if (act === 'counter-close' && ((t === x && downT === x) || el('.rvm-changes-close'))) { S.counterFor = null; render(); }
+    else if (act === 'counter-accept' || act === 'counter-decline') {
+      /* the answer covers every video the counter-offer covered */
+      const m = model(pieceOf(id)), set = mates(m).filter(x => x.countered), n = first(m.c), today = FORKS.today;
+      const ids = (set.length ? set : [m]).map(x => x.p.id);
+      S.counterFor = null; guardUntil = performance.now() + 500;
+      const curOf = (i) => S.ext[i] || pieceOf(i).ext;
+      if (act === 'counter-accept') {
+        const cur = curOf(id), total = cur.counter, type = cur.type || BASE.type;   /* a set's counter is one total */
+        ids.forEach(i => { const c = curOf(i); S.ext[i] = { ...c, state: 'extended', accepted: today, offer: c.counter }; });
+        const lines = ids.map(i => { const x = model(pieceOf(i)), o = outcome(x, type); return ids.length > 1 ? `${KL[x.kind]}: ${o}` : `${n}'s ${KL[x.kind]}: ${o}`; }).map(t => t.charAt(0).toUpperCase() + t.slice(1));
+        S.sent = { kind: 'accepted', names: [n], videos: ids.length, what: `${termOf(cur.term).more.replace(/^./, c => c.toUpperCase())} ${TYPES[type].word} rights`, total, until: lines.join(' ') };
+      } else { ids.forEach(i => { S.ext[i] = { ...curOf(i), state: 'refused', refused: today }; }); toast(ids.length > 1 ? `You declined ${n}'s counter-offer on ${ids.length} videos` : `You declined the counter-offer on ${n}'s ${KL[m.kind]}`); }
+      save('ext', S.ext); render();
+    }
+    else if (act === 'sent-close' && ((t === x && downT === x) || el('.rvm-changes-close') || el('.rvm-changes-send'))) { S.sent = null; render(); }
     else if (act === 'sheet-close' && ((t === x && downT === x) || el('.rvm-changes-close'))) { closeSheet(); }   /* a drag that ends on the dimmed area does not close it */
     else if (act === 'sheet-send') {
       const of = document.getElementById('offer');
       const offer = Number(of && of.value) || 0;
-      if (!(offer > 0)) { toast('Add an offer above $0'); if (of) of.focus(); return; }
+      if (!offersOk(sheetList())) { toast('Add an offer above $0'); const f = of || document.querySelector('[data-offerfor]'); if (f) f.focus(); return; }
+      const multi = perCreator() && Object.keys(byCreator(sheetList())).length > 1;
+      const amountFor = (c) => multi ? S.sheetOffers[c] : offer;   /* per creator: the set's total; per video: the video's price */
       const ta = document.getElementById('sheetText');
-      const ids = S.sheetIds.slice();
+      const ids = sheetList().map(m => m.p.id);
+      if (!ids.length) return;
+      const gid = {};   /* per creator: the videos sent to one creator share a group id, so the answer covers them all */
+      if (perCreator()) ids.forEach(i => { const c = pieceOf(i).c; if (!gid[c]) gid[c] = `${c}-${FORKS.today}-${Date.now()}`; });
       ids.forEach(i => {
         /* what the brand already holds stays: an accepted extension is kept under `prev`, the new offer sits on top */
-        const head = S.ext[i] || pieceOf(i).ext || null;
-        const held = head && head.state === 'extended' && head.accepted && D(head.accepted) <= D(FORKS.today) ? head : undefined;
-        S.ext[i] = { state:'requested', requested: FORKS.today, term: S.sheetTerm, type: S.sheetType, offer, note: ta ? ta.value : '', prev: held };
+        const held = heldOf(i);   /* the newest yes on or before the day on screen, never one from a later day */
+        S.ext[i] = { state:'requested', requested: FORKS.today, term: S.sheetTerm, type: S.sheetType, offer: amountFor(pieceOf(i).c), note: ta ? ta.value : '', prev: held, group: gid[pieceOf(i).c] };
       });
       /* keyboard focus lands on the video the offer was for, not on the filter pills */
       S.sheetOpener = S.tab === 'content' ? `#nf .cs-kebab[data-menu="${ids[0]}"]` : `#nf .cs-check[data-sel="${ids[0]}"]`;
       guardUntil = performance.now() + 500;
-      S.sent = { names: ids.map(i => first(CREATORS[pieceOf(i).c])), what: `${termOf(S.sheetTerm).of.replace(/^./, c => c.toUpperCase())} ${TYPES[S.sheetType].word} rights`, offer };
-      save('ext', S.ext); S.sheetSolo = false; S.sheetIds = []; S.sheetFor = null; S.sheetText = ''; S.sel = [];
+      S.sent = { mode: FORKS.offer, names: [...new Set(ids.map(i => first(CREATORS[pieceOf(i).c])))], offers: perCreator() ? Object.keys(gid).length : ids.length, videos: ids.length, what: `${termOf(S.sheetTerm).of.replace(/^./, c => c.toUpperCase())} ${TYPES[S.sheetType].word} rights`, offer, total: perCreator() ? Object.keys(gid).reduce((t, c) => t + amountFor(c), 0) : offer * ids.length };
+      save('ext', S.ext); S.sheetSolo = false; S.sheetIds = []; S.sheetOff = []; S.sheetFor = null; S.sheetText = ''; S.sel = [];
       render();   /* the green check page says it; no toast on top of it */
     }
     return;
@@ -1399,16 +1658,16 @@ let downT = null;   /* where the press started */
 document.addEventListener('pointerdown', (e) => { downT = e.target; document.body.classList.add('is-pointer'); }, true);
 document.addEventListener('keydown', (e) => { if (e.key === 'Tab' || e.key.startsWith('Arrow')) document.body.classList.remove('is-pointer'); }, true);
 document.addEventListener('input', (e) => {
-  if (e.target.id === 'offer') { const digits = e.target.value.replace(/[^0-9]/g, ''); if (digits !== e.target.value) e.target.value = digits; S.sheetOffer = Number(digits) || 0; const b = document.querySelector('.rvm-changes-send'); if (b) b.disabled = !(S.sheetOffer > 0); }
+  if (e.target.id === 'offer' || e.target.dataset.offerfor) { const digits = e.target.value.replace(/[^0-9]/g, ''); if (digits !== e.target.value) e.target.value = digits; if (e.target.id === 'offer') S.sheetOffer = Number(digits) || 0; else S.sheetOffers[e.target.dataset.offerfor] = Number(digits) || 0; S.offerTouched = true; const list = sheetList(); const b = document.querySelector('.rvm-changes-send'); if (b) b.disabled = !offersOk(list); const tl = document.getElementById('offerTotal'); if (tl) tl.textContent = totalLine(list); }
   if (e.target.id === 'sheetText') S.sheetText = e.target.value;
 });
 document.addEventListener('keydown', (e) => {
   /* Enter or Space on our own role=button / role=link elements acts like a click */
   if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[role="button"], [role="link"]') && !e.target.matches('button, a[href], input, textarea')) { e.preventDefault(); e.target.click(); return; }
-  if (e.key === 'Escape') { if (S.menu) { S.sheetOpener = `#nf .cs-kebab[data-menu="${S.menu}"]`; S.menu = null; render(); } else if (S.sent) { S.sent = null; render(); } else if (S.sheetSolo) closeSheet(); return; }
+  if (e.key === 'Escape') { if (S.menu) { S.sheetOpener = `#nf .cs-kebab[data-menu="${S.menu}"]`; S.menu = null; render(); } else if (S.sent) { S.sent = null; render(); } else if (S.counterFor) { S.counterFor = null; render(); } else if (S.sheetSolo) closeSheet(); return; }
   /* Tab out of an open card menu closes it */
   if (S.menu && e.key === 'Tab') setTimeout(() => { const a = document.activeElement; if (S.menu && !(a && a.closest && a.closest('.cs-menu, [data-menu]'))) { S.menu = null; render(); } }, 0);
-  if (S.sheetSolo && e.key === 'Tab') {
+  if ((S.sheetSolo || S.counterFor || S.sent) && e.key === 'Tab') {
     /* keep Tab inside the sheet */
     const scope = document.querySelector('.rvm-changes-card'); if (!scope) return;
     const items = [...scope.querySelectorAll('a[href], button:not([disabled]), input, textarea, [tabindex="0"]')].filter(n => n.offsetParent !== null);
