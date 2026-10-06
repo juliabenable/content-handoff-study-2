@@ -316,15 +316,10 @@ body.is-pointer .nf .cs-panel :focus-visible, body.is-pointer .rvm :focus-visibl
 .cs-sheet-status.is-offer i { background: #896bd9; }
 /* the green check page and the counter-offer sheet do not change height, so they sit in the middle of the window (Julia, Oct 6) */
 .rvm.cs-solo .cs-solo-scrim.is-center { align-items: center; padding: 24px; }
-.cs-picks { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
-.cs-pickt { width: 84px; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 0; border: 0; background: none; text-align: left; cursor: pointer; font: inherit; color: inherit; }
-.cs-pickt-img { position: relative; width: 84px; height: 105px; border-radius: 10px; overflow: hidden; background: #eee; margin-bottom: 4px; box-shadow: 0 0 0 1px #e3e3e3; }
-.cs-pickt.is-on .cs-pickt-img { box-shadow: 0 0 0 2px #7a5cfa; }
-.cs-pickt-img img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; display: block; transition: opacity .15s ease, filter .15s ease; }
-.cs-pickt-img, .cs-pickt-box { transition: box-shadow .15s ease, background-color .15s ease, border-color .15s ease; }
-.cs-pickt:not(.is-on) .cs-pickt-img img { opacity: .4; filter: grayscale(.6); }
-.cs-pickt-box { position: absolute; top: 6px; right: 6px; width: 20px; height: 20px; border-radius: 6px; background: rgba(255,255,255,.95); border: 1.5px solid #c6c6c6; display: grid; place-items: center; color: #fff; font-size: 11px; line-height: 1; }
-.cs-pickt.is-on .cs-pickt-box { background: #7a5cfa; border-color: #7a5cfa; }
+.cs-picks { display: flex; flex-wrap: wrap; gap: 12px; margin: 16px 0 0; padding: 0; list-style: none; }
+.cs-pickt { width: 84px; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+.cs-pickt-img { width: 84px; height: 105px; border-radius: 10px; overflow: hidden; background: #eee; margin-bottom: 4px; box-shadow: 0 0 0 1px #e3e3e3; }
+.cs-pickt-img img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; display: block; }
 .cs-pickt-k { font-size: 12px; font-weight: 600; line-height: 16px; color: #1c1c1c; }
 .cs-pickt-s { font-size: 11px; line-height: 14px; color: #717171; }
 .cs-offers { display: flex; flex-direction: column; gap: 8px; }
@@ -332,10 +327,6 @@ body.is-pointer .nf .cs-panel :focus-visible, body.is-pointer .rvm :focus-visibl
 .cs-offer-who { font-size: 13px; color: #52525b; }
 .cs-offer-who b { color: #1c1c1c; font-weight: 600; }
 .cs-offer-row .cs-money { width: 140px; height: 40px; flex: none; }
-.cs-sheet-list.is-pick li { align-items: center; justify-content: flex-start; }
-.cs-sheet-list.is-pick li span { margin-left: auto; }
-.cs-pick { width: 18px; height: 18px; flex: none; border-radius: 5px; border: 1.5px solid #c6c6c6; background: #fff; color: #fff; display: grid; place-items: center; font-size: 11px; line-height: 1; cursor: pointer; padding: 0; }
-.cs-pick[aria-checked="true"] { background: #7a5cfa; border-color: #7a5cfa; }
 .cs-sheet-hint.cs-total { color: #3f3f46; font-weight: 600; }
 .cs-sheet-hint.cs-total:empty { display: none; }
 .cs-counter-out { margin-top: 12px; background: none; padding: 0; gap: 4px; }
@@ -503,7 +494,8 @@ body.embed .cs-demo { display: none; }
 
 /* the extend sheet on its own (table rows and bulk): same card, centred on a scrim */
 /* anchored near the top, so the card does not jump under the pointer when a choice makes it taller */
-.rvm.cs-solo .cs-solo-scrim { position: fixed; inset: 0; z-index: 420; background: rgba(0,0,0,.45); display: grid; justify-items: center; align-items: start; padding: clamp(12px, calc((100vh - 800px) / 2), 96px) 24px 12px; }
+.rvm.cs-solo .cs-solo-scrim { position: fixed; inset: 0; z-index: 420; background: rgba(0,0,0,.45); display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; align-items: start; padding: clamp(12px, calc((100vh - 800px) / 2), 96px) 16px 48px; }
+.rvm.cs-solo .cs-solo-scrim:not(.is-center) .rvm-changes-card.cs-sheet { max-height: calc(100vh - clamp(12px, calc((100vh - 800px) / 2), 96px) - 48px); }   /* clears the demo chip */
 .rvm.cs-solo .rvm-changes-card { position: relative; right: auto; bottom: auto; width: 520px; max-width: 100%; min-height: 0; }   /* wider, twice (Julia, Oct 5) */
 
 
@@ -795,7 +787,7 @@ if (qs.has('embed')) document.body.classList.add('embed');
 function setFork(k, v) { FORKS[k] = v; save(k, v); try { const u = new URL(location.href); if (u.searchParams.has(k)) { u.searchParams.delete(k); history.replaceState(null, '', u); } } catch {} }
 
 /* session state: downloads + extension requests made in this prototype */
-const S = { counterFor: null, sent: null, sheetOff: [], sheetOffers: {}, offerTouched: false, downloads: load('downloads', {}), ext: load('ext', {}), filter:'all', tab: ['dashboard','content','rights'].includes(qs.get('tab')) ? qs.get('tab') : 'rights', sheetFor:null, sheetType:'organic', sheetTerm:'90', sheetOffer:75, sheetText:'', demoPinned:false, rtFilter: ['countered','ending','active','extended','requested','ended','pending'].includes(qs.get('filter')) ? qs.get('filter') : 'all', rtSort:{ key:'attention', dir:1 }, sel:[], sheetIds:[], sheetSolo:false, sheetSkipped:0, rowsOpen:[], sheetOpener:null, menu:null };
+const S = { counterFor: null, sent: null, sheetOffers: {}, downloads: load('downloads', {}), ext: load('ext', {}), filter:'all', tab: ['dashboard','content','rights'].includes(qs.get('tab')) ? qs.get('tab') : 'rights', sheetFor:null, sheetType:'organic', sheetTerm:'90', sheetOffer:75, sheetText:'', demoPinned:false, rtFilter: ['countered','ending','active','extended','requested','ended','pending'].includes(qs.get('filter')) ? qs.get('filter') : 'all', rtSort:{ key:'attention', dir:1 }, sel:[], sheetIds:[], sheetSolo:false, sheetSkipped:[], rowsOpen:[], sheetOpener:null, menu:null };
 
 /* the requests on one video, oldest first; an accepted one stays reachable under `prev` when a new offer goes out */
 function heldOf(id) { let e = S.ext[id] || pieceOf(id).ext || null; while (e && !(e.state === 'extended' && e.accepted && D(e.accepted) <= D(FORKS.today))) e = e.prev || null; return e || undefined; }
@@ -935,7 +927,6 @@ function statusLine(m) {
   return { cls: m.state === 'ending' ? 'is-ending' : '', html:`You have <b>${plural(left, 'more day')}</b> of <b>${t}</b> rights, until ${fmtEnd(until)}.${then}` };
 }
 /* "90 more days of organic rights at $75" */
-const askText = (ext) => `${ext.t.more} ${TYPES[ext.type].word} rights${ext.offer ? ` at $${ext.offer}` : ''}`;
 
 /* ---- icons ---- */
 const I = {
@@ -965,7 +956,7 @@ const HEADER = `<header class="workflow-header"><a class="workflow-header-backli
    RENDER (keeps scroll and keyboard focus across re-renders)
    ================================================================== */
 const root = document.getElementById('nf');
-const FOCUS_ATTRS = ['data-pick','data-offermode','data-prod-card','data-answer','data-counter','data-filter','data-dl','data-openpost','data-copylink','data-tab','data-act','data-row','data-term','data-type','data-today','data-demo-toggle','data-rt-filter','data-rt-sort','data-sel','data-rt-extend','data-menu'];
+const FOCUS_ATTRS = ['data-offermode','data-prod-card','data-answer','data-counter','data-filter','data-dl','data-openpost','data-copylink','data-tab','data-act','data-row','data-term','data-type','data-today','data-demo-toggle','data-rt-filter','data-rt-sort','data-sel','data-rt-extend','data-menu'];
 function focusKey(el) {
   if (!el || el === document.body) return null;
   if (el.id) return '#' + el.id;
@@ -1226,7 +1217,7 @@ function rowActions(m) {
   const link = `<button type="button" class="cs-iconbtn" data-copylink="${m.p.id}" title="Copy the link to the live post" aria-label="Copy the link to ${n}'s ${KL[m.kind]}">${I.link}</button>`;
   const post = `<a class="cs-iconbtn" href="https://${m.p.url}" target="_blank" rel="noopener" data-openpost="${m.p.id}" title="Open the live post on ${PLATFORM(m.kind)}" aria-label="Open the live post">${I.out}</a>`;
   /* Extend is on every row that can take an offer, not only the ones ending: it is also how a brand adds paid rights */
-  const ext = extendable(m) ? `<button type="button" class="cs-extend${m.state === 'ending' ? ' is-amber' : ''}" data-rt-extend="${m.p.id}" aria-label="Extend the rights on ${n}'s ${KL[m.kind]}">${EXTEND_CTA}</button>` : '';
+  const ext = extendable(m) ? `<button type="button" class="cs-extend${m.state === 'ending' ? ' is-amber' : ''}" data-rt-extend="${m.p.id}" aria-label="Extend the rights on ${perCreator() && creatorSet(m.p.id).length > 1 ? `${n}'s videos` : `${n}'s ${KL[m.kind]}`}">${EXTEND_CTA}</button>` : '';
   /* a counter-offer waits on the brand: one button opens it, where Accept and Decline live (Julia, Oct 6) */
   const review = m.countered ? `<button type="button" class="cs-extend is-review" data-counter="${m.p.id}" aria-label="Review ${n}'s counter-offer">Review</button>` : '';
   return review + ext + link + post + dl;
@@ -1234,9 +1225,11 @@ function rowActions(m) {
 /* the row carries what the popup used to say: what was offered, or what the creator agreed to */
 function statusTitle(m) {
   const n = first(m.c);
-  if (m.countered) return ` title="You offered $${m.ext.offer} for ${m.ext.t.of} ${TYPES[m.ext.type].word} rights. ${n} asks $${m.ext.counter}."`;
-  if (m.requested) return ` title="Offer sent ${fmt(D(m.ext.requested))}: ${askText(m.ext)}. No answer yet."`;
-  if (m.acc) return m.acc.counter ? ` title="You accepted ${n}'s counter-offer ${fmt(D(m.acc.accepted))}: ${m.acc.t.more} ${TYPES[m.acc.type].word} rights at $${m.acc.agreed || m.acc.offer}."` : ` title="${n} said yes ${fmt(D(m.acc.accepted))}: ${m.acc.t.more} ${TYPES[m.acc.type].word} rights at $${m.acc.offer}."`;
+  const on = (e) => { const k = e.group ? PIECES.filter(q => { const x = S.ext[q.id] || q.ext; return x && x.group === e.group; }).length : 1; return k > 1 ? ` on ${k} videos` : ''; };   /* a set's price is one total */
+  const what = (e) => `${e.t.of} ${TYPES[e.type].word} rights${on(e)}`;
+  if (m.countered) return ` title="You offered $${m.ext.offer} for ${what(m.ext)}. ${n} asks $${m.ext.counter}."`;
+  if (m.requested) return ` title="Offer sent ${fmt(D(m.ext.requested))}: ${what(m.ext)} at $${m.ext.offer}. No answer yet."`;
+  if (m.acc) return m.acc.counter ? ` title="You accepted ${n}'s counter-offer ${fmt(D(m.acc.accepted))}: ${what(m.acc)} at $${m.acc.agreed || m.acc.offer}."` : ` title="${n} said yes ${fmt(D(m.acc.accepted))}: ${what(m.acc)} at $${m.acc.offer}."`;
   return '';
 }
 /* the line under the status: the latest answer, so the brand sees what happened to its offer (Julia, Oct 6) */
@@ -1262,10 +1255,12 @@ function renderRights(ms) {
   const sel = S.sel.filter(id => rows.some(m => m.p.id === id));
   const selMs = sel.map(id => ms.find(m => m.p.id === id));
   const selDl = selMs.filter(usableFile), selExt = selMs.filter(extendable);
+  const covers = perCreator() ? [...new Set(selExt.map(m => m.p.id).flatMap(creatorSet))] : selExt.map(m => m.p.id);   /* per creator, a ticked video brings its creator's others */
+  const coversN = covers.length !== sel.length || covers.some(i => !sel.includes(i)) ? covers.length : 0;
   const usable = rows.filter(usableFile);   /* Download all acts on the rows on screen */
 
   const line = sel.length
-    ? `<div class="cs-bulk"><b>${sel.length} selected</b><button class="cs-ghost" data-act="bulk-dl" ${selDl.length ? '' : 'disabled'} title="${selDl.length > 1 ? 'One .zip with the selected video files' : 'Download the video file'}">${I.dl}Download${selDl.length && selDl.length !== sel.length ? ` (${selDl.length})` : ''}</button><button class="cs-ghost" data-act="bulk-links" title="Copy the links to the selected posts, one per line">${I.link}Copy links</button><button class="cs-ghost is-dark" data-act="bulk-extend" ${selExt.length ? '' : 'disabled'}>${EXTEND_CTA}${selExt.length && selExt.length !== sel.length ? ` (${selExt.length})` : ''}</button><button class="cs-link" data-act="bulk-clear">Clear</button></div>`
+    ? `<div class="cs-bulk"><b>${sel.length} selected</b><button class="cs-ghost" data-act="bulk-dl" ${selDl.length ? '' : 'disabled'} title="${selDl.length > 1 ? 'One .zip with the selected video files' : 'Download the video file'}">${I.dl}Download${selDl.length && selDl.length !== sel.length ? ` (${selDl.length})` : ''}</button><button class="cs-ghost" data-act="bulk-links" title="Copy the links to the selected posts, one per line">${I.link}Copy links</button><button class="cs-ghost is-dark" data-act="bulk-extend" ${selExt.length ? '' : 'disabled'}>${EXTEND_CTA}${selExt.length && coversN ? ` (${coversN})` : ''}</button><button class="cs-link" data-act="bulk-clear">Clear</button></div>`
     : '';   /* no count line (Julia, Oct 5). A selection takes over the table's header row, so ticking a video never moves the table */
 
   const arrow = (k) => S.rtSort.key === k ? `<span aria-hidden="true">${S.rtSort.dir === 1 ? '▲' : '▼'}</span>` : `<span aria-hidden="true" class="cs-rt-idle">↕</span>`;
@@ -1297,7 +1292,7 @@ function renderRights(ms) {
    card's three-dot menu. There is no video popup any more (Julia, Oct 5): a row
    already has download, copy link, open the post and extend.
    ================================================================== */
-const sheetList = () => (S.sheetSolo ? S.sheetIds.filter(id => !S.sheetOff.includes(id)) : []).map(id => model(pieceOf(id)));
+const sheetList = () => (S.sheetSolo ? S.sheetIds : []).map(id => model(pieceOf(id)));
 const sheetTerm = () => termOf(S.sheetTerm);
 const suggested = () => PRICE[S.sheetType][S.sheetTerm];
 function sheetHint(list) {
@@ -1318,31 +1313,21 @@ function sheetHint(list) {
   const ifYes = who ? `If ${who} says yes` : 'If a creator says yes', they = who || 'they';
   if (list.length && list.every(addsPaid)) return t.days == null ? `${ifYes}, paid use starts that day, with no end date.` : `${ifYes}, paid use starts that day and runs ${t.label}.`;
   if (list.some(addsPaid)) return `Videos with paid use today get more after it ends; the others start paid use the day ${who || 'the creator'} says yes.`;
-  if (!list.length) return 'Tick at least one video.';
   if (t.days == null) return `${ifYes}, the rights on ${who ? 'each video' : 'that video'} have no end date.`;
   return list.every(m => m.state === 'ended') ? `${ifYes}, the rights on ${who ? 'each video' : 'that video'} run ${t.label} from that day.`
     : `${ifYes} before a video's end date, its new period follows on from that date. Otherwise it starts the day ${they} ${who ? 'says' : 'say'} yes.`;
 }
 /* Tony, Oct 2: a line under the offer tied to the length ("for 90 days, the average is somewhere around").
    No average has been measured, so it says "we suggest". */
-/* per creator, the ladder price is for the creator's whole set; each video left out takes $10 off
-   (Julia, Oct 6: "the pre-filled number we had before should be for both videos, selecting only one should just reduce that price by $10") */
-const LEAVE_OUT = 10;
+/* per creator, the offer covers all of the creator's videos and the ladder price is for the whole set
+   (Julia, Oct 6: "if there are 2 content, they just get both, can't unselect and forget about the $10 price") */
 const byCreator = (list) => { const g = {}; list.forEach(m => (g[m.p.c] ||= []).push(m)); return g; };
-/* the suggested total for one creator's set, from what is ticked */
-function setPrice(c, ids = S.sheetIds) {
-  const set = ids.map(id => model(pieceOf(id))).filter(m => extendable(m) && m.p.c === c);
-  const out = set.filter(m => S.sheetOff.includes(m.p.id)).length;
-  return { size: set.length, kept: set.length - out, price: Math.max(suggested() - LEAVE_OUT * out, LEAVE_OUT) };
-}
 function prefill(ids = S.sheetIds) {
-  S.offerTouched = false;
-  if (!perCreator()) { S.sheetOffer = suggested(); return; }
+  S.sheetOffer = suggested();
+  if (!perCreator()) return;
   const g = byCreator(ids.map(id => model(pieceOf(id))).filter(extendable));
   S.sheetOffers = {};
-  Object.keys(g).forEach(c => { S.sheetOffers[c] = setPrice(c, ids).price; });
-  const live = Object.keys(g).filter(c => g[c].some(m => !S.sheetOff.includes(m.p.id)));
-  S.sheetOffer = live.length === 1 ? S.sheetOffers[live[0]] : 0;
+  Object.keys(g).forEach(c => { S.sheetOffers[c] = suggested(); });
 }
 function offersOk(list) {
   if (!list.length) return false;
@@ -1355,9 +1340,8 @@ function offerHint(list) {
   const who = new Set(list.map(m => m.p.c)).size === 1 && list.length ? first(list[0].c) : 'Each creator';
   const tail = `${who} can say no or ask for more.`, what = `${sheetTerm().of} ${TYPES[S.sheetType].word} rights`;
   if (perCreator()) {
-    if (who === 'Each creator') return `For ${what} on a creator's videos, we suggest $${suggested()}, less $${LEAVE_OUT} for each video you leave out. ${tail}`;
-    const sp = setPrice(list[0].p.c);
-    if (sp.size > 1) return sp.kept === sp.size ? `For ${what} on ${sp.size === 2 ? 'both' : `all ${sp.size}`} of ${who}'s videos, we suggest $${sp.price}. ${tail}` : `For ${what} on ${sp.kept} of ${who}'s ${sp.size} videos, we suggest $${sp.price}: $${suggested()} for ${sp.size === 2 ? 'both' : 'all of them'}, less $${LEAVE_OUT} for each one left out. ${tail}`;
+    if (who === 'Each creator') return `For ${what} on all of a creator's videos, we suggest $${suggested()}. ${tail}`;
+    if (list.length > 1) return `For ${what} on ${list.length === 2 ? 'both' : `all ${list.length}`} of ${who}'s videos, we suggest $${suggested()}. ${tail}`;
   }
   return `For ${what}, we suggest $${suggested()}${list.length > 1 ? ' per video' : ''}. ${tail}`;
 }
@@ -1368,22 +1352,20 @@ function offerField(list, one, n, oneCreator, cn) {
     const g = byCreator(list);
     return `<span class="cs-sheet-label">Your offer to each creator</span>${hint}<div class="cs-offers">${Object.keys(g).map(c => `<div class="cs-offer-row"><span class="cs-offer-who"><b>${first(CREATORS[c])}</b> · ${plural(g[c].length, 'video')}</span>${money(`data-offerfor="${c}" aria-label="Your offer to ${first(CREATORS[c])}"`, S.sheetOffers[c] || 0)}</div>`).join('')}</div>`;
   }
-  if (!list.length) return `<span class="cs-sheet-label">Your offer</span><span class="cs-sheet-hint" id="offerHint">Tick at least one video to make an offer.</span>`;
-  const ln = first(list[0].c), lone = new Set(list.map(m => m.p.c)).size === 1;   /* named after who is still ticked */
+  const ln = first(list[0].c), lone = new Set(list.map(m => m.p.c)).size === 1;
   const lbl = one ? `Your offer to ${n}` : perCreator() && lone ? (list.length > 1 ? `Your offer to ${ln} for ${plural(list.length, 'video')}` : `Your offer to ${ln}`) : 'Your offer per video';
   return `<label class="cs-sheet-label" for="offer">${lbl}</label>${hint}${money('id="offer"', S.sheetOffer)}<span class="cs-sheet-hint cs-total" id="offerTotal">${totalLine(list)}</span>`;
 }
-function sheetHtml(list, solo, all = list) {
-  const one = all.length === 1 ? all[0] : null;
+function sheetHtml(list) {
+  const one = list.length === 1 ? list[0] : null;
   const n = one ? first(one.c) : null;
-  const oneCreator = new Set(all.map(m => m.p.c)).size === 1, cn = first(all[0].c);
-  const picking = perCreator() && all.length > 1;
-  const title = one ? `Extend rights on ${n}'s ${KL[one.kind]}` : picking && oneCreator ? `Extend rights on ${cn}'s videos` : `Extend rights on ${all.length} videos`;
+  const oneCreator = new Set(list.map(m => m.p.c)).size === 1, cn = first(list[0].c);
+  const pictures = perCreator() && list.length > 1;
+  const title = one ? `Extend rights on ${n}'s ${KL[one.kind]}` : pictures && oneCreator ? `Extend rights on ${cn}'s videos` : `Extend rights on ${list.length} videos`;
   const offers = offerCount(list);
   const lone = list.length && new Set(list.map(m => m.p.c)).size === 1, ln = list.length ? first(list[0].c) : cn;
   const sub = one ? `Katie's team sends it to ${n}. The answer shows on the Rights tab.`
     : perCreator() && lone ? `Katie's team sends ${ln} one offer for ${plural(list.length, 'video')}. The answer shows on the Rights tab.`
-    : perCreator() && !list.length ? `Tick the videos this offer covers.`
     : perCreator() ? `Katie's team sends each creator one offer for their videos. Each answer shows on the Rights tab.`
     : `Katie's team sends it to each creator. Each answer shows on the Rights tab.`;
   const st = one ? statusLine(one) : null;
@@ -1392,22 +1374,28 @@ function sheetHtml(list, solo, all = list) {
   const mixed = new Set(list.map(m => m.type)).size > 1;
   const holds = (m) => m.state === 'ended' ? `${typeWord(m)} rights ended ${fmtEnd(m.ends)}` : m.perpetual && !m.nextType ? `${typeWord(m)}, no end date` : `${typeWord(m)} until ${fmtEnd(m.nextType ? m.typeEnds : m.ends)}`;
   const short = (m) => m.state === 'ended' ? `ended ${fmtEnd(m.ends)}` : m.perpetual && !m.nextType ? 'no end date' : `until ${fmtEnd(m.nextType ? m.typeEnds : m.ends)}`;
-  /* the creator's videos as mini pictures, each ticked in or out (Julia, Oct 6: "show the mini pictures") */
-  const names = picking
-    ? `<div class="cs-picks" role="group" aria-label="Videos in this offer">${all.map(m => { const on = !S.sheetOff.includes(m.p.id); return `<button type="button" class="cs-pickt${on ? ' is-on' : ''}" role="checkbox" aria-checked="${on}" data-pick="${m.p.id}" aria-label="Include ${first(m.c)}'s ${KL[m.kind]}"><span class="cs-pickt-img"><img src="${R}posters/${m.p.clip}.jpg" alt=""><span class="cs-pickt-box" aria-hidden="true">${on ? '✓' : ''}</span></span><span class="cs-pickt-k">${oneCreator ? KL[m.kind] : first(m.c)}</span><span class="cs-pickt-s">${oneCreator ? short(m) : `${KL[m.kind]} · ${short(m)}`}</span></button>`; }).join('')}</div>`
+  /* the creator's videos as mini pictures (Julia, Oct 6: "show the mini pictures"); the offer covers all of them, nothing to untick */
+  const names = pictures
+    ? `<ul class="cs-picks" aria-label="Videos in this offer">${list.map(m => `<li class="cs-pickt"><span class="cs-pickt-img"><img src="${R}posters/${m.p.clip}.jpg" alt=""></span><span class="cs-pickt-k">${oneCreator ? KL[m.kind] : first(m.c)}</span><span class="cs-pickt-s">${oneCreator ? short(m) : `${KL[m.kind]} · ${short(m)}`}</span></li>`).join('')}</ul>`
     : list.length <= 4
     ? `<ul class="cs-sheet-list">${list.map(m => `<li><b>${first(m.c)} · ${KL[m.kind]}</b><span>${holds(m)}</span></li>`).join('')}</ul>`
     : `<p class="cs-sheet-names">${list.map(m => `${first(m.c)} · ${KL[m.kind]}`).join(', ')}</p>`;
-  const skipped = S.sheetSkipped ? `<p class="cs-sheet-names">${plural(S.sheetSkipped, 'selected video')} ${S.sheetSkipped > 1 ? 'are' : 'is'} left out (a request is already in, or the rights never end).</p>` : '';
+  /* what this offer does not cover, and why: one creator's other videos, or ticked videos that cannot take an offer */
+  const why = (m) => m.state === 'pending' ? 'it is not posted yet' : m.requested ? 'an offer is already out' : m.countered ? 'a counter-offer is waiting for you' : m.perpetual ? 'its rights never end' : lockedAt(m) ? 'in the demo it has an offer dated later' : '';
+  const inOffer = (id) => list.some(m => m.p.id === id);
+  const outIds = [...new Set([...(perCreator() && oneCreator ? PIECES.filter(q => q.c === list[0].p.c).map(q => q.id) : []), ...S.sheetSkipped])].filter(id => !inOffer(id));
+  const outs = outIds.map(id => model(pieceOf(id))).filter(m => why(m));
+  const skipped = !outs.length ? '' : outs.length <= 3 ? outs.map(m => `<p class="cs-sheet-names">${first(m.c)}'s ${KL[m.kind]} is not in this offer: ${why(m)}.</p>`).join('')
+    : `<p class="cs-sheet-names">${outs.length} videos are not in this offer: each already has an offer out or a counter-offer waiting, or rights that never end.</p>`;
   const types = Object.entries(TYPES).map(([k, t]) => `<button type="button" role="radio" class="cs-type${S.sheetType===k?' is-on':''}" data-type="${k}" aria-checked="${S.sheetType===k}"><span class="cs-type-top"><span>${t.label}</span>${current === k ? '<span class="cs-type-cur">Current</span>' : ''}</span><span class="cs-type-sub">${t.sub}</span></button>`).join('');
   const chips = TERMS.map(t => `<button type="button" class="cs-chip${S.sheetTerm===t.key?' is-on':''}" data-term="${t.key}" aria-pressed="${S.sheetTerm===t.key}">${t.label}</button>`).join('');
   return `<div class="cs-solo-scrim" data-act="sheet-close"><div class="rvm-changes-card cs-sheet" role="dialog" aria-modal="true" aria-label="${title}">
     <button type="button" class="rvm-changes-close" data-act="sheet-close" title="Close" aria-label="Close"><img src="${R}assets/icons/close-16.svg" alt=""></button>
     <div class="rvm-changes-body"><p class="rvm-changes-title">${title}</p>
-      ${st ? `<p class="cs-sheet-status ${st.cls}"><i></i><span>${st.html}</span></p>` : names + skipped}
-      <div class="cs-sheet-field" id="fieldType"><span class="cs-sheet-label" id="lblType">Type of rights</span>${mixed ? `<span class="cs-sheet-hint">These videos do not all have the same rights today. The offer asks for the same rights on each.</span>` : ''}<div class="cs-types" role="radiogroup" aria-labelledby="lblType">${types}</div></div>
+      ${st ? `<p class="cs-sheet-status ${st.cls}"><i></i><span>${st.html}</span></p>${outs.length ? skipped : ''}` : names + skipped}
+      <div class="cs-sheet-field"><span class="cs-sheet-label" id="lblType">Type of rights</span>${mixed ? `<span class="cs-sheet-hint">These videos do not all have the same rights today. The offer asks for the same rights on each.</span>` : ''}<div class="cs-types" role="radiogroup" aria-labelledby="lblType">${types}</div></div>
       <div class="cs-sheet-field"><span class="cs-sheet-label" id="lblDays">How long</span><span class="cs-sheet-hint" id="sheetHint">${sheetHint(list)}</span><div class="cs-chips" role="group" aria-labelledby="lblDays">${chips}</div></div>
-      <div class="cs-sheet-field" id="fieldOffer">${offerField(list, one, n, oneCreator, cn)}</div>
+      <div class="cs-sheet-field">${offerField(list, one, n, oneCreator, cn)}</div>
       <div class="cs-sheet-field"><label class="cs-sheet-label" for="sheetText">${I.lock}Private note to the Benable team <span class="cs-opt">· optional</span></label><span class="cs-sheet-hint" id="noteHint">Only the Benable team reads this. ${lone ? `${ln} never sees it.` : 'The creators never see it.'}</span><textarea class="rvm-changes-textarea" id="sheetText" aria-describedby="noteHint" placeholder="Anything the Benable team should know, for example where you plan to run it">${esc(S.sheetText)}</textarea></div>
     </div>
     <div class="rvm-changes-footer"><button type="button" class="rvm-changes-send" data-act="sheet-send" data-id="${one ? one.p.id : ''}" ${offersOk(list) ? '' : 'disabled'}>${offers <= 1 ? 'Send offer' : `Send ${offers} offers`}</button><p class="cs-sheet-next">${sub}</p></div>
@@ -1464,12 +1452,13 @@ function counterHtml(m) {
 function counterSetHtml(m, set) {
   const n = first(m.c), e = m.ext, k = set.length;
   const offered = e.offer, asks = e.counter;   /* one total for the set */
+  const tw = set.every(x => x.state === 'ended') ? e.t.of : e.t.more;
   const lines = set.map(x => `<li><b>${KL[x.kind]}</b><span>If you accept, ${outcome(preview(x, x.ext.type, x.ext.term), x.ext.type)}</span></li>`).join('');
   return `<div class="cs-solo-scrim is-center" data-act="counter-close"><div class="rvm-changes-card cs-sheet" role="dialog" aria-modal="true" aria-label="Counter-offer on ${n}'s videos">
     <button type="button" class="rvm-changes-close" data-act="counter-close" title="Close" aria-label="Close"><img src="${R}assets/icons/close-16.svg" alt=""></button>
     <div class="rvm-changes-body"><p class="rvm-changes-title">Counter-offer on ${n}'s videos</p>
-      <p class="cs-sheet-status is-offer"><i></i><span>On ${fmt(D(e.requested))} you offered <b>$${offered}</b> for ${e.t.more} ${TYPES[e.type].word} rights on ${k} videos.</span></p>
-      <div class="cs-counter"><span class="cs-counter-k">${n} asks</span><span class="cs-counter-v">$${asks}</span><span class="cs-counter-s">For ${e.t.more} ${TYPES[e.type].word} rights on ${andList(set.map(x => `the ${KL[x.kind]}`))} · ${fmt(D(e.countered))}</span></div>
+      <p class="cs-sheet-status is-offer"><i></i><span>On ${fmt(D(e.requested))} you offered <b>$${offered}</b> for ${tw} ${TYPES[e.type].word} rights on ${k} videos.</span></p>
+      <div class="cs-counter"><span class="cs-counter-k">${n} asks</span><span class="cs-counter-v">$${asks}</span><span class="cs-counter-s">For ${tw} ${TYPES[e.type].word} rights on ${andList(set.map(x => `the ${KL[x.kind]}`))} · ${fmt(D(e.countered))}</span></div>
       <ul class="cs-sheet-list cs-counter-out">${lines}</ul>
       <p class="cs-sheet-hint cs-counter-hint">If you decline, each video's rights stay as they are.</p>
     </div>
@@ -1481,17 +1470,9 @@ function renderSolo(ms) {
   if (S.sent) { document.body.insertAdjacentHTML('beforeend', `<div class="rvm cs-solo">${sentHtml()}</div>`); return; }
   const all = S.sheetIds.map(id => ms.find(m => m.p.id === id)).filter(Boolean).filter(extendable);
   if (!all.length) { S.sheetSolo = false; return; }
-  const list = all.filter(m => !S.sheetOff.includes(m.p.id));
-  document.body.insertAdjacentHTML('beforeend', `<div class="rvm cs-solo">${sheetHtml(list, true, all)}</div>`);
+  document.body.insertAdjacentHTML('beforeend', `<div class="rvm cs-solo">${sheetHtml(all)}</div>`);
 }
 
-function syncPicks() {
-  const all = S.sheetIds.map(id => model(pieceOf(id))).filter(extendable), list = all.filter(m => !S.sheetOff.includes(m.p.id));
-  document.querySelectorAll('.cs-pickt[data-pick]').forEach(b => { const on = !S.sheetOff.includes(b.dataset.pick); b.classList.toggle('is-on', on); b.setAttribute('aria-checked', String(on)); const box = b.querySelector('.cs-pickt-box'); if (box) box.textContent = on ? '✓' : ''; });
-  const tmp = document.createElement('div'); tmp.innerHTML = sheetHtml(list, true, all);
-  ['#fieldType', '#sheetHint', '#fieldOffer', '.rvm-changes-footer'].forEach(sel => { const a = document.querySelector('.cs-sheet ' + sel), b = tmp.querySelector(sel); if (a && b) a.replaceWith(b); });
-  wireSheet();
-}
 function wireSheet() {
   const card = document.querySelector('.cs-sheet'); if (!card) return;
   const body = card.querySelector('.rvm-changes-body');
@@ -1528,13 +1509,13 @@ function primeSheet(key, ms) {
   /* a draft survives closing and reopening the same video; a new one starts from what the video has now */
   if (S.sheetFor === key) return;
   S.sheetType = ms.length && ms.every(m => m.type === 'organic') ? 'organic' : 'paid';   /* starts on what the videos hold; a mixed selection starts on the wider rights */
-  S.sheetTerm = '90'; S.sheetText = ''; S.sheetOff = []; prefill(ms.map(m => m.p.id));
+  S.sheetTerm = '90'; S.sheetText = ''; prefill(ms.map(m => m.p.id));
 }
 const openerKey = () => { const a = document.activeElement; return a && a.closest && a.closest('.cs-menu') && S.menu ? `#nf .cs-kebab[data-menu="${S.menu}"]` : focusKey(a); };
 let guardUntil = 0;   /* the second click of a double-click must not fall through to what the first one uncovered */
 function openSolo(ids) {
   S.sheetOpener = openerKey(); guardUntil = performance.now() + 500;
-  const key = ids.join(',');
+  const key = [...ids].sort().join(',');   /* a creator's set is the same draft from either video */
   primeSheet(key, ids.map(i => model(pieceOf(i))));
   S.sheetIds = ids; S.sheetSolo = true; S.sheetFor = key; S.menu = null; render();
   setTimeout(() => { const f = document.getElementById('offer') || document.querySelector('[data-offerfor]'); if (f) { f.focus(); f.setSelectionRange(f.value.length, f.value.length); } }, 30);
@@ -1561,8 +1542,7 @@ document.addEventListener('click', (e) => {
     else S.sel = S.sel.includes(id) ? S.sel.filter(i => i !== id) : S.sel.concat(id);
     render(); return;
   }
-  if ((x = el('[data-rt-extend]'))) { e.stopPropagation(); if (x.disabled) return; S.sheetSkipped = 0; const ids = x.dataset.rtExtend.split(','); openSolo(perCreator() && ids.length === 1 ? creatorSet(ids[0]) : ids); return; }
-  if ((x = el('[data-pick]'))) { const ta = document.getElementById('sheetText'); if (ta) S.sheetText = ta.value; const id = x.dataset.pick; S.sheetOff = S.sheetOff.includes(id) ? S.sheetOff.filter(i => i !== id) : S.sheetOff.concat(id); if (!S.offerTouched) prefill(); syncPicks(); return; }
+  if ((x = el('[data-rt-extend]'))) { e.stopPropagation(); if (x.disabled) return; S.sheetSkipped = []; const ids = x.dataset.rtExtend.split(','); openSolo(perCreator() && ids.length === 1 ? creatorSet(ids[0]) : ids); return; }
   if ((x = el('[data-offermode]'))) { setFork('offer', x.dataset.offermode); applySeed(); S.sheetSolo = false; S.sheetIds = []; S.sheetFor = null; S.counterFor = null; S.sent = null; S.sel = []; render(); return; }
   if ((x = el('[data-today]'))) { setFork('today', x.dataset.today); S.sel = []; S.menu = null; S.sheetSolo = false; S.sheetIds = []; S.sheetFor = null; S.counterFor = null; S.sent = null; render(); return; }
   if ((x = el('[data-answer]'))) {
@@ -1606,7 +1586,7 @@ document.addEventListener('click', (e) => {
   if ((x = el('[data-act]'))) {
     const act = x.dataset.act; const id = x.dataset.id;
     if (act === 'bulk-clear') { S.sel = []; render(); }
-    else if (act === 'bulk-extend') { const ids = S.sel.filter(i => extendable(model(pieceOf(i)))); S.sheetSkipped = S.sel.length - ids.length; if (ids.length) openSolo(ids); }
+    else if (act === 'bulk-extend') { const ids = S.sel.filter(i => extendable(model(pieceOf(i)))); S.sheetSkipped = S.sel.filter(i => !ids.includes(i));   /* ticked but cannot take an offer */ if (ids.length) openSolo(perCreator() ? [...new Set(ids.flatMap(creatorSet))] : ids); }
     else if (act === 'bulk-dl') {
       const list = S.sel.map(i => model(pieceOf(i))).filter(usableFile);
       if (list.length === 1) { downloadPiece(list[0]); toast(`Downloading ${fileName(list[0])}`); setTimeout(render, 50); } else if (list.length) downloadZip(list);
@@ -1655,7 +1635,7 @@ document.addEventListener('click', (e) => {
       S.sheetOpener = S.tab === 'content' ? `#nf .cs-kebab[data-menu="${ids[0]}"]` : `#nf .cs-check[data-sel="${ids[0]}"]`;
       guardUntil = performance.now() + 500;
       S.sent = { mode: FORKS.offer, names: [...new Set(ids.map(i => first(CREATORS[pieceOf(i).c])))], offers: perCreator() ? Object.keys(gid).length : ids.length, videos: ids.length, what: `${termOf(S.sheetTerm).of.replace(/^./, c => c.toUpperCase())} ${TYPES[S.sheetType].word} rights`, offer, total: perCreator() ? Object.keys(gid).reduce((t, c) => t + amountFor(c), 0) : offer * ids.length };
-      save('ext', S.ext); S.sheetSolo = false; S.sheetIds = []; S.sheetOff = []; S.sheetFor = null; S.sheetText = ''; S.sel = [];
+      save('ext', S.ext); S.sheetSolo = false; S.sheetIds = []; S.sheetFor = null; S.sheetText = ''; S.sel = [];
       render();   /* the green check page says it; no toast on top of it */
     }
     return;
@@ -1665,7 +1645,7 @@ let downT = null;   /* where the press started */
 document.addEventListener('pointerdown', (e) => { downT = e.target; document.body.classList.add('is-pointer'); }, true);
 document.addEventListener('keydown', (e) => { if (e.key === 'Tab' || e.key.startsWith('Arrow')) document.body.classList.remove('is-pointer'); }, true);
 document.addEventListener('input', (e) => {
-  if (e.target.id === 'offer' || e.target.dataset.offerfor) { const digits = e.target.value.replace(/[^0-9]/g, ''); if (digits !== e.target.value) e.target.value = digits; if (e.target.id === 'offer') S.sheetOffer = Number(digits) || 0; else S.sheetOffers[e.target.dataset.offerfor] = Number(digits) || 0; S.offerTouched = true; const list = sheetList(); const b = document.querySelector('.rvm-changes-send'); if (b) b.disabled = !offersOk(list); const tl = document.getElementById('offerTotal'); if (tl) tl.textContent = totalLine(list); }
+  if (e.target.id === 'offer' || e.target.dataset.offerfor) { const digits = e.target.value.replace(/[^0-9]/g, ''); if (digits !== e.target.value) e.target.value = digits; if (e.target.id === 'offer') S.sheetOffer = Number(digits) || 0; else S.sheetOffers[e.target.dataset.offerfor] = Number(digits) || 0; const list = sheetList(); const b = document.querySelector('.rvm-changes-send'); if (b) b.disabled = !offersOk(list); const tl = document.getElementById('offerTotal'); if (tl) tl.textContent = totalLine(list); }
   if (e.target.id === 'sheetText') S.sheetText = e.target.value;
 });
 document.addEventListener('keydown', (e) => {
