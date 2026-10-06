@@ -629,6 +629,7 @@ body.embed .cs-demo { display: none; }
 .cs-types { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .cs-type { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; border: 1px solid #e3e3e3; border-radius: 12px; background: #fff; text-align: left; cursor: pointer; font: inherit; color: #1c1c1c; }
 .cs-type:hover { border-color: #b9b9b9; }
+.cs-type:disabled { cursor: default; opacity: .55; }
 .cs-type.is-on { border-color: #1c1c1c; box-shadow: inset 0 0 0 1px #1c1c1c; }
 .cs-type-top { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 6px; font-size: 13px; font-weight: 600; line-height: 18px; }
 .cs-type-top > span:first-child { white-space: nowrap; }
@@ -756,7 +757,7 @@ const PIECES = [
     url:'instagram.com/reel/DAf…' },
   { id:'s1', c:'sofia',  kind:'TikTok',   clip:'emery-1',  posted:'2027-01-06', approved:'2026-12-28', size:'55 MB',
     cap:['new year, same barrier: my Repair+ verdict after a month','#simplepartner'],
-    url:'tiktok.com/@sofiabrandt/video/7490…' },
+    url:'tiktok.com/@sofiabrandt/video/7490…', ext:{ state:'extended', requested:'2027-01-20', accepted:'2027-01-25', term:'forever', type:'organic', offer:150 } },
   { id:'a1', c:'amara',  kind:'IG Reel',  clip:'quinn-2',  posted:null, approved:'2027-02-19', size:'42 MB',
     cap:['a week of Repair+ on dry winter skin, the before and after','#simplepartner'], url:null },
 ];
@@ -764,7 +765,7 @@ const PIECES = [
 /* ---- prototype scaffolding: only the day is switchable (deep links ?today=&tab=&filter=&embed) ---- */
 const TODAYS = [
   { key:'2026-12-10', label:'Dec 10', hint:'first posts live, everything active' },
-  { key:'2027-02-24', label:'Feb 24', hint:'mixed: ended, ending, active, extended' },
+  { key:'2027-02-24', label:'Feb 24', hint:'mixed: ending, active, extended, offers out, a counter-offer' },
   { key:'2027-04-02', label:'Apr 2',  hint:'most ended' },
 ];
 const qs = new URLSearchParams(location.search);
@@ -775,11 +776,13 @@ const FORKS = { today: (qDay && !isNaN(D(qDay))) ? qDay : load('today', '2027-02
 /* OFFERS: per creator (Julia, Oct 6: "the offers should be for all their content") or per video, toggled in the demo bar */
 FORKS.offer = ['video','creator'].includes(qs.get('offer')) ? qs.get('offer') : load('offer', 'creator');
 const perCreator = () => FORKS.offer === 'creator';
-/* the demo's waiting counter-offer: on Priya's Reel alone per video, on both of Priya's videos per creator */
-const SEED_P1 = PIECES.find(q => q.id === 'p1'), SEED_P2 = PIECES.find(q => q.id === 'p2');
+/* the demo's seeded offers: per video they sit on one video; per creator they cover all of the creator's videos
+   (Julia, Oct 6: "that shouldn't happen right because Emery says yes to both") */
+const SEED_SETS = [['quinn', 'q2', ['q1', 'q2']], ['emery', 'e1', ['e1', 'e2']], ['priya', 'p2', ['p1', 'p2']]];
+const SEED_BASE = Object.fromEntries(SEED_SETS.map(([, src]) => [src, { ...PIECES.find(q => q.id === src).ext }]));
 function applySeed() {
-  if (perCreator()) { SEED_P1.ext = { state:'countered', requested:'2027-02-20', countered:'2027-02-22', term:'90', type:'paid', offer:75, counter:100, group:'seed-priya' }; SEED_P2.ext = { ...SEED_P2.ext, offer:75, counter:100, group:'seed-priya' }; }
-  else { delete SEED_P1.ext; const { group, ...rest } = SEED_P2.ext; SEED_P2.ext = { ...rest, offer:75, counter:100 }; }
+  SEED_SETS.forEach(([c, src, ids]) => ids.forEach(id => { const q = PIECES.find(x => x.id === id);
+    if (perCreator()) q.ext = { ...SEED_BASE[src], group: `seed-${c}` }; else if (id === src) q.ext = { ...SEED_BASE[src] }; else delete q.ext; }));
 }
 applySeed();
 if (qs.has('embed')) document.body.classList.add('embed');
@@ -802,7 +805,7 @@ function outcome(r, type) {
   const paid = r.periods.filter(q => q.type === 'paid'), org = r.periods.filter(q => q.type === 'organic');
   const paidEnd = paid.length ? paid[paid.length - 1].end : undefined;
   if (r.perpetual && (type === 'organic' || !org.length)) return paidEnd != null && type === 'organic' && paidEnd > D(FORKS.today) ? `organic rights have no end date. Paid use still ends ${fmtY(paidEnd)}.` : type === 'organic' ? 'organic rights have no end date.' : 'the rights have no end date.';
-  if (type === 'paid') return paidEnd == null ? 'paid use has no end date.' : `paid use runs to ${fmtY(paidEnd)}.${r.ends > paidEnd ? ` Organic rights then run to ${fmtY(r.ends)}.` : ''}`;
+  if (type === 'paid') return paidEnd == null ? 'paid use has no end date.' : `paid use runs to ${fmtY(paidEnd)}.${r.perpetual ? ' Organic rights then have no end date.' : r.ends > paidEnd ? ` Organic rights then run to ${fmtY(r.ends)}.` : ''}`;
   return paidEnd && paidEnd < r.ends && paidEnd > D(FORKS.today) ? `organic rights run to ${fmtY(r.ends)}. Paid use still ends ${fmtY(paidEnd)}.` : `${type === 'organic' && paidEnd ? 'organic ' : ''}rights run to ${fmtY(r.ends)}.`;
 }
 /* the videos one offer covered, when it was sent to a creator for several videos at once */
@@ -843,19 +846,19 @@ function model(p) {
     }
     pendingReq = null; lastAnswer = { kind: 'yes', date: D(e.accepted), amount: e.agreed || e.offer, countered: !!e.counter, group: e.group };
     const acc = D(e.accepted), last = periods[periods.length - 1];
-    if (last.end == null) return;                                                 /* nothing follows rights with no end date */
+    if (last.end == null && !(e.type === 'paid' && last.type === 'organic')) return;   /* nothing follows rights with no end date, except paid on top of organic (Julia, Oct 6) */
     /* AGREED (Julia, Oct 6): more time follows on from the current end; adding paid starts the day the creator
        says yes. When paid use is already running at the yes, more paid follows on from where it ends. */
-    const liveAtYes = acc <= last.end;
+    const liveAtYes = last.end == null || acc <= last.end;
     if (e.type === 'paid' && liveAtYes) {
       let from = acc;
       let j = periods.findIndex(q => q.type === 'paid' && q.start <= acc && q.end > acc);
       if (j >= 0) { from = periods[j].end; while (j + 1 < periods.length && periods[j + 1].type === 'paid' && +periods[j + 1].start === +periods[j].end) { j++; from = periods[j].end; } }
       const heldEnd = last.end, heldType = last.type;
-      periods.forEach(q => { if (q.end > from) q.end = q.start > from ? q.start : from; });   /* time already bought stays: */
+      periods.forEach(q => { if (q.end == null || q.end > from) q.end = q.start > from ? q.start : from; });   /* time already bought stays: */
       const paidEnd = addTerm(from, t);
       periods.push({ start: from, end: paidEnd, type: 'paid' });
-      if (paidEnd != null && heldEnd > paidEnd) periods.push({ start: paidEnd, end: heldEnd, type: heldType });   /* it runs on after the paid term */
+      if (paidEnd != null && (heldEnd == null || heldEnd > paidEnd)) periods.push({ start: paidEnd, end: heldEnd, type: heldType });   /* it runs on after the paid term; organic with no end date runs on for ever */
     } else {
       const start = liveAtYes ? last.end : acc;
       periods.push({ start, end: addTerm(start, t), type: e.type, late: !liveAtYes });
@@ -868,6 +871,8 @@ function model(p) {
   m.periods = periods; m.accepted = accepted; m.acc = accepted[accepted.length - 1] || null;
   m.extended = accepted.length > 0;
   m.perpetual = lastP.end == null;
+  m.orgForever = m.perpetual && lastP.type === 'organic';   /* paid can still be added */
+  m.paidForever = m.perpetual && lastP.type === 'paid';     /* nothing left to buy */
   m.ends = m.perpetual ? FAR : lastP.end;
   m.extStart = m.extended ? lastP.start : null;
   m.lateStart = m.extended && !!lastP.late;                                       /* the last yes came after the rights had ended */
@@ -1048,10 +1053,10 @@ function card(m) {
   const kebab = `<button type="button" class="cs-kebab" data-menu="${p.id}" aria-expanded="${open}" aria-label="More for ${n}'s ${KL[m.kind]}" title="Download or extend rights">${I.dots}</button>`;
   /* why an item is off is on screen, not only in a tooltip */
   const dlWhy = usableFile(m) ? '' : m.requested ? `Comes back if ${n} says yes` : m.countered ? `Comes back if you accept ${n}'s counter-offer` : `Rights ended ${fmtEnd(m.ends)}`;
-  const lock = lockedAt(m), extWhy = m.requested ? `Sent ${fmt(D(m.ext.requested))}, no answer yet` : lock ? `Demo: it has an offer dated ${fmt(lock)}, after the day on screen` : '';
+  const lock = lockedAt(m), extWhy = m.requested ? `Sent ${fmt(D(m.ext.requested))}, no answer yet` : m.orgForever && !lock ? 'Organic never ends. This adds paid use.' : lock ? `Demo: it has an offer dated ${fmt(lock)}, after the day on screen` : '';
   const menu = !open ? '' : `<div class="cs-menu" role="group" aria-label="${n}'s ${KL[m.kind]}">
       <button type="button" data-dl="${p.id}" ${usableFile(m) ? '' : 'disabled'} title="${usableFile(m) ? `Download ${fileName(m)}` : m.requested ? `Rights ended ${fmtEnd(m.ends)}. Download comes back if ${n} says yes.` : m.countered ? `Rights ended ${fmtEnd(m.ends)}. Download comes back if you accept ${n}'s counter-offer.` : `Rights ended ${fmtEnd(m.ends)}. Extend to download again.`}">${I.dl}<span class="cs-menu-txt">Download video${dlWhy ? `<em>${dlWhy}</em>` : ''}</span></button>
-      ${m.countered ? `<button type="button" data-counter="${p.id}">${I.clock}<span class="cs-menu-txt">Review counter-offer<em>${n} asks $${m.ext.counter}</em></span></button>` : `<button type="button" data-rt-extend="${p.id}" ${extendable(m) ? '' : 'disabled'}>${I.clock}<span class="cs-menu-txt">${m.requested ? 'Offer sent' : m.perpetual ? (m.nextType || m.type === 'organic' ? 'Organic rights never end' : 'Rights never end') : 'Extend rights'}${extWhy ? `<em>${extWhy}</em>` : ''}</span></button>`}
+      ${m.countered ? `<button type="button" data-counter="${p.id}">${I.clock}<span class="cs-menu-txt">Review counter-offer<em>${n} asked $${m.ext.counter}</em></span></button>` : `<button type="button" data-rt-extend="${p.id}" ${extendable(m) ? '' : 'disabled'}>${I.clock}<span class="cs-menu-txt">${m.requested ? 'Offer sent' : m.paidForever ? 'Rights never end' : 'Extend rights'}${extWhy ? `<em>${extWhy}</em>` : ''}</span></button>`}
     </div>`;
   return `<div class="cs-card${open ? ' is-menu' : ''}" role="link" tabindex="0" data-prod-card="${p.id}" aria-label="${c.name}, ${KL[m.kind]}: opens the post on ${PLATFORM(m.kind)}">
       <div class="cs-media"><img src="${R}posters/${p.clip}.jpg" alt="">${platPill}</div>
@@ -1177,7 +1182,7 @@ function renderDashboard(ms) {
 const RT_LABEL = { active:'Active', ending:'Ending soon', ended:'Ended', countered:'Counter-offer', requested:'Offer sent', extended:'Extended', pending:'Not posted yet' };
 const RT_FILTERS = [['all','All'], ['countered','Counter-offer'], ['ending','Ending soon'], ['active','Active'], ['extended','Extended'], ['requested','Offer sent'], ['ended','Ended'], ['pending','Not posted']];
 const selectable = (m) => m.state !== 'pending';
-const extendable = (m) => m.state !== 'pending' && !m.requested && !m.countered && !m.perpetual && !lockedAt(m);
+const extendable = (m) => m.state !== 'pending' && !m.requested && !m.countered && !m.paidForever && !lockedAt(m);
 /* download stops when rights end (Julia, Oct 5); extending brings the file back */
 const usableFile = (m) => m.state !== 'pending' && m.state !== 'ended';
 function rtRows(ms) {
@@ -1227,7 +1232,7 @@ function statusTitle(m) {
   const n = first(m.c);
   const on = (e) => { const k = e.group ? PIECES.filter(q => { const x = S.ext[q.id] || q.ext; return x && x.group === e.group; }).length : 1; return k > 1 ? ` on ${k} videos` : ''; };   /* a set's price is one total */
   const what = (e) => `${e.t.of} ${TYPES[e.type].word} rights${on(e)}`;
-  if (m.countered) return ` title="You offered $${m.ext.offer} for ${what(m.ext)}. ${n} asks $${m.ext.counter}."`;
+  if (m.countered) return ` title="You offered $${m.ext.offer} for ${what(m.ext)}. ${n} asked $${m.ext.counter}."`;
   if (m.requested) return ` title="Offer sent ${fmt(D(m.ext.requested))}: ${what(m.ext)} at $${m.ext.offer}. No answer yet."`;
   if (m.acc) return m.acc.counter ? ` title="You accepted ${n}'s counter-offer ${fmt(D(m.acc.accepted))}: ${what(m.acc)} at $${m.acc.agreed || m.acc.offer}."` : ` title="${n} said yes ${fmt(D(m.acc.accepted))}: ${what(m.acc)} at $${m.acc.offer}."`;
   return '';
@@ -1236,7 +1241,7 @@ function statusTitle(m) {
 function statusNote(m) {
   const n = first(m.c), g = mates(m), k = g.length;
   const vids = k > 1 ? ` for ${k} videos` : '';
-  if (m.countered) return `${n} asks $${m.ext.counter}${vids} · you offered $${m.ext.offer}`;
+  if (m.countered) return `${n} asked $${m.ext.counter}`;
   if (m.requested) return `${fmt(D(m.ext.requested))}${k > 1 ? ` · ${k} videos` : ''}${m.ext.offer ? ` · $${m.ext.offer}` : ''} · no answer yet`;
   const a = m.answer;
   if (!a) return '';
@@ -1381,19 +1386,20 @@ function sheetHtml(list) {
     ? `<ul class="cs-sheet-list">${list.map(m => `<li><b>${first(m.c)} · ${KL[m.kind]}</b><span>${holds(m)}</span></li>`).join('')}</ul>`
     : `<p class="cs-sheet-names">${list.map(m => `${first(m.c)} · ${KL[m.kind]}`).join(', ')}</p>`;
   /* what this offer does not cover, and why: one creator's other videos, or ticked videos that cannot take an offer */
-  const why = (m) => m.state === 'pending' ? 'it is not posted yet' : m.requested ? 'an offer is already out' : m.countered ? 'a counter-offer is waiting for you' : m.perpetual ? 'its rights never end' : lockedAt(m) ? 'in the demo it has an offer dated later' : '';
+  const why = (m) => m.state === 'pending' ? 'it is not posted yet' : m.requested ? 'an offer is already out' : m.countered ? 'a counter-offer is waiting for you' : m.paidForever ? 'its rights never end' : lockedAt(m) ? 'in the demo it has an offer dated later' : '';
   const inOffer = (id) => list.some(m => m.p.id === id);
   const outIds = [...new Set([...(perCreator() && oneCreator ? PIECES.filter(q => q.c === list[0].p.c).map(q => q.id) : []), ...S.sheetSkipped])].filter(id => !inOffer(id));
   const outs = outIds.map(id => model(pieceOf(id))).filter(m => why(m));
   const skipped = !outs.length ? '' : outs.length <= 3 ? outs.map(m => `<p class="cs-sheet-names">${first(m.c)}'s ${KL[m.kind]} is not in this offer: ${why(m)}.</p>`).join('')
     : `<p class="cs-sheet-names">${outs.length} videos are not in this offer: each already has an offer out or a counter-offer waiting, or rights that never end.</p>`;
-  const types = Object.entries(TYPES).map(([k, t]) => `<button type="button" role="radio" class="cs-type${S.sheetType===k?' is-on':''}" data-type="${k}" aria-checked="${S.sheetType===k}"><span class="cs-type-top"><span>${t.label}</span>${current === k ? '<span class="cs-type-cur">Current</span>' : ''}</span><span class="cs-type-sub">${t.sub}</span></button>`).join('');
+  const orgDone = list.filter(m => m.orgForever);   /* organic with no end date: this offer can only add paid */
+  const types = Object.entries(TYPES).map(([k, t]) => `<button type="button" role="radio"${k === 'organic' && orgDone.length ? ' disabled aria-disabled="true"' : ''} class="cs-type${S.sheetType===k?' is-on':''}" data-type="${k}" aria-checked="${S.sheetType===k}"><span class="cs-type-top"><span>${t.label}</span>${current === k ? '<span class="cs-type-cur">Current</span>' : ''}</span><span class="cs-type-sub">${k === 'organic' && orgDone.length ? 'Already yours, with no end date.' : t.sub}</span></button>`).join('');
   const chips = TERMS.map(t => `<button type="button" class="cs-chip${S.sheetTerm===t.key?' is-on':''}" data-term="${t.key}" aria-pressed="${S.sheetTerm===t.key}">${t.label}</button>`).join('');
   return `<div class="cs-solo-scrim" data-act="sheet-close"><div class="rvm-changes-card cs-sheet" role="dialog" aria-modal="true" aria-label="${title}">
     <button type="button" class="rvm-changes-close" data-act="sheet-close" title="Close" aria-label="Close"><img src="${R}assets/icons/close-16.svg" alt=""></button>
     <div class="rvm-changes-body"><p class="rvm-changes-title">${title}</p>
       ${st ? `<p class="cs-sheet-status ${st.cls}"><i></i><span>${st.html}</span></p>${outs.length ? skipped : ''}` : names + skipped}
-      <div class="cs-sheet-field"><span class="cs-sheet-label" id="lblType">Type of rights</span>${mixed ? `<span class="cs-sheet-hint">These videos do not all have the same rights today. The offer asks for the same rights on each.</span>` : ''}<div class="cs-types" role="radiogroup" aria-labelledby="lblType">${types}</div></div>
+      <div class="cs-sheet-field"><span class="cs-sheet-label" id="lblType">Type of rights</span>${orgDone.length ? `<span class="cs-sheet-hint">${orgDone.length === list.length ? (list.length > 1 ? 'Organic rights on these videos have no end date. This offer adds paid use.' : 'Organic rights have no end date. This offer adds paid use.') : `${andList(orgDone.map(m => `${first(m.c)}'s ${KL[m.kind]}`))} already ${orgDone.length > 1 ? 'have' : 'has'} organic rights with no end date, so this offer adds paid use.`}</span>` : mixed ? `<span class="cs-sheet-hint">These videos do not all have the same rights today. The offer asks for the same rights on each.</span>` : ''}<div class="cs-types" role="radiogroup" aria-labelledby="lblType">${types}</div></div>
       <div class="cs-sheet-field"><span class="cs-sheet-label" id="lblDays">How long</span><span class="cs-sheet-hint" id="sheetHint">${sheetHint(list)}</span><div class="cs-chips" role="group" aria-labelledby="lblDays">${chips}</div></div>
       <div class="cs-sheet-field">${offerField(list, one, n, oneCreator, cn)}</div>
       <div class="cs-sheet-field"><label class="cs-sheet-label" for="sheetText">${I.lock}Private note to the Benable team <span class="cs-opt">· optional</span></label><span class="cs-sheet-hint" id="noteHint">Only the Benable team reads this. ${lone ? `${ln} never sees it.` : 'The creators never see it.'}</span><textarea class="rvm-changes-textarea" id="sheetText" aria-describedby="noteHint" placeholder="Anything the Benable team should know, for example where you plan to run it">${esc(S.sheetText)}</textarea></div>
@@ -1438,12 +1444,12 @@ function counterHtml(m) {
   if (set.length > 1) return counterSetHtml(m, set);
   const n = first(m.c), e = m.ext, vid = `${n}'s ${KL[m.kind]}`;
   const r = preview(m, e.type, e.term);
-  const now = m.state === 'ended' ? `If you decline, the rights stay ended. They ended ${fmtEnd(m.ends)}.` : `If you decline, the rights still end ${fmtEnd(m.ends)}.`;
+  const now = m.state === 'ended' ? `If you decline, the rights stay ended. They ended ${fmtEnd(m.ends)}.` : m.perpetual ? `If you decline, organic rights still have no end date${m.type === 'paid' && m.typeEnds !== FAR ? ` and paid use still ends ${fmtEnd(m.typeEnds)}` : ''}.` : `If you decline, the rights still end ${fmtEnd(m.ends)}.`;
   return `<div class="cs-solo-scrim is-center" data-act="counter-close"><div class="rvm-changes-card cs-sheet" role="dialog" aria-modal="true" aria-label="Counter-offer on ${vid}">
     <button type="button" class="rvm-changes-close" data-act="counter-close" title="Close" aria-label="Close"><img src="${R}assets/icons/close-16.svg" alt=""></button>
     <div class="rvm-changes-body"><p class="rvm-changes-title">Counter-offer on ${vid}</p>
       <p class="cs-sheet-status is-offer"><i></i><span>On ${fmt(D(e.requested))} you offered <b>$${e.offer}</b> for ${m.state === 'ended' ? e.t.of : e.t.more} ${TYPES[e.type].word} rights.</span></p>
-      <div class="cs-counter"><span class="cs-counter-k">${n} asks</span><span class="cs-counter-v">$${e.counter}</span><span class="cs-counter-s">For ${m.state === 'ended' ? e.t.of : e.t.more} ${TYPES[e.type].word} rights · ${fmt(D(e.countered))}</span></div>
+      <div class="cs-counter"><span class="cs-counter-k">${n} asked</span><span class="cs-counter-v">$${e.counter}</span><span class="cs-counter-s">For ${m.state === 'ended' ? e.t.of : e.t.more} ${TYPES[e.type].word} rights · ${fmt(D(e.countered))}</span></div>
       <p class="cs-sheet-hint cs-counter-hint">If you accept, ${outcome(r, e.type)} ${now}</p>
     </div>
     <div class="rvm-changes-footer"><div class="cs-counter-acts"><button type="button" class="cs-ghost" data-act="counter-decline" data-id="${m.p.id}">Decline</button><button type="button" class="rvm-changes-send" data-act="counter-accept" data-id="${m.p.id}">Accept $${e.counter}</button></div><p class="cs-sheet-next">Katie's team tells ${n} your answer.</p></div>
@@ -1458,7 +1464,7 @@ function counterSetHtml(m, set) {
     <button type="button" class="rvm-changes-close" data-act="counter-close" title="Close" aria-label="Close"><img src="${R}assets/icons/close-16.svg" alt=""></button>
     <div class="rvm-changes-body"><p class="rvm-changes-title">Counter-offer on ${n}'s videos</p>
       <p class="cs-sheet-status is-offer"><i></i><span>On ${fmt(D(e.requested))} you offered <b>$${offered}</b> for ${tw} ${TYPES[e.type].word} rights on ${k} videos.</span></p>
-      <div class="cs-counter"><span class="cs-counter-k">${n} asks</span><span class="cs-counter-v">$${asks}</span><span class="cs-counter-s">For ${tw} ${TYPES[e.type].word} rights on ${andList(set.map(x => `the ${KL[x.kind]}`))} · ${fmt(D(e.countered))}</span></div>
+      <div class="cs-counter"><span class="cs-counter-k">${n} asked</span><span class="cs-counter-v">$${asks}</span><span class="cs-counter-s">For ${tw} ${TYPES[e.type].word} rights on ${andList(set.map(x => `the ${KL[x.kind]}`))} · ${fmt(D(e.countered))}</span></div>
       <ul class="cs-sheet-list cs-counter-out">${lines}</ul>
       <p class="cs-sheet-hint cs-counter-hint">If you decline, each video's rights stay as they are.</p>
     </div>
@@ -1508,7 +1514,7 @@ function downloadZip(list) { list.forEach(m => markDownloaded(m.p.id)); toast(`P
 function primeSheet(key, ms) {
   /* a draft survives closing and reopening the same video; a new one starts from what the video has now */
   if (S.sheetFor === key) return;
-  S.sheetType = ms.length && ms.every(m => m.type === 'organic') ? 'organic' : 'paid';   /* starts on what the videos hold; a mixed selection starts on the wider rights */
+  S.sheetType = ms.length && ms.every(m => m.type === 'organic') && !ms.some(m => m.orgForever) ? 'organic' : 'paid';   /* starts on what the videos hold; a mixed selection starts on the wider rights */
   S.sheetTerm = '90'; S.sheetText = ''; prefill(ms.map(m => m.p.id));
 }
 const openerKey = () => { const a = document.activeElement; return a && a.closest && a.closest('.cs-menu') && S.menu ? `#nf .cs-kebab[data-menu="${S.menu}"]` : focusKey(a); };
