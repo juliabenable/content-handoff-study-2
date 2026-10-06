@@ -431,7 +431,8 @@ body.embed .cs-demo { display: none; }
 .nf .cs-rt-status { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 500; color: #444; white-space: nowrap; }
 .nf .cs-rt-status i { width: 8px; height: 8px; border-radius: 999px; background: #2baf87; flex: none; }
 .nf .cs-rt-st { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-.nf .cs-rt-st em { font-style: normal; font-weight: 400; font-size: 12px; line-height: 16px; color: #767676; }
+.nf .cs-rt-st em { font-style: normal; font-weight: 400; font-size: 12px; line-height: 16px; color: #767676; white-space: normal; }
+.nf .cs-rt-status { min-width: 0; }
 .nf .cs-rt-status.is-ending { color: #b45309; }
 .nf .cs-rt-status.is-ending i { background: #e88e2c; }
 .nf .cs-rt-status.is-ended { color: #767676; }
@@ -672,7 +673,7 @@ body.embed .cs-demo { display: none; }
    ================================================================== */
 const D = (s) => new Date(s + 'T12:00:00');
 const DAY = 86400000;
-const addDays = (d, n) => new Date(d.getTime() + n * DAY);
+const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n, 12);
 const diffDays = (a, b) => Math.round((a - b) / DAY);
 const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const MONL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -808,9 +809,9 @@ function preview(m, type, termKey) {
 function outcome(r, type) {
   const paid = r.periods.filter(q => q.type === 'paid'), org = r.periods.filter(q => q.type === 'organic');
   const paidEnd = paid.length ? paid[paid.length - 1].end : undefined;
-  if (r.perpetual && (type === 'organic' || !org.length)) return paidEnd !== undefined && paidEnd != null && type === 'organic' ? `organic rights have no end date. Paid use still ends ${fmtY(paidEnd)}.` : 'the rights have no end date.';
+  if (r.perpetual && (type === 'organic' || !org.length)) return paidEnd != null && type === 'organic' && paidEnd > D(FORKS.today) ? `organic rights have no end date. Paid use still ends ${fmtY(paidEnd)}.` : type === 'organic' ? 'organic rights have no end date.' : 'the rights have no end date.';
   if (type === 'paid') return paidEnd == null ? 'paid use has no end date.' : `paid use runs to ${fmtY(paidEnd)}.${r.ends > paidEnd ? ` Organic rights then run to ${fmtY(r.ends)}.` : ''}`;
-  return paidEnd && paidEnd < r.ends ? `organic rights run to ${fmtY(r.ends)}. Paid use still ends ${fmtY(paidEnd)}.` : `rights run to ${fmtY(r.ends)}.`;
+  return paidEnd && paidEnd < r.ends && paidEnd > D(FORKS.today) ? `organic rights run to ${fmtY(r.ends)}. Paid use still ends ${fmtY(paidEnd)}.` : `${type === 'organic' && paidEnd ? 'organic ' : ''}rights run to ${fmtY(r.ends)}.`;
 }
 /* the videos one offer covered, when it was sent to a creator for several videos at once */
 function mates(m) { return m.group ? MODELS().filter(x => x.group === m.group) : [m]; }
@@ -818,7 +819,9 @@ const sumOf = (list, f) => list.reduce((t, x) => t + (Number(f(x)) || 0), 0);
 const andList = (a) => a.length < 2 ? a.join('') : `${a.slice(0, -1).join(', ')} and ${a[a.length - 1]}`;
 /* in per creator mode, Extend on one video opens the creator's whole set, that video first */
 function creatorSet(id) { const c = PIECES.find(q => q.id === id).c; return [id, ...PIECES.filter(q => q.c === c && q.id !== id).map(q => q.id).filter(i => extendable(model(pieceOf(i))))]; }
-function extChain(p) { const chain = []; for (let e = S.ext[p.id] || p.ext || null; e; e = e.prev) chain.unshift(e); return chain; }
+/* a video given an offer or answer in this demo on a later day than the one on screen: stepping back does not rewrite that history (the seeded records are scenery; ↺ resets) */
+function lockedAt(m) { const t = D(FORKS.today); for (let e = S.ext[m.p.id] || null; e; e = e.prev) for (const k of ['requested','countered','accepted','declined','refused']) if (e[k] && D(e[k]) > t) return D(e[k]); return null; }
+function extChain(p) { const chain = []; for (let e = S.ext[p.id] || p.ext || null; e; e = e.prev) if (e.state && e.term) chain.unshift(e); return chain; }
 /* ---- derived model for one piece at "today" ---- */
 function model(p) {
   const today = D(FORKS.today);
@@ -846,7 +849,7 @@ function model(p) {
       if (e.state === 'declined' && on(e.declined)) { pendingReq = null; lastAnswer = { kind: 'declined', date: D(e.declined), group: e.group }; return; }
       pendingReq = { ...e, state: on(e.countered) ? 'countered' : 'requested' }; lastAnswer = null; return;
     }
-    pendingReq = null; lastAnswer = { kind: 'yes', date: D(e.accepted), amount: e.offer, countered: !!e.counter, group: e.group };
+    pendingReq = null; lastAnswer = { kind: 'yes', date: D(e.accepted), amount: e.agreed || e.offer, countered: !!e.counter, group: e.group };
     const acc = D(e.accepted), last = periods[periods.length - 1];
     if (last.end == null) return;                                                 /* nothing follows rights with no end date */
     /* AGREED (Julia, Oct 6): more time follows on from the current end; adding paid starts the day the creator
@@ -977,7 +980,7 @@ function render() {
   const scroller = root.querySelector('.workspace-grid');
   const pageTop = scroller && last.tab === S.tab ? scroller.scrollTop : 0;
   const fkey = focusKey(document.activeElement);
-  const endingCount = ms.filter(m => m.state === 'ending' && !m.requested && !m.countered).length, counterCount = ms.filter(m => m.countered).length;
+  const endingCount = ms.filter(m => m.state === 'ending' && !m.requested && !m.countered).length, counterCount = new Set(ms.filter(m => m.countered).map(m => m.group || m.p.id)).size;
   const tab = S.tab;
   const dot = (endingCount || counterCount) ? `<span class="cs-tabdot" title="${[endingCount ? `Rights ending soon on ${plural(endingCount, 'video')}` : '', counterCount ? `${plural(counterCount, 'counter-offer')} to answer` : ''].filter(Boolean).join(', ')}"></span>` : '';
   const tabBtn = (k, label, d) => `<button type="button" class="workflow-dashboard-tab${tab===k?' active':''}" data-tab="${k}" aria-pressed="${tab===k}">${label}${d && tab !== k ? dot : ''}</button>`;
@@ -1023,7 +1026,8 @@ function render() {
   /* focus: back where it was, or to whatever opened the sheet */
   let target = fkey ? document.querySelector(fkey) : null;
   if (target && target.disabled) target = null;
-  if (!S.sheetSolo && S.sheetOpener) { if (!target) target = document.querySelector(S.sheetOpener); S.sheetOpener = null; }
+  if (S.counterFor || S.sent) target = document.querySelector('.cs-sheet .rvm-changes-send');   /* Accept, or Done */
+  else if (!S.sheetSolo && S.sheetOpener) { if (!target) target = document.querySelector(S.sheetOpener); S.sheetOpener = null; }
   if (!target && fkey && !S.sheetSolo) target = root.querySelector('.cs-filter.is-on, [data-rt-filter].is-on');
   if (target) target.focus({ preventScroll: true });
   wireSheet();
@@ -1053,10 +1057,10 @@ function card(m) {
   const kebab = `<button type="button" class="cs-kebab" data-menu="${p.id}" aria-expanded="${open}" aria-label="More for ${n}'s ${KL[m.kind]}" title="Download or extend rights">${I.dots}</button>`;
   /* why an item is off is on screen, not only in a tooltip */
   const dlWhy = usableFile(m) ? '' : m.requested ? `Comes back if ${n} says yes` : m.countered ? `Comes back if you accept ${n}'s counter-offer` : `Rights ended ${fmtEnd(m.ends)}`;
-  const extWhy = m.requested ? `Sent ${fmt(D(m.ext.requested))}, no answer yet` : '';
+  const lock = lockedAt(m), extWhy = m.requested ? `Sent ${fmt(D(m.ext.requested))}, no answer yet` : lock ? `Demo: it has an offer dated ${fmt(lock)}, after the day on screen` : '';
   const menu = !open ? '' : `<div class="cs-menu" role="group" aria-label="${n}'s ${KL[m.kind]}">
       <button type="button" data-dl="${p.id}" ${usableFile(m) ? '' : 'disabled'} title="${usableFile(m) ? `Download ${fileName(m)}` : m.requested ? `Rights ended ${fmtEnd(m.ends)}. Download comes back if ${n} says yes.` : m.countered ? `Rights ended ${fmtEnd(m.ends)}. Download comes back if you accept ${n}'s counter-offer.` : `Rights ended ${fmtEnd(m.ends)}. Extend to download again.`}">${I.dl}<span class="cs-menu-txt">Download video${dlWhy ? `<em>${dlWhy}</em>` : ''}</span></button>
-      ${m.countered ? `<button type="button" data-counter="${p.id}">${I.clock}<span class="cs-menu-txt">Review counter-offer<em>${n} asks $${m.ext.counter}</em></span></button>` : `<button type="button" data-rt-extend="${p.id}" ${extendable(m) ? '' : 'disabled'}>${I.clock}<span class="cs-menu-txt">${m.requested ? 'Offer sent' : m.perpetual ? 'Rights never end' : 'Extend rights'}${extWhy ? `<em>${extWhy}</em>` : ''}</span></button>`}
+      ${m.countered ? `<button type="button" data-counter="${p.id}">${I.clock}<span class="cs-menu-txt">Review counter-offer<em>${n} asks $${m.ext.counter}</em></span></button>` : `<button type="button" data-rt-extend="${p.id}" ${extendable(m) ? '' : 'disabled'}>${I.clock}<span class="cs-menu-txt">${m.requested ? 'Offer sent' : m.perpetual ? (m.nextType || m.type === 'organic' ? 'Organic rights never end' : 'Rights never end') : 'Extend rights'}${extWhy ? `<em>${extWhy}</em>` : ''}</span></button>`}
     </div>`;
   return `<div class="cs-card${open ? ' is-menu' : ''}" role="link" tabindex="0" data-prod-card="${p.id}" aria-label="${c.name}, ${KL[m.kind]}: opens the post on ${PLATFORM(m.kind)}">
       <div class="cs-media"><img src="${R}posters/${p.clip}.jpg" alt="">${platPill}</div>
@@ -1182,7 +1186,7 @@ function renderDashboard(ms) {
 const RT_LABEL = { active:'Active', ending:'Ending soon', ended:'Ended', countered:'Counter-offer', requested:'Offer sent', extended:'Extended', pending:'Not posted yet' };
 const RT_FILTERS = [['all','All'], ['countered','Counter-offer'], ['ending','Ending soon'], ['active','Active'], ['extended','Extended'], ['requested','Offer sent'], ['ended','Ended'], ['pending','Not posted']];
 const selectable = (m) => m.state !== 'pending';
-const extendable = (m) => m.state !== 'pending' && !m.requested && !m.countered && !m.perpetual;
+const extendable = (m) => m.state !== 'pending' && !m.requested && !m.countered && !m.perpetual && !lockedAt(m);
 /* download stops when rights end (Julia, Oct 5); extending brings the file back */
 const usableFile = (m) => m.state !== 'pending' && m.state !== 'ended';
 function rtRows(ms) {
@@ -1232,7 +1236,7 @@ function statusTitle(m) {
   const n = first(m.c);
   if (m.countered) return ` title="You offered $${m.ext.offer} for ${m.ext.t.of} ${TYPES[m.ext.type].word} rights. ${n} asks $${m.ext.counter}."`;
   if (m.requested) return ` title="Offer sent ${fmt(D(m.ext.requested))}: ${askText(m.ext)}. No answer yet."`;
-  if (m.acc) return m.acc.counter ? ` title="You accepted ${n}'s counter-offer ${fmt(D(m.acc.accepted))}: ${m.acc.t.more} ${TYPES[m.acc.type].word} rights at $${m.acc.offer}."` : ` title="${n} said yes ${fmt(D(m.acc.accepted))}: ${m.acc.t.more} ${TYPES[m.acc.type].word} rights at $${m.acc.offer}."`;
+  if (m.acc) return m.acc.counter ? ` title="You accepted ${n}'s counter-offer ${fmt(D(m.acc.accepted))}: ${m.acc.t.more} ${TYPES[m.acc.type].word} rights at $${m.acc.agreed || m.acc.offer}."` : ` title="${n} said yes ${fmt(D(m.acc.accepted))}: ${m.acc.t.more} ${TYPES[m.acc.type].word} rights at $${m.acc.offer}."`;
   return '';
 }
 /* the line under the status: the latest answer, so the brand sees what happened to its offer (Julia, Oct 6) */
@@ -1305,14 +1309,16 @@ function sheetHint(list) {
     const n = first(one.c);
     if (one.state === 'ended') return t.days == null ? `If ${n} says yes, the rights start that day, with no end date.` : `If ${n} says yes, the rights run ${t.label} from that day.`;
     const r = preview(one, S.sheetType, S.sheetTerm), what = outcome(r, S.sheetType);
-    if (addsPaid(one)) return `If ${n} says yes, paid use starts that day and ${what.replace(/^paid use /, '')}`;
+    if (addsPaid(one)) return `If ${n} says yes today, ${what}`;
     const by = S.sheetType === 'paid' ? one.typeEnds : one.ends;
     return t.days == null ? `If ${n} says yes, ${what}` : `If ${n} says yes by ${fmtEnd(by)}, ${what}`;
   }
   /* several videos: name the creator when they are all one creator's (per creator offers) */
   const who = new Set(list.map(m => m.p.c)).size === 1 && list.length ? first(list[0].c) : null;
   const ifYes = who ? `If ${who} says yes` : 'If a creator says yes', they = who || 'they';
-  if (list.some(addsPaid)) return t.days == null ? `${ifYes}, paid use starts that day, with no end date.` : `${ifYes}, paid use starts that day and runs ${t.label}.`;
+  if (list.length && list.every(addsPaid)) return t.days == null ? `${ifYes}, paid use starts that day, with no end date.` : `${ifYes}, paid use starts that day and runs ${t.label}.`;
+  if (list.some(addsPaid)) return `Videos with paid use today get more after it ends; the others start paid use the day ${who || 'the creator'} says yes.`;
+  if (!list.length) return 'Tick at least one video.';
   if (t.days == null) return `${ifYes}, the rights on ${who ? 'each video' : 'that video'} have no end date.`;
   return list.every(m => m.state === 'ended') ? `${ifYes}, the rights on ${who ? 'each video' : 'that video'} run ${t.label} from that day.`
     : `${ifYes} before a video's end date, its new period follows on from that date. Otherwise it starts the day ${they} ${who ? 'says' : 'say'} yes.`;
@@ -1444,12 +1450,12 @@ function counterHtml(m) {
   if (set.length > 1) return counterSetHtml(m, set);
   const n = first(m.c), e = m.ext, vid = `${n}'s ${KL[m.kind]}`;
   const r = preview(m, e.type, e.term);
-  const now = m.state === 'ended' ? `If you decline, the rights stay ended (they ended ${fmtEnd(m.ends)}).` : `If you decline, the rights still end ${fmtEnd(m.ends)}.`;
+  const now = m.state === 'ended' ? `If you decline, the rights stay ended. They ended ${fmtEnd(m.ends)}.` : `If you decline, the rights still end ${fmtEnd(m.ends)}.`;
   return `<div class="cs-solo-scrim is-center" data-act="counter-close"><div class="rvm-changes-card cs-sheet" role="dialog" aria-modal="true" aria-label="Counter-offer on ${vid}">
     <button type="button" class="rvm-changes-close" data-act="counter-close" title="Close" aria-label="Close"><img src="${R}assets/icons/close-16.svg" alt=""></button>
     <div class="rvm-changes-body"><p class="rvm-changes-title">Counter-offer on ${vid}</p>
-      <p class="cs-sheet-status is-offer"><i></i><span>On ${fmt(D(e.requested))} you offered <b>$${e.offer}</b> for ${e.t.more} ${TYPES[e.type].word} rights.</span></p>
-      <div class="cs-counter"><span class="cs-counter-k">${n} asks</span><span class="cs-counter-v">$${e.counter}</span><span class="cs-counter-s">For ${e.t.more} ${TYPES[e.type].word} rights · ${fmt(D(e.countered))}</span></div>
+      <p class="cs-sheet-status is-offer"><i></i><span>On ${fmt(D(e.requested))} you offered <b>$${e.offer}</b> for ${m.state === 'ended' ? e.t.of : e.t.more} ${TYPES[e.type].word} rights.</span></p>
+      <div class="cs-counter"><span class="cs-counter-k">${n} asks</span><span class="cs-counter-v">$${e.counter}</span><span class="cs-counter-s">For ${m.state === 'ended' ? e.t.of : e.t.more} ${TYPES[e.type].word} rights · ${fmt(D(e.countered))}</span></div>
       <p class="cs-sheet-hint cs-counter-hint">If you accept, ${outcome(r, e.type)} ${now}</p>
     </div>
     <div class="rvm-changes-footer"><div class="cs-counter-acts"><button type="button" class="cs-ghost" data-act="counter-decline" data-id="${m.p.id}">Decline</button><button type="button" class="rvm-changes-send" data-act="counter-accept" data-id="${m.p.id}">Accept $${e.counter}</button></div><p class="cs-sheet-next">Katie's team tells ${n} your answer.</p></div>
@@ -1617,12 +1623,13 @@ document.addEventListener('click', (e) => {
       const m = model(pieceOf(id)), set = mates(m).filter(x => x.countered), n = first(m.c), today = FORKS.today;
       const ids = (set.length ? set : [m]).map(x => x.p.id);
       S.counterFor = null; guardUntil = performance.now() + 500;
+      S.sheetOpener = S.tab === 'content' ? `#nf .cs-kebab[data-menu="${id}"]` : `#nf .cs-check[data-sel="${id}"]`;   /* the Review button is gone after an answer */
       const curOf = (i) => S.ext[i] || pieceOf(i).ext;
       if (act === 'counter-accept') {
-        const cur = curOf(id), total = cur.counter, type = cur.type || BASE.type;   /* a set's counter is one total */
-        ids.forEach(i => { const c = curOf(i); S.ext[i] = { ...c, state: 'extended', accepted: today, offer: c.counter }; });
+        const cur = curOf(id), total = cur.counter, type = cur.type || BASE.type, wasEnded = set.length ? set.every(x => x.state === 'ended') : m.state === 'ended';   /* a set's counter is one total */
+        ids.forEach(i => { const c = curOf(i); S.ext[i] = { ...c, state: 'extended', accepted: today, agreed: c.counter }; });
         const lines = ids.map(i => { const x = model(pieceOf(i)), o = outcome(x, type); return ids.length > 1 ? `${KL[x.kind]}: ${o}` : `${n}'s ${KL[x.kind]}: ${o}`; }).map(t => t.charAt(0).toUpperCase() + t.slice(1));
-        S.sent = { kind: 'accepted', names: [n], videos: ids.length, what: `${termOf(cur.term).more.replace(/^./, c => c.toUpperCase())} ${TYPES[type].word} rights`, total, until: lines.join(' ') };
+        S.sent = { kind: 'accepted', names: [n], videos: ids.length, what: `${(wasEnded ? termOf(cur.term).of : termOf(cur.term).more).replace(/^./, c => c.toUpperCase())} ${TYPES[type].word} rights`, total, until: lines.join(' ') };
       } else { ids.forEach(i => { S.ext[i] = { ...curOf(i), state: 'refused', refused: today }; }); toast(ids.length > 1 ? `You declined ${n}'s counter-offer on ${ids.length} videos` : `You declined the counter-offer on ${n}'s ${KL[m.kind]}`); }
       save('ext', S.ext); render();
     }
