@@ -397,7 +397,7 @@ body.embed .cs-demo { display: none; }
 .nf .cs-seg button + button { border-left: 1px solid #e3e3e3; }
 .nf .cs-seg button.is-on { background: #1a1a1a; color: #fff; }
 .nf .cs-rt-card { border: 1px solid #e3e3e3; border-radius: 16px; background: #fff; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,.03); }
-.nf .cs-rt-cols, .nf .cs-rt-row { display: grid; grid-template-columns: 22px minmax(190px, 1.5fr) 84px minmax(140px, .9fr) minmax(150px, 1fr) 276px; gap: 14px; align-items: center; padding: 0 20px; }
+.nf .cs-rt-cols, .nf .cs-rt-row { display: grid; grid-template-columns: 22px minmax(190px, 1.5fr) 84px minmax(140px, .9fr) minmax(150px, 1fr) 212px; gap: 14px; align-items: center; padding: 0 20px; }
 .nf .cs-rt-cols { height: 40px; background: #f8f9fa; border-bottom: 1px solid #e3e3e3; font-size: 12px; font-weight: 600; color: #717171; }
 .nf .cs-rt-sort { display: inline-flex; align-items: center; gap: 4px; font: inherit; font-weight: 600; color: inherit; cursor: pointer; }
 .nf .cs-rt-sort.is-on { color: #1a1a1a; }
@@ -408,7 +408,8 @@ body.embed .cs-demo { display: none; }
 .nf .cs-rt-row.is-sel { background: #faf9ff; }
 .nf .cs-rt-video { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .nf .cs-rt-thumb { width: 36px; height: 48px; border-radius: 6px; overflow: hidden; background: #eee; flex: none; }
-.nf .cs-rt-thumb.is-ph, .cs-pickt-img.is-ph { display: flex; align-items: center; justify-content: center; color: #4d5561; background: radial-gradient(circle at center top, rgba(255,255,255,.52), rgba(255,255,255,0) 44%), linear-gradient(#eceff3, #d9dde2); }
+.nf .cs-rt-thumb.is-ph img, .cs-pickt-img.is-ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; display: block; }
+.nf .cs-rt-thumb.is-ph, .cs-pickt-img.is-ph { position: relative; display: flex; align-items: center; justify-content: center; color: #4d5561; background: radial-gradient(circle at center top, rgba(255,255,255,.52), rgba(255,255,255,0) 44%), linear-gradient(#eceff3, #d9dde2); }
 .nf .cs-rt-thumb.is-ph svg { width: 16px; height: 16px; }
 .cs-pickt-img.is-ph svg { width: 22px; height: 22px; }
 
@@ -423,6 +424,7 @@ body.embed .cs-demo { display: none; }
 .nf .cs-rt-status i { width: 8px; height: 8px; border-radius: 999px; background: #2baf87; flex: none; }
 .nf .cs-rt-st { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
 .nf .cs-rt-st em { font-style: normal; font-weight: 400; font-size: 12px; line-height: 16px; color: #767676; white-space: normal; }
+.nf .cs-rt-st em .cs-nowrap { white-space: nowrap; }
 .nf .cs-rt-status { min-width: 0; }
 .nf .cs-rt-status.is-ending { color: #b45309; }
 .nf .cs-rt-status.is-ending i { background: #e88e2c; }
@@ -580,9 +582,7 @@ body.embed .cs-demo { display: none; }
   .nf .cs-body { padding: 12px 12px; }
 }
 @media (max-width: 1240px) {
-  .nf .cs-rt-cols, .nf .cs-rt-row { grid-template-columns: 22px minmax(150px, 1.4fr) minmax(110px, .9fr) minmax(120px, 1fr) 252px; }
-  .nf .cs-rt-actions { gap: 6px; }
-  .nf .cs-rt-actions .cs-extend { padding: 0 10px; }
+  .nf .cs-rt-cols, .nf .cs-rt-row { grid-template-columns: 22px minmax(150px, 1.4fr) minmax(110px, .9fr) minmax(130px, 1fr) 196px; }
   .nf .cs-rt-cols > :nth-child(3), .nf .cs-rt-row > :nth-child(3) { display: none; }   /* Posted folds away first */
   .nf .cs-bigday { min-height: 84px; padding: 4px 4px 6px; }
 }
@@ -1233,19 +1233,20 @@ function endCell(m) {
   const sub = m.daysLeft < 0 ? agoDays(-m.daysLeft) : m.daysLeft === 0 ? 'today' : `in ${plural(m.daysLeft, 'day')}`;
   return `<span class="cs-rt-end${m.state === 'ending' && !m.requested && !m.countered ? ' is-ending' : m.state === 'ended' ? ' is-ended' : ''}"><b>${fmtEnd(m.ends)}</b><span>${sub} · ${tw}</span></span>`;
 }
-/* no video thumbnails in the portal yet (Julia, Oct 6: "we won't have the pictures here yet - find placeholder"):
-   production's tile for a recent post without a thumbnail, a soft grey gradient with the platform's icon */
+/* the video's picture, and production's placeholder underneath it for when a thumbnail is missing or fails to load
+   (Julia, Oct 6: "placeholder only as fallback"). The placeholder is production's tile for a recent post with no
+   thumbnail: a soft grey gradient with the platform's icon */
 const PH = {
   tt: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.98a8.18 8.18 0 0 0 4.76 1.52V7.05a4.84 4.84 0 0 1-1-.36z" fill="currentColor"/></svg>',
   ig: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" stroke="currentColor" stroke-width="2"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
 };
 /* the demo's later-day lock, in words */
 const lockWhy = (m) => { const l = lockedAt(m); return l ? `Demo: this video has an offer dated ${fmt(l)}. Pick a later day to act on it.` : ''; };
+const thumb = (m) => `${PH[m.plat]}${m.p.clip ? `<img src="${R}posters/${m.p.clip}.jpg" alt="" onerror="this.remove()">` : ''}`;
 /* why a row's Extend cannot send a new offer right now (Julia, Oct 6: Extend "should" appear for everyone) */
 function extendWhy(m) {
   const n = first(m.c), lock = lockedAt(m);
   if (m.requested) return `${n} has not answered the ${fmt(D(m.ext.requested))} offer yet.`;
-  if (m.countered) return `Answer ${n}'s counter-offer first.`;
   if (m.paidForever) return 'These rights never end.';
   if (lock) return lockWhy(m);
   const sib = openSibling(m); if (sib) return `An offer to ${n} is still open on the ${KL[sib.kind]}.`;
@@ -1263,7 +1264,7 @@ function rowActions(m) {
   /* a counter-offer waits on the brand: one button opens it, where Accept and Decline live (Julia, Oct 6) */
   const review = !m.countered ? '' : lockedAt(m) ? `<button type="button" class="cs-extend is-review is-off" data-counter="${m.p.id}" aria-disabled="true" title="${lockWhy(m)}" aria-label="Review ${n}'s counter-offer. ${lockWhy(m)}">Review</button>`
     : `<button type="button" class="cs-extend is-review" data-counter="${m.p.id}" aria-label="Review ${n}'s counter-offer">Review</button>`;
-  return review + ext + link + post + dl;
+  return (m.countered ? review : ext) + link + post + dl;   /* on a counter-offer, Review takes Extend's place (Julia, Oct 6) */
 }
 /* the row carries what the popup used to say: what was offered, or what the creator agreed to */
 function statusTitle(m) {
@@ -1278,15 +1279,15 @@ function statusTitle(m) {
 /* the line under the status: the latest answer, so the brand sees what happened to its offer (Julia, Oct 6) */
 function statusNote(m) {
   const n = first(m.c), g = mates(m), k = g.length;
-  const vids = k > 1 ? ` for ${k} videos` : '';
   if (m.countered) return `${n} asked $${m.ext.counter}`;
-  if (m.requested) return `${fmt(D(m.ext.requested))}${k > 1 ? ` · ${k} videos` : ''}${m.ext.offer ? ` · $${m.ext.offer}` : ''} · no answer yet`;
+  if (m.requested) return `<span class="cs-nowrap">${fmt(D(m.ext.requested))}${k > 1 ? ` · ${k} videos` : ''}${m.ext.offer ? ` · $${m.ext.offer}` : ''}</span><br>No answer yet`;   /* "No answer yet" on its own line (Julia, Oct 6) */
   const a = m.answer;
   if (!a) return '';
   const amt = a.amount;
-  if (a.kind === 'yes') return a.countered ? `You accepted $${amt}${vids} · ${fmt(a.date)}` : `${n} said yes ${fmt(a.date)} · $${amt}${vids}`;
+  /* short: who answered and when; the amount and the videos are in the hover (Julia, Oct 6: "No need for $75 for 2 videos") */
+  if (a.kind === 'yes') return a.countered ? `You accepted $${amt} · ${fmt(a.date)}` : `${n} said yes ${fmt(a.date)}`;
   if (a.kind === 'declined') return `${n} said no ${fmt(a.date)}`;
-  if (a.kind === 'refused') return `You declined $${amt}${vids} · ${fmt(a.date)}`;
+  if (a.kind === 'refused') return `You declined $${amt} · ${fmt(a.date)}`;
   return '';
 }
 function renderRights(ms) {
@@ -1318,7 +1319,7 @@ function renderRights(ms) {
     <div class="cs-rt-cols${sel.length ? ' is-bulk' : ''}"><button type="button" class="cs-check" role="checkbox" aria-checked="${allState}" data-sel="all" aria-label="Select all" ${rows.length ? '' : 'disabled'}>${allState === 'true' ? '✓' : allState === 'mixed' ? '-' : ''}</button>${sel.length ? line : `${sortBtn('creator', 'Video')}${sortBtn('posted', 'Posted')}${sortBtn('ends', 'Rights end')}${sortBtn('status', 'Status')}<span></span>`}</div>
     ${rows.length ? rows.map(m => `<div class="cs-rt-row${S.sel.includes(m.p.id) ? ' is-sel' : ''}" data-vid="${m.p.id}">
       ${check(m)}
-      <span class="cs-rt-video"><span class="cs-rt-thumb is-ph" aria-hidden="true">${PH[m.plat]}</span><span class="cs-rt-names"><span class="cs-name">${m.c.name}</span><span class="cs-meta">${m.c.handle} · ${KL[m.kind]}</span></span></span>
+      <span class="cs-rt-video"><span class="cs-rt-thumb is-ph" aria-hidden="true">${thumb(m)}</span><span class="cs-rt-names"><span class="cs-name">${m.c.name}</span><span class="cs-meta">${m.c.handle} · ${KL[m.kind]}</span></span></span>
       <span class="cs-rt-date">${fmt(m.posted)}</span>
       ${endCell(m)}
       <span class="cs-rt-status is-${m.chip}"${statusTitle(m)}><i></i><span class="cs-rt-st"><span>${RT_LABEL[m.chip]}</span>${statusNote(m) ? `<em>${statusNote(m)}</em>` : ''}</span></span>
@@ -1413,7 +1414,7 @@ function sheetHtml(list) {
   const short = (m) => m.state === 'ended' ? `ended ${fmtEnd(m.ends)}` : m.perpetual && !m.nextType ? 'no end date' : m.orgForever ? `paid until ${fmtEnd(m.typeEnds)}, then organic` : `until ${fmtEnd(m.nextType ? m.typeEnds : m.ends)}`;
   /* the creator's videos as mini pictures (Julia, Oct 6: "show the mini pictures"); the offer covers all of them, nothing to untick */
   const names = pictures
-    ? `<ul class="cs-picks" aria-label="Videos in this offer">${list.map(m => `<li class="cs-pickt"><span class="cs-pickt-img is-ph" aria-hidden="true">${PH[m.plat]}</span><span class="cs-pickt-k">${oneCreator ? KL[m.kind] : first(m.c)}</span><span class="cs-pickt-s">${oneCreator ? short(m) : `${KL[m.kind]} · ${short(m)}`}</span></li>`).join('')}</ul>`
+    ? `<ul class="cs-picks" aria-label="Videos in this offer">${list.map(m => `<li class="cs-pickt"><span class="cs-pickt-img is-ph" aria-hidden="true">${thumb(m)}</span><span class="cs-pickt-k">${oneCreator ? KL[m.kind] : first(m.c)}</span><span class="cs-pickt-s">${oneCreator ? short(m) : `${KL[m.kind]} · ${short(m)}`}</span></li>`).join('')}</ul>`
     : list.length <= 4
     ? `<ul class="cs-sheet-list">${list.map(m => `<li><b>${first(m.c)} · ${KL[m.kind]}</b><span>${holds(m)}</span></li>`).join('')}</ul>`
     : `<p class="cs-sheet-names">${list.map(m => `${first(m.c)} · ${KL[m.kind]}`).join(', ')}</p>`;
