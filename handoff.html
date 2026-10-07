@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rights tab handoff</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --ink: #1a1a1a; --ink2: #4a4a4a; --mute: #777; --line: rgba(26,26,26,0.1); --paper: #f4f2ef; --card: #fff; --new: #6a4df0; --newwash: #f1eeff; --ok: #17663f; --okwash: #e2f3e9; --warn: #8a4a12; --warnwash: #fff0ce; --open: #9b2c2c; --openwash: #fde8e8; }
+  body { font-family: Inter, ui-sans-serif, system-ui, sans-serif; background: var(--paper); color: var(--ink); font-size: 14px; line-height: 1.55; padding: 48px 24px 120px; }
+  .wrap { max-width: 1480px; margin: 0 auto; }
+  .narrow { max-width: 900px; }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--new); margin-bottom: 10px; }
+  h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.3px; text-wrap: balance; }
+  h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.2px; margin-top: 72px; padding-top: 28px; border-top: 1px solid var(--line); }
+  h3 { font-size: 16px; font-weight: 700; letter-spacing: -0.1px; }
+  p { max-width: 820px; }
+  .intro { margin-top: 10px; color: var(--ink2); }
+  .lede { margin-top: 10px; color: var(--ink2); }
+  code, .mono { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 12.5px; }
+  code { background: rgba(26,26,26,0.06); padding: 1px 5px; border-radius: 5px; }
+  .live { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .live a { font-size: 13px; font-weight: 600; color: #333; background: #fff; border: 1px solid rgba(26,26,26,0.12); border-radius: 999px; padding: 6px 14px; text-decoration: none; }
+  .live a:hover { border-color: #9b9b9b; }
+  .live a.is-new { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .toc { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .toc a { font-size: 12px; font-weight: 600; color: #444; background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; text-decoration: none; }
+  .toc a:hover { border-color: #b9b9b9; }
+
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; vertical-align: 1px; }
+  .tag.dec { background: var(--okwash); color: var(--ok); }
+  .tag.prop { background: var(--warnwash); color: var(--warn); }
+  .tag.open { background: var(--openwash); color: var(--open); }
+  .tag.fe { background: #e8eefc; color: #23439b; }
+  .tag.be { background: #ece9e4; color: #4a443b; }
+  .tag.copy { background: var(--newwash); color: var(--new); }
+
+  /* at a glance */
+  .glance { margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+  .glance div { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+  .glance b { display: block; font-size: 14px; }
+  .glance span { display: block; margin-top: 4px; color: var(--ink2); font-size: 13px; }
+  .glance span .tag { display: inline-block; margin-top: 0; font-size: 11px; }
+
+  /* the rule */
+  .rule { margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+  .box { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; }
+  .box h3 { margin-bottom: 10px; }
+  pre { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 12.5px; line-height: 1.6; background: #17171a; color: #e9e7e2; border-radius: 12px; padding: 16px 18px; overflow-x: auto; }
+  pre .c { color: #9b978e; }
+  pre .k { color: #c9b8ff; }
+  .steps { margin: 0 0 0 18px; color: var(--ink2); }
+  .steps li { margin-top: 6px; padding-left: 4px; }
+  .steps b { color: var(--ink); }
+  .calc { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px 16px; align-items: center; margin-top: 6px; }
+  .calc label { font-weight: 600; }
+  .calc input { font: inherit; padding: 7px 10px; border: 1px solid rgba(26,26,26,0.2); border-radius: 9px; background: #fff; width: 170px; }
+  .calc dt { color: var(--mute); }
+  .calc dd { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .calc .big { font-size: 18px; color: var(--new); }
+  .calc .why { grid-column: 1 / -1; color: var(--ink2); font-weight: 400; font-size: 13px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .tablewrap { margin-top: 16px; overflow-x: auto; border-radius: 14px; }
+  th { text-align: left; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--mute); padding: 10px 14px; border-bottom: 1px solid var(--line); background: #faf9f7; white-space: nowrap; }
+  td { padding: 10px 14px; border-bottom: 1px solid rgba(26,26,26,0.07); vertical-align: top; }
+  tr:last-child td { border-bottom: 0; }
+  td.num, th.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tr.hit td { background: #faf7ff; }
+  tr.hit td.name { color: var(--new); font-weight: 700; }
+  td.name { font-weight: 600; white-space: nowrap; }
+  td .was { color: var(--mute); text-decoration: line-through; margin-right: 6px; font-weight: 400; }
+  td.q { font-weight: 600; min-width: 190px; }
+  .note { margin-top: 10px; color: var(--mute); font-size: 13px; }
+
+  /* screens */
+  section.screen { margin-top: 44px; }
+  .head { display: grid; grid-template-columns: 30px minmax(0, 1fr); column-gap: 12px; max-width: 900px; }
+  .letter { width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 13px; font-weight: 700; display: grid; place-items: center; }
+  .head h3 { line-height: 30px; }
+  .head p { grid-column: 2; margin-top: 2px; color: var(--ink2); }
+  .pair { margin-top: 16px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start; }
+  .pair.trio { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .pair.rail { grid-template-columns: repeat(2, 400px); justify-content: start; }
+  figure { min-width: 0; }
+  figcaption { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #8a8a8a; }
+  figure.new figcaption { color: var(--new); }
+  figcaption a { font-weight: 600; letter-spacing: 0; text-transform: none; color: #777; text-decoration: none; }
+  figcaption a:hover { color: var(--ink); text-decoration: underline; }
+  .crop { position: relative; width: 100%; height: 220px; overflow: hidden; border-radius: 14px; border: 1px solid var(--line); background: #fafafa; box-shadow: 0 4px 14px rgba(0,0,0,0.04); }
+  figure.new .crop { border-color: rgba(106,77,240,0.45); box-shadow: 0 4px 18px rgba(106,77,240,0.10); }
+  .crop iframe { position: absolute; left: 0; top: 0; border: 0; transform-origin: 0 0; pointer-events: none; opacity: 0; transition: opacity .2s ease; }
+  .crop.ready iframe { opacity: 1; }
+  .changes { margin-top: 14px; }
+  .changes td:first-child { width: 34px; color: var(--mute); font-weight: 700; }
+  .changes td.what { font-weight: 600; min-width: 150px; }
+  .changes td.old { color: var(--mute); min-width: 180px; }
+  .changes td.tags { white-space: nowrap; }
+  .changes td.tags .tag { margin-right: 4px; }
+
+  @media (max-width: 1180px) {
+    .rule, .pair, .pair.trio { grid-template-columns: minmax(0, 1fr); }
+    .pair.rail { grid-template-columns: minmax(0, 400px); }
+  }
+
+  .shot { margin-top: 14px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px; }
+  .shot img { display: block; width: 100%; height: auto; border-radius: 8px; }
+  .shots { margin-top: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; align-items: start; }
+  .shots figure { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px; }
+  .shots figure img { display: block; width: 100%; height: auto; border-radius: 8px; }
+  .shots figcaption, .shot figcaption { display: block; margin: 10px 2px 2px; font-size: 13px; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--ink2); }
+  .shots figcaption b, .shot figcaption b { color: var(--ink); }
+  ul.plain { margin: 10px 0 0 18px; max-width: 900px; color: var(--ink2); }
+  ul.plain li { margin-top: 6px; }
+  ul.plain b { color: var(--ink); }
+  .mail { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; max-width: 640px; margin-top: 14px; font-size: 14px; }
+  .mail .subj { font-weight: 700; margin-bottom: 10px; }
+  .mail p { margin-top: 8px; }
+  .grid-prices td, .grid-prices th { text-align: left; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="eyebrow">Brand Portal · Rights tab · engineering handoff · Oct 7</div>
+<h1>Rights tab: what to build</h1>
+<p class="intro">A new Rights tab on the campaign page, next to Dashboard and Content. The brand downloads each creator's video, sees when its usage rights end, and offers the creator more time or paid use. Everything on this page is decided by Julia (and Tony on Oct 2). The prototype is the spec for every screen and every string; this page adds the rules behind them and what the backend needs.</p>
+<div class="live">
+  <a class="is-new" href="surface.html?tab=rights&today=2027-02-24" target="_blank">Prototype: Rights tab ↗</a>
+  <a href="surface.html?tab=content&today=2027-02-24" target="_blank">Content tab with the three-dot menu ↗</a>
+  <a href="surface.html?tab=rights&today=2027-02-24&filter=countered" target="_blank">A counter-offer ↗</a>
+  <a href="surface.html?tab=rights&today=2027-04-02" target="_blank">Apr 2, most rights ended ↗</a>
+</div>
+<p class="note">The black bar at the bottom of the prototype is a demo control: it switches the day and lets a creator answer. It is not part of the product (see "Demo only" below).</p>
+<div class="toc">
+  <a href="#glance">At a glance</a><a href="#rules">The rules</a><a href="#screens">Screens</a><a href="#money">What the brand owes</a><a href="#email">The 7-day email</a><a href="#api">Backend</a><a href="#edges">Edge cases</a><a href="#out">Not in this build</a><a href="#demo">Demo only</a><a href="#yours">Your call</a>
+</div>
+
+<h2 id="glance">At a glance</h2>
+<div class="glance">
+  <div><b>A Rights tab per campaign</b><span>One table, one row per posted video: posted, rights end, status, then Extend, copy link, open the post, download. Filter pills by status, every header sorts, Download all. Ticking rows turns the header row into a selection bar: Download, Copy links, Extend, Clear. Dashboard stays as production; Content stays as production plus three dots on each card: Download video and Extend rights.</span></div>
+  <div><b>Starting rights are a field per brand</b><span>Days and type. Simple: 90 days, organic + paid, by contract. Basic plan (most brands): 30 days, organic only. Every date on the tab derives from it.</span></div>
+  <div><b>Extend makes an offer, per creator</b><span>One offer covers all of a creator's videos that can take one, at one price. Organic only or organic + paid; 90 days, 1 year or Perpetual. Katie's team relays it to the creator for now.</span></div>
+  <div><b>Creators answer: yes, no, or a counter</b><span>The brand sees every answer on the row. A counter-offer gets a Review button: Accept or Decline. One answer covers the whole set.</span></div>
+  <div><b>Downloads</b><span>Each file, a selection, or Download all as one zip of the rows on screen whose rights are live. Download stops when rights end and comes back with an extension. Free on the basic plan.</span></div>
+  <div><b>The 7-day email, in the first ship</b><span>Daily job. Brands with paid rights only. One email per creator, 7 days before the first of the creator's videos ends (or its paid use ends). At Simple it goes to Katherine.</span></div>
+  <div><b>Track what each brand owes</b><span>One line per accepted offer, kept by the backend. A creator's set counts once. Simple's contract 90 days are not in it.</span></div>
+  <div><b>Pictures, with a fallback</b><span>Each row shows the video's thumbnail, and so does each small picture in an extend sheet for 2 or more videos. When there is none, production's no-thumbnail tile shows instead.</span></div>
+</div>
+
+<h2 id="rules">The rules</h2>
+<div class="rule">
+  <div class="box">
+    <h3>In words</h3>
+    <ol class="steps">
+      <li><b>Starting rights.</b> A field on the brand (or its campaign): how many days and which type. The clock starts the day the post goes live. The end date is a live day: on Feb 24 a video whose rights end Feb 24 shows "today" under its end date, and download still works.</li>
+      <li><b>Only posted videos.</b> A video joins the Rights tab the day its post goes live. Not posted yet means not on the tab.</li>
+      <li><b>Types.</b> Organic only ("Use it on your own channels.") or Organic + paid ("Also run it as a paid ad."). Never paid alone.</li>
+      <li><b>Lengths.</b> 90 days, 1 year, Perpetual. 1 year ends on the same date the next year. Perpetual has no end date.</li>
+      <li><b>More time follows on.</b> If the creator says yes before the current end date, the new period starts at that end date. After the end date, it starts the day the creator says yes.</li>
+      <li><b>Adding paid starts at the yes.</b> If paid use is already running, more paid follows on from where it ends. Organic rights with no end date carry on after the paid period.</li>
+      <li><b>Paid on top of organic with no end date.</b> Such a video can still take an offer, organic + paid only (Organic only is greyed: "Already yours, with no end date."). In a sheet that mixes such a video with others, Organic only is off for the whole offer ("Not in an offer with these videos."), since an offer asks for the same rights on each video. Once paid use has no end date too, there is nothing left to buy.</li>
+      <li><b>Nothing is erased.</b> What the brand holds stays in force while a new offer is out, and after a no.</li>
+      <li><b>Paid added over organic days already bought.</b> The new paid term covers those days; they are not pushed later, and the end date does not move. Organic rights that end after the new paid term, or have no end date, run on after it. The price is the full organic + paid price, nothing off.</li>
+      <li><b>Per creator.</b> Extend on any of a creator's videos opens all of that creator's videos that can take an offer. The brand cannot leave one out. One price for the set, one answer for the set. A video the creator posts after the offer went out joins the next offer to that creator, never a separate one.</li>
+      <li><b>Ending soon</b> is the last 7 days of the rights, or the last 7 days of paid use when organic rights run on after it. A row with an offer out or a counter waiting shows the offer instead.</li>
+      <li><b>Download</b> works while the rights are live and stops when they end; an extension brings it back.</li>
+    </ol>
+  </div>
+  <div class="box">
+    <h3>As pseudo-code</h3>
+<pre><span class="c">// per brand (or campaign): Simple { days: 90, type: organic+paid }, basic plan { days: 30, type: organic }</span>
+periods = [{ start: posted_on, end: posted_on + base.days, type: base.type }]
+
+<span class="k">for</span> each accepted offer (a yes, or an accepted counter), in order:
+  Y = accepted_on; last = periods.last
+  <span class="k">if</span> last.end == none <span class="k">and not</span> (offer.type == organic+paid <span class="k">and</span> last.type == organic): skip   <span class="c">// nothing follows rights with no end date</span>
+  <span class="k">if</span> offer.type == organic+paid <span class="k">and</span> (last.end == none <span class="k">or</span> Y &lt;= last.end):
+    from = (paid running at Y) ? end of that paid use : Y
+    held = last                                   <span class="c">// what the brand held before this yes</span>
+    cut every period at <span class="k">from</span>
+    add { start: from, end: from + term, type: organic+paid }
+    <span class="k">if</span> term has an end <span class="k">and</span> (held.end == none <span class="k">or</span> held.end &gt; from + term):
+      add { start: from + term, end: held.end, type: held.type }   <span class="c">// it runs on after</span>
+  <span class="k">else if</span> Y &lt;= last.end:  add { start: last.end, end: last.end + term, type }  <span class="c">// follows on</span>
+  <span class="k">else</span>:                 add { start: Y, end: Y + term, type }               <span class="c">// after the end</span>
+
+term: 90 days | 1 year (same date next year) | Perpetual (end = none)
+ends        = periods.last.end            <span class="c">// none = "No end date"</span>
+type today  = the period live today; on a boundary day paid wins
+ended       = today &gt; ends               <span class="c">// checked first; download off</span>
+ending soon = 0 &lt;= days to end &lt;= 7, or 0 &lt;= days to paid end &lt;= 7 and organic runs on</pre>
+    <p class="note">The same rules as <code>model()</code> in the prototype's <code>surface.html</code>.</p>
+  </div>
+</div>
+
+<h3 style="margin-top:28px">Prices</h3>
+<p class="lede">The offer prefills with the price for the type and length; the brand can type its own amount. The line under the "Your offer" label, above the amount, says "For 90 days of organic + paid rights on both of Quinn's videos, we suggest $75. Quinn can say no or ask for more." The price is for the creator's whole set.</p>
+<div class="tablewrap" style="max-width:640px"><table class="grid-prices">
+  <thead><tr><th></th><th>90 days</th><th>1 year</th><th>Perpetual</th></tr></thead>
+  <tbody>
+    <tr><td class="name">Organic + paid</td><td class="num">$75</td><td class="num">$150</td><td class="num">$200</td></tr>
+    <tr><td class="name">Organic only</td><td class="num">$50</td><td class="num">$100</td><td class="num">$150</td></tr>
+  </tbody>
+</table></div>
+<p class="note">Adding paid on top of organic with no end date uses the organic + paid row, nothing off.</p>
+<p class="note"><b>What the sheet opens on.</b> 90 days, and the type the videos hold now. When their types differ, or a video's organic rights have no end date, it opens on organic + paid. "Current" marks the type the videos hold now; it is hidden when any of them has ended or they hold different types. Changing type or length refills the suggested price. Closing and reopening the same creator's sheet keeps the draft: type, length, amount and note. A sheet for one video opens with what the brand holds ("You have 3 more days of organic + paid rights, until Feb 27."); a sheet for 2 or more videos shows them as small pictures, each with its end date under it.</p>
+
+<h3 style="margin-top:28px">An offer, from send to answer</h3>
+<div class="tablewrap"><table>
+  <thead><tr><th>Step</th><th>Who</th><th>What the row shows</th></tr></thead>
+  <tbody>
+    <tr><td class="q">Brand sends the offer</td><td>Brand, from Extend</td><td>"Offer sent", with "Feb 24 · 2 videos · $75" and "No answer yet" on the line below. A green check page confirms what was offered. Extend is greyed: "Emery has not answered the Feb 24 offer yet."</td></tr>
+    <tr><td class="q">Relayed to the creator</td><td>Katie's team, by text for now</td><td>Unchanged. The private note goes to the Benable team only; the creator never sees it.</td></tr>
+    <tr><td class="q">Creator says yes</td><td>Creator, through Katie's team</td><td>"Extended", the new end date, and "Quinn said yes Feb 15". The amount is in the hover.</td></tr>
+    <tr><td class="q">Creator says no</td><td>Creator</td><td>Back to its status, with "Emery said no Feb 24". Extend is open again.</td></tr>
+    <tr><td class="q">Creator counters</td><td>Creator</td><td>"Counter-offer" with "Priya asked $100", and Review in Extend's place. Review shows what was offered, what the creator asks, what accepting buys and what declining leaves.</td></tr>
+    <tr><td class="q">Brand accepts the counter</td><td>Brand</td><td>"Extended" at the counter price, with "You accepted $100 · Feb 24". A green check page confirms it.</td></tr>
+    <tr><td class="q">Brand declines the counter</td><td>Brand</td><td>Back to its status, with "You declined $100 · Feb 24". Extend is open again.</td></tr>
+  </tbody>
+</table></div>
+<p class="note">Each step covers every video in the creator's set. The hover on a status has the full detail, for example "Quinn said yes Feb 15: 90 days of organic + paid rights on 2 videos at $75."</p>
+
+<h3 style="margin-top:28px">When Extend cannot send a new offer</h3>
+<p class="lede">Extend is on every row. When a new offer cannot go out yet, it is greyed and says why, on hover and on a click.</p>
+<div class="tablewrap"><table>
+  <thead><tr><th>Case</th><th>What it says</th></tr></thead>
+  <tbody>
+    <tr><td class="q">An offer to this creator is out</td><td>"Emery has not answered the Feb 24 offer yet."</td></tr>
+    <tr><td class="q">An offer is open on another of the creator's videos</td><td>"An offer to Quinn is still open on the TikTok."</td></tr>
+    <tr><td class="q">A counter-offer is waiting</td><td>Review takes Extend's place.</td></tr>
+    <tr><td class="q">Paid use has no end date</td><td>"These rights never end."</td></tr>
+  </tbody>
+</table></div>
+<p class="note">In the extend sheet, a creator's video that cannot be in the offer is named: "Emery's Reel is not in this offer: an offer is already out."</p>
+
+<h2 id="screens">Screens</h2>
+<p class="lede">From the prototype, on Feb 24 in the demo. Open the prototype for the live version of each.</p>
+<figure class="shot"><img src="handoff/1-rights-table.png" alt="The Rights tab table" loading="lazy"><figcaption><b>The Rights tab.</b> Pills by status, Download all, one row per posted video. The default order puts counter-offers first, then ending soon, active, offer sent, extended and ended; each group by end date, soonest first, except ended rows, most recently ended first. A creator's videos sit next to each other, in the place of their most urgent video. A column the brand sorts by keeps its own order. Under each end date, the time left and the type of rights. The orange dot left of "Rights" flags rights ending soon and counter-offers to answer; it shows while the brand is on the Dashboard or Content tab, with a hover such as "Rights ending soon on 2 videos, 1 counter-offer to answer".</figcaption></figure>
+<div class="shots">
+  <figure><img src="handoff/2-extend-sheet.png" alt="Extend sheet for one creator" loading="lazy"><figcaption><b>Extend, one creator with 2 videos.</b> Title, the creator's videos as small pictures with each end date under it, type of rights with "Current" on what the brand holds, how long with what a yes buys, the offer with its suggested price, a private note to the Benable team. "Katie's team sends Quinn one offer for 2 videos" sits by Send.</figcaption></figure>
+  <figure><img src="handoff/3-offer-sent.png" alt="Offer sent page" loading="lazy"><figcaption><b>After Send offer.</b> A green check page with what was offered and who sends it.</figcaption></figure>
+  <figure><img src="handoff/4-counter-offer.png" alt="Counter-offer review" loading="lazy"><figcaption><b>Review a counter-offer.</b> What the brand offered, what the creator asked, what each video gets on accept, what declining leaves. Decline or Accept.</figcaption></figure>
+  <figure><img src="handoff/5-counter-accepted.png" alt="Counter-offer accepted page" loading="lazy"><figcaption><b>After Accept.</b> A green check page with the new end dates.</figcaption></figure>
+  <figure><img src="handoff/7-several-creators.png" alt="Extend for several creators" loading="lazy"><figcaption><b>Several creators at once.</b> Ticking rows and choosing Extend in the header gives one price box per creator. Ticking one of a creator's videos brings the creator's other videos along.</figcaption></figure>
+  <figure><img src="handoff/8-paid-on-top.png" alt="Paid on top of organic with no end date" loading="lazy"><figcaption><b>Paid on top of organic with no end date.</b> Organic only is greyed; the offer adds paid use, and organic carries on after it.</figcaption></figure>
+  <figure><img src="handoff/9-content-menu.png" alt="Content tab three-dot menu" loading="lazy"><figcaption><b>Content tab.</b> Production, plus three dots on each card: Download video and Extend rights. Extend opens the same sheet. A countered video shows Review counter-offer.</figcaption></figure>
+  <figure><img src="handoff/10-content-menu-greyed.png" alt="Content tab menu with greyed rows" loading="lazy"><figcaption><b>Greyed menu rows say why.</b> For example "Offer sent" with "Sent Feb 24, no answer yet", and a download that comes back if the creator says yes.</figcaption></figure>
+</div>
+<figure class="shot"><img src="handoff/11-rights-apr2.png" alt="The Rights tab on Apr 2" loading="lazy"><figcaption><b>Apr 2.</b> Ended rows: the end date is grey, "34 days ago", download is off, Extend stays.</figcaption></figure>
+<p class="note">Pictures: each row and each small picture in the sheet shows the video's thumbnail. When a video has none, or it fails to load, production's tile for a creator's recent post with no thumbnail shows instead: the soft grey gradient of <code>.draft-recent-post-media</code> with the TikTok or Instagram icon centred in #4d5561 (<code>.draft-recent-post-placeholder</code>).</p>
+
+<h2 id="money">What the brand owes</h2>
+<p class="lede">The backend keeps track of the total each brand owes for extensions (Julia, Oct 6).</p>
+<ul class="plain">
+  <li><b>One line per accepted offer:</b> brand, campaign, creator, the videos it covers, type of rights, length, the amount offered, the counter if there was one, the agreed amount, the day it was accepted.</li>
+  <li><b>A creator's yes</b> owes the brand's offer. <b>An accepted counter-offer</b> owes the counter. Offers sent, declined or not answered owe nothing.</li>
+  <li><b>A creator's set counts once.</b> One offer covers all of a creator's videos at one price. If the price is stored on each video's record, summing per video counts a set twice; sum per offer.</li>
+  <li><b>The total</b> per brand and per campaign is the sum of agreed amounts. The rights a contract already includes (Simple's first 90 days) are not in it.</li>
+</ul>
+<p class="note">In the prototype, Feb 24: Quinn $75 for 2 videos plus Sofia $150 = $225.</p>
+
+<h2 id="email">The 7-day email</h2>
+<ul class="plain">
+  <li><b>In the first ship.</b> A daily job. Brands already get scheduled emails (draft review, campaign availability), so it can follow the same pattern.</li>
+  <li><b>Who gets it:</b> only brands with paid rights. One contact per brand; at Simple, Katherine.</li>
+  <li><b>When:</b> 7 days before a creator's rights end, or 7 days before paid use ends when organic rights run on after it. The end date includes any accepted extension, so an extended video is reminded 7 days before its new end.</li>
+  <li><b>One email per creator.</b> When a creator's videos end on different days, one email goes out 7 days before the first end, listing each video and its end date.</li>
+  <li><b>A button, Open the Rights tab,</b> links to the campaign's Rights tab.</li>
+</ul>
+<div class="mail">
+  <div class="subj">Quinn's videos: usage rights start ending Feb 16</div>
+  <p>Hi Katherine,</p>
+  <p>Your usage rights on Quinn Hale's videos for Repair+ Holiday Hydration are about to end:</p>
+  <p><b>TikTok</b>, rights end Feb 16<br><b>Reel</b>, rights end Feb 19</p>
+  <p>After each date, any ads running that video should be paused, and its file can no longer be downloaded. If you haven't downloaded the files yet, now is a good time.</p>
+  <p>To keep using a video, extend the rights from the Rights tab: choose how long and make Quinn an offer.</p>
+  <p style="margin-top:14px"><span style="display:inline-block;background:#1a1a1a;color:#fff;border-radius:999px;padding:8px 16px;font-weight:600;font-size:13px">Open the Rights tab</span></p>
+  <p>Team Benable</p>
+</div>
+
+<h2 id="api">Backend: what exists today, what the build needs</h2>
+<p class="lede">Read from <code>beneble_app</code> at <code>0efa449c3</code> (Oct 6). Nothing structured about usage rights exists yet: no rights days, type, start or end, no offers, no download route for videos.</p>
+<div class="tablewrap"><table>
+  <thead><tr><th>Piece</th><th>Today</th><th>What the build needs</th></tr></thead>
+  <tbody>
+    <tr><td class="q">The video and the day it went live</td><td>Two records, not linked: the approved file (submission &gt; item &gt; asset, <code>content_url</code>) and the live post (a URL on <code>brand_collab_campaign_live_posts</code>, joined only by <code>assignment_id</code>). <code>submission_items.posted_at</code> exists but nothing in production writes it. The stored dates are on the assignment (<code>live_link_submitted_at</code>, <code>verified_live_at</code>, <code>completed_at</code>); the platform's own post date is only in the scraper DB.</td><td>One rights record per delivered video, tied to its file and its live post, with the day the post went live as the start of the clock.</td></tr>
+    <tr><td class="q">Which videos are on the tab</td><td>The Content tab's feed (<code>CampaignFeedQuery</code>) merges creator live posts, found content and recs; found content also includes brand mentions outside the campaign and posts from candidate creators.</td><td>Only the campaign's delivered videos, posted, one row each.</td></tr>
+    <tr><td class="q">Starting rights</td><td>Nothing structured. Only prose: <code>brief.usage_permissions</code>, default "30 days of organic usage rights" plus paid rights "case by case", editable per org. <code>requirements[:usage_rights_days]</code> is read by the admin page but never written.</td><td>Days and type per brand: Simple 90, organic + paid; basic plan 30, organic only. Every date derives from it.</td></tr>
+    <tr><td class="q">Downloading a file</td><td>No download route for videos: no attachment disposition, no signed download. The brand already sees the raw file URL in the draft review queue, the assignment page and the tracker preview. A signed download with attachment exists for brief and contract PDFs. No zip in production (<code>rubyzip</code> is only pulled in by test gems).</td><td>A download for each file and for a selection, and Download all as one zip of the rows on screen whose rights are live. Download stops when rights end and comes back with an extension.</td></tr>
+    <tr><td class="q">Thumbnails</td><td><code>submission_assets.poster_url</code>: a worker grabs one frame (720px) after upload. Failures return quietly, so retries never run and nothing backfills; a poster can stay empty for good.</td><td>Show the poster; when it is empty or fails to load, show production's no-thumbnail tile.</td></tr>
+    <tr><td class="q">Offers and answers</td><td>Nothing: no table for offers, counters or answers. Katie's team talks to creators in the admin SMS console (<code>/admin/brand_collab/sms</code>, threads linked to organization, campaign and assignment). Slack alerts and <code>AuditLogger</code> exist.</td><td>An offer per creator covering a set of videos: type, length, the brand's amount, the counter, the agreed amount, dates, the private note, and the states sent, yes, no, countered, accepted, declined. A way for Katie's team to send it and record the creator's answer.</td></tr>
+    <tr><td class="q">What the brand owes</td><td>Creator payments have one row per assignment (unique) and sending one completes the assignment, so it cannot carry extensions as is. Billing creator fees to brands is a manual monthly ledger (<code>LedgerQuery</code>, mark billed). No one-off Stripe charges to brands (no Stripe invoice items).</td><td>One line per accepted offer, as in <a href="#money">What the brand owes</a>, with a total per brand and per campaign.</td></tr>
+    <tr><td class="q">The 7-day email</td><td>Brand emails go through <code>PostmarkMailer</code> with the generic text template. Draft review emails have a delivery table with an idempotency key and status (<code>brand_collab_draft_review_emails</code>); campaign availability emails have their own table (<code>brand_collab_campaign_availability_emails</code>) and a sweeper every 15 minutes. Recipients are the organization's active owners and managers; organizations have no contact field. Daily jobs use sidekiq-cron, registered in each worker file.</td><td>A daily job, one email per creator, brands with paid rights only, at Simple to Katherine.</td></tr>
+  </tbody>
+</table></div>
+
+
+<h2 id="edges">Edge cases</h2>
+<div class="tablewrap"><table>
+  <thead><tr><th>Case</th><th>What happens</th></tr></thead>
+  <tbody>
+    <tr><td class="q">The end date itself</td><td>The video shows "today" and Ending soon, and download still works. The next day it is Ended and download stops.</td></tr>
+    <tr><td class="q">A yes on the end date</td><td>Counts as before the end: the new period follows on from the end date.</td></tr>
+    <tr><td class="q">A yes after the end</td><td>The new period starts on the day of the yes. The days in between are not rights. Download comes back.</td></tr>
+    <tr><td class="q">A creator with one ended and one live video</td><td>One offer, one price for both. The ended one starts at the yes, the live one follows on from its end.</td></tr>
+    <tr><td class="q">Paid added while paid use is running</td><td>More paid follows on from where paid ends. Organic days already bought inside the new paid term become paid and the end date does not move; only organic rights that end after it, or have no end date, run on after it. Example: paid to May 20, organic to Aug 18, 90 more days of paid gives paid to Aug 18.</td></tr>
+    <tr><td class="q">Paid on top of organic with no end date</td><td>Paid runs its term from the yes (or after running paid), then organic carries on with no end date. Organic only is greyed.</td></tr>
+    <tr><td class="q">Paid ending before organic</td><td>Ending soon in the last 7 days of paid use, the row shows the paid end date in bold, and on that day paid is still on. The 7-day email goes out too.</td></tr>
+    <tr><td class="q">Perpetual organic + paid accepted</td><td>"No end date". Extend is greyed: "These rights never end." The video is not in later offers to the creator.</td></tr>
+    <tr><td class="q">An extended video in its last 7 days</td><td>Shows Ending soon, not Extended.</td></tr>
+    <tr><td class="q">An ended video with an offer out</td><td>Download stays off ("comes back if Emery says yes") until the yes.</td></tr>
+    <tr><td class="q">A creator posts another video while an offer is out</td><td>The new video is not in the open offer and cannot get its own. It joins the next offer to that creator.</td></tr>
+    <tr><td class="q">A counter on a 2-video offer</td><td>One amount for the set. Accepting records one line owed, at the counter price.</td></tr>
+    <tr><td class="q">The brand declines a counter, or the creator says no</td><td>Nothing owed. Extend comes back. What the brand already held stays in force.</td></tr>
+    <tr><td class="q">A new offer after an earlier yes</td><td>The earlier yes stays in force and stays owed once.</td></tr>
+    <tr><td class="q">Ticking rows across 3 creators</td><td>3 offers, one price box each; Send is off while any box is $0; the green check page shows the total.</td></tr>
+    <tr><td class="q">A ticked video that cannot take an offer</td><td>Named in the sheet: "Emery's Reel is not in this offer: an offer is already out."</td></tr>
+    <tr><td class="q">The offer field</td><td>Digits only, up to 6. Changing type or length refills the suggested price.</td></tr>
+    <tr><td class="q">Download all with a filter on</td><td>Only the rows on screen whose rights are live. One such row downloads that file; none turns the button off.</td></tr>
+    <tr><td class="q">The tab's orange dot</td><td>On for rights ending soon or a counter-offer to answer, shown only while the Dashboard or Content tab is open. A 2-video counter counts once; a row with an offer out does not turn it on.</td></tr>
+  </tbody>
+</table></div>
+
+
+<h2 id="out">Not in this build</h2>
+<ul class="plain">
+  <li><b>A creator app or screen for offers.</b> Katie's team relays offers and answers to creators for now.</li>
+  <li><b>Instant approval</b> when a creator has already named a price, and <b>pricing by creator size</b>. Agreed for a later version.</li>
+  <li><b>Ad codes</b> (Spark, partnership codes), which a client asked for on Sep 18. No field collects them yet; closed by Julia on Oct 6.</li>
+  <li><b>A rights calendar.</b> Dropped by Tony on Oct 2.</li>
+  <li><b>Rules for what a basic-plan brand must stop doing at day 30.</b> The tab tells brands nothing about it.</li>
+  <li><b>A library across campaigns, and a Benable fee on extensions.</b> Closed by Julia.</li>
+  <li><b>No video popup.</b> Every action is on the row.</li>
+  <li><b>Moving money for extensions.</b> This build tracks what each brand owes (see What the brand owes); paying the creator and invoicing the brand are not part of it.</li>
+</ul>
+
+<h2 id="demo">Demo only: do not build</h2>
+<ul class="plain">
+  <li>The black demo bar: the day switch (Dec 10, Feb 24, Apr 2), the creator's Yes / Counter / No, the reset, and the "BRAND OWES" readout.</li>
+  <li>The example data (Simple, the creators, their seeded offers and answers), and a counter being $25 more than the offer.</li>
+  <li>Messages that start with "Demo:". They stop the demo from rewriting a day that comes later than the one on screen; a real calendar only moves forward.</li>
+</ul>
+
+<h2 id="yours">Your call</h2>
+<ul class="plain">
+  <li>Where the starting-rights field lives (brand, campaign, or both) and how the two values are stored.</li>
+  <li>How offers reach Katie's team and how they record the creator's answer (admin screen, Slack, or both).</li>
+  <li>What a single download is called, the zip's name and how it is built.</li>
+  <li>Table and field names for offers and for what the brand owes.</li>
+  <li>Which stored date counts as the day a post went live (the assignment's <code>live_link_submitted_at</code> or <code>verified_live_at</code>, or the platform's post date when the scraper has it).</li>
+  <li>How the 7-day email reaches Katherine at Simple: today brand emails go to every owner and manager of the organization.</li>
+  <li>What the draft review queue, the assignment page and the tracker preview keep showing once a video's rights end.</li>
+  <li>Whether to backfill missing posters.</li>
+  <li>1 year from Feb 29: the prototype ends it Mar 1 (a date roll-over, not a choice); Feb 28 or Mar 1 is yours.</li>
+  <li>Keeping the brief's usage-rights wording in line with the per-brand field.</li>
+</ul>
+<p class="note" style="margin-top:28px">Prepared by Julia, with Claude, Oct 7. Every item above is decided; the prototype is the reference for layout and copy.</p>
+
+</div>
+</body>
+</html>

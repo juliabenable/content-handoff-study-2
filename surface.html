@@ -1273,6 +1273,9 @@ function statusTitle(m) {
   const what = (e, live) => `${live ? moreOf(m, e) : e.t.of} ${TYPES[e.type].word} rights${on(e)}`;
   if (m.countered) return ` title="${n} asked $${m.ext.counter} for ${what(m.ext, true)}. You offered $${m.ext.offer}."`;
   if (m.requested) return ` title="Offer sent ${fmt(D(m.ext.requested))}: ${what(m.ext, true)} at $${m.ext.offer}. No answer yet."`;
+  /* the hover follows the latest answer, like the line under the status */
+  if (m.answer && m.answer.kind === 'declined') return ` title="${n} said no ${fmt(m.answer.date)}${m.ext ? ` to ${what(m.ext)} at $${m.ext.offer}` : ''}."`;
+  if (m.answer && m.answer.kind === 'refused') return ` title="You declined ${n}'s counter-offer of $${m.answer.amount} ${fmt(m.answer.date)}."`;
   if (m.acc) return m.acc.counter ? ` title="You accepted ${n}'s counter-offer ${fmt(D(m.acc.accepted))}: ${what(m.acc)} at $${m.acc.agreed || m.acc.offer}."` : ` title="${n} said yes ${fmt(D(m.acc.accepted))}: ${what(m.acc)} at $${m.acc.offer}."`;
   return '';
 }
